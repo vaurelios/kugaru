@@ -1,23 +1,23 @@
 /*
-Copyright (C) 2003, 2010 - Wolfire Games
+ * This file is part of Kugaru.
+ *
+ * Copyright (C) 2003, 2010 - Wolfire Games
+ * Copyright (C) 2014 Victor A. Santos
+ *
+ * Kugaru is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Kugaru is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Kugaru.  If not, see <http://www.gnu.org/licenses/>.
+ */
 
-This file is part of Lugaru.
-
-Lugaru is free software; you can redistribute it and/or
-modify it under the terms of the GNU General Public License
-as published by the Free Software Foundation; either version 2
-of the License, or (at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  
-
-See the GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with this program; if not, write to the Free Software
-Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-*/
 
 #include "pack_private.h"
 
@@ -63,14 +63,14 @@ void BinIOPack(void *context, int type, int byte_order, int count)
                 break;
             case BinIO_TYPE_FLOAT32:
                 {
-                    float32_t value = (float32_t)va_arg(ctx->args, double);
+                    float value = (float)va_arg(ctx->args, double);
                     BinIOConvert4(BinIO_HOST_BYTE_ORDER, byte_order, (const uint8_t *)&value, ctx->buffer, 1);
                     ctx->buffer += 4;
                 }
                 break;
             case BinIO_TYPE_FLOAT64:
                 {
-                    float64_t value = va_arg(ctx->args, float64_t);
+                    double value = va_arg(ctx->args, double);
                     BinIOConvert8(BinIO_HOST_BYTE_ORDER, byte_order, (const uint8_t *)&value, ctx->buffer, 1);
                     ctx->buffer += 8;
                 }

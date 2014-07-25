@@ -1,28 +1,29 @@
 /*
-Copyright (C) 2003, 2010 - Wolfire Games
+ * This file is part of Kugaru.
+ *
+ * Copyright (C) 2003, 2010 - Wolfire Games
+ * Copyright (C) 2014 Victor A. Santos
+ *
+ * Kugaru is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Kugaru is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Kugaru.  If not, see <http://www.gnu.org/licenses/>.
+ */
 
-This file is part of Lugaru.
 
-Lugaru is free software; you can redistribute it and/or
-modify it under the terms of the GNU General Public License
-as published by the Free Software Foundation; either version 2
-of the License, or (at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  
-
-See the GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with this program; if not, write to the Free Software
-Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-*/
-
-#ifndef private_h
-#define private_h
+#ifndef PRIVATE_H
+#define PRIVATE_H
 
 #include <stdarg.h>
+#include <stdint.h>
 #include <stddef.h>
 
 #define BinIO_TYPE_IGNORE_BYTE         'x'
@@ -37,26 +38,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #define BinIO_BIG_ENDIAN_BYTE_ORDER    'B'
 #define BinIO_HOST_BYTE_ORDER          'H'
 #define BinIO_NETWORK_BYTE_ORDER       'N'
-
-#ifndef ALREADY_DID_BINIO_STDINT
-#define ALREADY_DID_BINIO_STDINT
-#if defined(BinIO_STDINT_HEADER)
-#include BinIO_STDINT_HEADER
-typedef float              float32_t;
-typedef double             float64_t;
-#else
-typedef unsigned char      uint8_t;
-typedef unsigned short     uint16_t;
-typedef unsigned long      uint32_t;
-#ifdef WIN32
-	typedef unsigned __int64	uint64_t;
-#else
-	typedef unsigned long long uint64_t;
-#endif
-typedef float              float32_t;
-typedef double             float64_t;
-#endif
-#endif
 
 #ifndef BinIO_INLINE
 #if defined(__GNUC__)
@@ -155,5 +136,5 @@ extern void BinIOCountBytes(void *context, int type, int byte_order, int count);
 
 extern size_t BinIOFormatByteCount(const char *format);
 
-#endif
+#endif /* PRIVATE_H */
 

@@ -61,4 +61,4 @@ set(KUGARU_H
 )
 
 add_executable(kugaru ${KUGARU_SRCS} ${KUGARU_H})
-target_link_libraries(kugaru ${LUGARU_LIBS})
+target_link_libraries(kugaru ${KUGARU_LIBS})

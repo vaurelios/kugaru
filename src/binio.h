@@ -23,6 +23,7 @@
 #define BINIO_H
 
 #include <stdarg.h>
+#include <stdint.h>
 #include <stdio.h>
 
 #if defined(__cplusplus)
@@ -34,7 +35,7 @@ extern "C" {
      *  - whitespace is ignored
      *  - each "group" consists of an optional count (defaults to 1),
      *    an optional byte-order marker (defaults to H, "host-native"),
-     *    and a  data-type specifier.
+:     *    and a  data-type specifier.
      *  - when unpacking, each variable argument is a pointer to the
      *    appropriate number of objects of the appropriate type.
      *  - when packing, each variable argument is an object of the
@@ -65,9 +66,6 @@ extern "C" {
      *  H host's native byte order
      *  N network byte order
      */
-
-    typedef unsigned char  uint8_t;
-    typedef unsigned short uint16_t;
 
     typedef struct
     {
