@@ -22,6 +22,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <math.h>
 
 #include "openal_wrapper.h"
 
@@ -372,7 +373,7 @@ static void *decode_to_pcm(const char *_fname, ALenum &format, ALsizei &size, AL
     char *fname = (char *) alloca(strlen(_fname) + 16);
     strcpy(fname, _fname);
     char *ptr = strchr(fname, '.');
-    if (ptr) *ptr = NULL;
+    if (ptr) *ptr = '\0';
     strcat(fname, ".ogg");
 
     // just in case...

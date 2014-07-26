@@ -1,27 +1,31 @@
 /*
-Copyright (C) 2003, 2010 - Wolfire Games
+ * This file is part of Kugaru.
+ *
+ * Copyright (C) 2003, 2010 - Wolfire Games
+ * Copyright (C) 2014 Victor A. Santos
+ *
+ * Kugaru is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Kugaru is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Kugaru.  If not, see <http://www.gnu.org/licenses/>.
+ */
 
-This file is part of Lugaru.
-
-Lugaru is free software; you can redistribute it and/or
-modify it under the terms of the GNU General Public License
-as published by the Free Software Foundation; either version 2
-of the License, or (at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  
-
-See the GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with this program; if not, write to the Free Software
-Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-*/
 
 #include "Game.h"
 #include "Terrain.h"
 #include "Objects.h"
+#include "Random.h"
+#include "FileIO.h"
+
+
 extern XYZ viewer;
 extern float viewdistance;
 extern float lightambient[3],lightbrightness[3];
@@ -42,6 +46,9 @@ extern Game * pgame;
 extern bool visibleloading;
 extern bool skyboxtexture;
 extern int tutoriallevel;
+
+using namespace Kugaru;
+
 
 //Functions
 
@@ -382,12 +389,9 @@ bool Terrain::load(const char *fileName)
 	//LoadTGA( fileName );
 
 	// Fixing filename so that it works with its own os
-	char * FixedFN = ConvertFileName(fileName);
+	const char *fixedFN = ConvertFileName(fileName);
 
-	unsigned char fileNamep[256];
-	CopyCStringToPascal(FixedFN, fileNamep);
-	//Load Image
-	upload_image( fileNamep ,0); 
+	upload_image(fixedFN, 0); 
 
 	//Is it valid?
 	if(texture.bpp>24){

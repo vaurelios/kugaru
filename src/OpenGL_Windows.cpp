@@ -19,19 +19,12 @@
  */
 
 
-#ifdef WIN32
-#define UINT8 WIN32API_UINT8
-#define UINT16 WIN32API_UINT16
-#define boolean WIN32API_boolean
-#include <windows.h>
-#undef UINT8
-#undef UINT16
-#undef boolean
-#endif
-
-
-
 #include "Game.h"
+#include "Random.h"
+#include "Utility.h"
+#include "FileIO.h"
+
+
 extern "C" {
 	#include "zlib.h"
 	#include "png.h"
@@ -106,7 +99,7 @@ extern float volume;
 #include <fstream>
 #include <iostream>
 #include "gamegl.h"
-#include "MacCompatibility.h"
+#include "FileIO.h"
 
 
 #ifdef WIN32
@@ -115,6 +108,7 @@ extern float volume;
 #endif
 
 using namespace std;
+using namespace Kugaru;
 
 
 
@@ -145,7 +139,7 @@ void ShutdownDSp();
 void DrawGL(Game & game);
 
 void CreateGLWindow (void);
-Boolean SetUp (Game & game);
+bool SetUp (Game & game);
 void DoKey (SInt8 theKey, SInt8 theCode);
 void DoUpdate (Game & game);
 
@@ -252,7 +246,7 @@ GLuint gFontList;
 char gcstrMode [256] = "";
 
 UInt32 gSleepTime = kForegroundSleep;
-Boolean gDone = false, gfFrontProcess = true;
+bool gDone = false, gfFrontProcess = true;
 
 Game * pgame = 0;
 
@@ -332,7 +326,7 @@ void GetKeys(  unsigned char theKeys[16])
     memcpy( theKeys, &g_theKeys, 16);
 }
 
-Boolean Button()
+bool Button()
 {
     return g_button;
 }
@@ -557,7 +551,7 @@ static void sdlEventProc(const SDL_Event &e, Game &game)
 
 static Point gMidPoint;
 
-Boolean SetUp (Game & game)
+bool SetUp (Game & game)
 {
 	char string[10];
 
@@ -616,7 +610,7 @@ Boolean SetUp (Game & game)
 	selectDetail(kContextWidth, kContextHeight, kBitsPerPixel, detail);
 
 	if(!ipstream) {
-		ofstream opstream(ConvertFileName(":Data:config.txt", "w"));
+		ofstream opstream(ConvertFileName(":Data:config.txt"));
 		opstream << "Screenwidth:\n";
 		opstream << kContextWidth;
 		opstream << "\nScreenheight:\n";

@@ -32,7 +32,7 @@
 #include "ogg/ogg.h"
 #include "vorbis/vorbisfile.h"
 
-#include "MacCompatibility.h"
+#include "FileIO.h"
 
 typedef struct OPENAL_SAMPLE    OPENAL_SAMPLE;
 typedef struct OPENAL_STREAM    OPENAL_STREAM;

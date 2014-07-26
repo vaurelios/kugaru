@@ -1,7 +1,6 @@
 /*
  * This file is part of Kugaru.
  *
- * Copyright (C) 2003, 2010 - Wolfire Games
  * Copyright (C) 2014 Victor A. Santos
  *
  * Kugaru is free software: you can redistribute it and/or modify
@@ -19,18 +18,13 @@
  */
 
 
-#ifndef MACCOMPATIBLITY_H
-#define MACCOMPATIBLITY_H
+#ifndef FILEIO_H
+#define FILEIO_H
 
 
-struct Point
+namespace Kugaru
 {
-    short v;
-    short h;
-};
+    const char* ConvertFileName( const char* name );
+}
 
-typedef signed char SInt8;
-typedef unsigned int UInt32;
-
-#endif
-
+#endif /* FILEIO_H */

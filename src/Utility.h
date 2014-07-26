@@ -1,7 +1,6 @@
 /*
  * This file is part of Kugaru.
  *
- * Copyright (C) 2003, 2010 - Wolfire Games
  * Copyright (C) 2014 Victor A. Santos
  *
  * Kugaru is free software: you can redistribute it and/or modify
@@ -19,18 +18,31 @@
  */
 
 
-#ifndef MACCOMPATIBLITY_H
-#define MACCOMPATIBLITY_H
+#ifndef UTILITY_H
+#define UTILITY_H
 
 
-struct Point
+typedef struct
 {
-    short v;
-    short h;
+    unsigned long hi;
+    unsigned long lo;
+} AbsoluteTime; 
+
+
+enum
+{
+    durationMicrosecond             = -1,
+    durationMillisecond             = 1,
+    durationSecond                  = 1000,
+    durationMinute                  = 1000 * 60,
+    durationHour                    = 1000 * 60 * 60,
+    durationDay                     = 1000 * 60 * 60 * 24,
+    durationForever                 = 0x7FFFFFFF,
+    durationImmediate               = 0,
 };
 
-typedef signed char SInt8;
-typedef unsigned int UInt32;
+AbsoluteTime            UpTime                  ();
+long                    AbsoluteDeltaToDuration (AbsoluteTime& a,
+                                                 AbsoluteTime& b);
 
-#endif
-
+#endif /* UTILITY_H */

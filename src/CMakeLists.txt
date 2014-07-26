@@ -1,3 +1,11 @@
+set(LIBDIR, "${CMAKE_INSTALL_PREFIX}/lib")
+set(DATADIR, "${CMAKE_INSTALL_PREFIX}/share/kugaru")
+
+configure_file(
+    "${PROJECT_SOURCE_DIR}/src/config.h.in"
+    "${PROJECT_BINARY_DIR}/src/config.h"
+)
+
 set(KUGARU_SRCS
     Frustum.cpp
     GameDraw.cpp
@@ -25,7 +33,8 @@ set(KUGARU_SRCS
     OpenGL_Windows.cpp
     openal_wrapper.cpp
     WinInput.cpp
-    MacCompatibility.cpp
+    FileIO.cpp
+    Utility.cpp
 )
 
 set(KUGARU_H
@@ -59,7 +68,8 @@ set(KUGARU_H
     pack_private.h
     private.h
     unpack_private.h
-    MacCompatibility.h
+    FileIO.h
+    Utility.h
 )
 
 add_executable(kugaru ${KUGARU_SRCS} ${KUGARU_H})

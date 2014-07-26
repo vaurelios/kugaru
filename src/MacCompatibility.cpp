@@ -40,36 +40,9 @@
 #include <stdint.h>
 
 
-static int QueryPerformanceFrequency(int64_t *liptr)
-{
-    assert(sizeof (int64_t) == 8);
-    *liptr = 1000;
-    return(1);
-}
 
-static int QueryPerformanceCounter(int64_t *liptr)
-{
-    struct timeval tv;
-    gettimeofday(&tv, NULL);
-    *liptr = ( (((int64_t) tv.tv_sec) * 1000) +
-               (((int64_t) tv.tv_usec) / 1000) );
-    return(1);
-}
 
-class AppTime
-{
-public:
-	AppTime()
-	{
-		counterRate = 1;
-		baseCounter = 0;
-		QueryPerformanceFrequency( (int64_t *)&counterRate);
-		QueryPerformanceCounter( (int64_t *)&baseCounter);
-	}
-	int64_t counterRate;
-	int64_t baseCounter;
-};
-static AppTime g_appTime;
+
 
 
 void CopyCStringToPascal( const char* src, unsigned char dst[256])
@@ -102,41 +75,7 @@ AbsoluteTime UpTime()
 }
 
 
-Duration AbsoluteDeltaToDuration( AbsoluteTime& a, AbsoluteTime& b)
-{
-	int64_t value = a.hi;
-	value <<= 32;
-	value |= a.lo;
-	int64_t value2 = b.hi;
-	value2 <<= 32;
-	value2 |= b.lo;
-	value -= value2;
 
-	if (value <= 0)
-		return durationImmediate;
-
-	int64_t frac = value % g_appTime.counterRate;
-	value /= g_appTime.counterRate;
-
-	Duration time;
-
-	if (value == 0)
-	{
-		frac *= -1000000;
-		frac /= g_appTime.counterRate;
-		time = (Duration)frac;
-	}
-	else
-	{
-		frac *= 1000;
-		frac /= g_appTime.counterRate;
-		value *= 1000;
-		value += frac;
-		time = (Duration)value;
-	}
-
-	return time;
-}
 
 
 #if PLATFORM_UNIX
@@ -273,34 +212,6 @@ static int locateCorrectFile(char *buf, const char *mode)
     return(rc);
 } /* locateCorrectFile */
 #endif
-
-
-static char g_filename[4096];
-char* ConvertFileName( const char* orgfilename, const char *mode)
-{
-    if (orgfilename == g_filename) // recursion?
-        return g_filename;
-
-	// translate filename into proper path name
-	if (orgfilename[ 0] == ':')
-		orgfilename++;
-	strcpy( g_filename, orgfilename);
-
-	for (int n = 0; g_filename[ n]; n++)
-	{
-		if (g_filename[ n] == ':')
-			g_filename[ n] = '/';
-
-		else if (g_filename[ n] == '\\')
-			g_filename[ n] = '/';
-	}
-
-    #if PLATFORM_UNIX
-    locateCorrectFile(g_filename, mode);
-    #endif
-
-	return g_filename;
-}
 
 #endif
 

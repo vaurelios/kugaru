@@ -13,6 +13,8 @@ pkg_check_modules(SDL REQUIRED sdl)
 pkg_check_modules(PNG REQUIRED libpng)
 pkg_check_modules(ZLIB REQUIRED zlib)
 pkg_check_modules(VORBIS REQUIRED vorbis vorbisfile)
+find_library(BOOST_FS_LIBRARY boost_filesystem)
+find_library(BOOST_SYSTEM_LIBRARY boost_system)
 
 include_directories(
     ${GL_INCLUDE_DIRS}
@@ -22,6 +24,7 @@ include_directories(
     ${PNG_INCLUDE_DIRS}
     ${ZLIB_INCLUDE_DIRS}
     ${VORBIS_INCLUDE_DIRS}
+    "${CMAKE_BINARY_DIR}/src"
 )
 
 set(KUGARU_LIBS
@@ -32,6 +35,8 @@ set(KUGARU_LIBS
     ${PNG_LIBRARIES}
     ${ZLIB_LIBRARIES}
     ${VORBIS_LIBRARIES}
+    ${BOOST_FS_LIBRARY}
+    ${BOOST_SYSTEM_LIBRARY}
 )
 
 subdirs(src)

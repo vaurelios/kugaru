@@ -1,25 +1,24 @@
 /*
-Copyright (C) 2003, 2010 - Wolfire Games
+ * This file is part of Kugaru.
+ *
+ * Copyright (C) 2003, 2010 - Wolfire Games
+ * Copyright (C) 2014 Victor A. Santos
+ *
+ * Kugaru is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Kugaru is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Kugaru.  If not, see <http://www.gnu.org/licenses/>.
+ */
 
-This file is part of Lugaru.
 
-Lugaru is free software; you can redistribute it and/or
-modify it under the terms of the GNU General Public License
-as published by the Free Software Foundation; either version 2
-of the License, or (at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  
-
-See the GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with this program; if not, write to the Free Software
-Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-*/
-
-/**> HEADER FILES <**/
 #include "Game.h"
 #include "TGALoader.h"
 
@@ -33,115 +32,87 @@ extern int loadscreencolor;
 
 extern bool LoadImage(const char * fname, TGAImageRec & tex);
 /********************> LoadTGA() <*****/
-bool upload_image(const unsigned char* filePath, bool hasalpha)
+bool upload_image(const char* filePath, bool hasalpha)
 {
-	if(visibleloading){
-		loadscreencolor=1;
-		pgame->LoadingScreen();
-	}
+    if(visibleloading){
+        loadscreencolor=1;
+        pgame->LoadingScreen();
+    }
 
 #if !PLATFORM_MACOSX
-
-	// for Windows, just use TGA loader for now
-	char fileName[ 256];
-	CopyPascalStringToC( filePath, fileName);
-/*
-	// change extension to .TGA
-	int len = strlen( fileName);
-	if (len > 3)
-	{
-		fileName[ len - 3] = 't';
-		fileName[ len - 2] = 'g';
-		fileName[ len - 1] = 'a';
-	}
-*/
-//	return (LoadTGA( fileName) != NULL);
-	return (LoadImage(fileName, texture));
-
+    return (LoadImage(filePath, texture));
 #else
+    OSStatus err;
+    ComponentResult cr;
 
-	OSStatus err;
-	ComponentResult cr;
+    FSSpec fsspec;
+    err = FSMakeFSSpec (0, 0, filePath, &fsspec);
+    
+    if (err) return;
 
-	/*FSRef fsref;
-	Boolean isdir;
-	err = FSPathMakeRef((const UInt8*)filePath, &fsref, &isdir);
-	if(err)return;
+    GraphicsImportComponent gi;
+    err = GetGraphicsImporterForFile(&fsspec, &gi);
+    
+    if (err) return;
 
-	FSSpec fsspec;
-	err = FSGetCatalogInfo(&fsref, kFSCatInfoNone, NULL, NULL, &fsspec, NULL);
-	if(err)return;
-	*/
+    Rect natbounds;
+    cr = GraphicsImportGetNaturalBounds(gi, &natbounds);
 
-	//Boolean isdir;
-	FSSpec fsspec;
-	//err = FSMakeFSSpec (0, 0, (const unsigned char*)filePath, &fsspec);
-	err = FSMakeFSSpec (0, 0, filePath, &fsspec);
-	//err=FSPathMakeFSSpec((const UInt8*)filePath,&fsspec,&isdir);*/
-	if(err)return;
+    size_t buffersize = 4 * natbounds.bottom * natbounds.right;
+    texture.sizeX=natbounds.right;
+    texture.sizeY=natbounds.bottom;
+    if (hasalpha) texture.bpp = 32;
+    //if(!hasalpha)texture.bpp = 24;
 
-	GraphicsImportComponent gi;
-	err = GetGraphicsImporterForFile(&fsspec, &gi);
-	if(err)return;
+    GWorldPtr gw;
+    err = QTNewGWorldFromPtr(&gw, k32ARGBPixelFormat, &natbounds, NULL, NULL,
+                             0, texture.data, 4 * natbounds.right);
+    if (err) return;
 
-	Rect natbounds;
-	cr = GraphicsImportGetNaturalBounds(gi, &natbounds);
+    cr = GraphicsImportSetGWorld(gi, gw, NULL);
 
-	size_t buffersize = 4 * natbounds.bottom * natbounds.right;
-	//void* buf = malloc(buffersize);
-	texture.sizeX=natbounds.right;
-	texture.sizeY=natbounds.bottom;
-	/*if(hasalpha)*/texture.bpp = 32;
-	//if(!hasalpha)texture.bpp = 24;
+    natbounds.top = natbounds.bottom;
+    natbounds.bottom = 0;
 
-	GWorldPtr gw;
-	err = QTNewGWorldFromPtr(&gw, k32ARGBPixelFormat, &natbounds, NULL, NULL,
-		0, texture.data, 4 * natbounds.right);
-	if(err)return;
+    cr = GraphicsImportSetBoundsRect(gi, &natbounds);
 
-	cr = GraphicsImportSetGWorld(gi, gw, NULL);
+    cr = GraphicsImportDraw(gi);
 
-	natbounds.top = natbounds.bottom;
-	natbounds.bottom = 0;
+    err = CloseComponent(gi);
+    if (err) return;
 
-	cr = GraphicsImportSetBoundsRect(gi, &natbounds);
+    /*glTexImage2D(textureTarget, 0, GL_RGBA, natbounds.right, natbounds.top, 0,
+    GL_BGRA, GL_UNSIGNED_INT_8_8_8_8_REV, buf);
+    */
 
-	cr = GraphicsImportDraw(gi);
+    //free(buf);
+    DisposeGWorld(gw);
 
-	err = CloseComponent(gi);
-	if(err)return;
+    // Loop Through The Image Data
+    GLuint imageSize;            // Used To Store The Image Size When Setting Aside Ram
+    GLuint temp;                 // Temporary Variable
+    GLuint bytesPerPixel;        // Temporary Variable
+    bytesPerPixel=texture.bpp/8;
+    imageSize = texture.sizeX * texture.sizeY * bytesPerPixel;
+    int alltrans=10;
 
-	/*glTexImage2D(textureTarget, 0, GL_RGBA, natbounds.right, natbounds.top, 0,
-	GL_BGRA, GL_UNSIGNED_INT_8_8_8_8_REV, buf);
-	*/
+    for( GLuint i = 0; i < int( imageSize ); i += 4 )
+    {
+        // Swaps The 1st And 3rd Bytes ('R'ed and 'B'lue)
+        temp = texture.data[i];                    // Temporarily Store The Value At Image Data 'i'
+        texture.data[i] = texture.data[i + 1];     // Set The 1st Byte To The Value Of The 3rd Byte
+        texture.data[i + 1] = texture.data[i + 2]; // Set The 3rd Byte To The Value In 'temp' (1st Byte Value)
+        texture.data[i + 2] = texture.data[i + 3];
+        texture.data[i + 3] = temp;
+    }
 
-	//free(buf);
-	DisposeGWorld(gw);
-
-	// Loop Through The Image Data
-	GLuint			imageSize;									// Used To Store The Image Size When Setting Aside Ram
-	GLuint			temp;										// Temporary Variable
-	GLuint			bytesPerPixel;										// Temporary Variable
-	bytesPerPixel=texture.bpp/8;
-	imageSize = texture.sizeX * texture.sizeY * bytesPerPixel;
-	int alltrans=10;
-
-	for( GLuint i = 0; i < int( imageSize ); i += 4 )
-	{
-		// Swaps The 1st And 3rd Bytes ('R'ed and 'B'lue)
-		temp = texture.data[i];					// Temporarily Store The Value At Image Data 'i'
-		texture.data[i] = texture.data[i + 1];	// Set The 1st Byte To The Value Of The 3rd Byte
-		texture.data[i + 1] = texture.data[i + 2];				// Set The 3rd Byte To The Value In 'temp' (1st Byte Value)
-		texture.data[i + 2] = texture.data[i + 3];
-		texture.data[i + 3] = temp;
-	}
-
-	int tempplace;
-	tempplace=0;
-	if(!hasalpha){
-		for( GLuint i = 0; i < int( imageSize ); i += 4 )
-		{
-			texture.data[i + 3] = 255;
+    int tempplace;
+    tempplace=0;
+    if(!hasalpha)
+    {
+        for( GLuint i = 0; i < int( imageSize ); i += 4 )
+        {
+            texture.data[i + 3] = 255;
 			/*texture.data[tempplace] = texture.data[i];	// Set The 1st Byte To The Value Of The 3rd Byte
 			texture.data[tempplace + 1] = texture.data[i + 1];				// Set The 3rd Byte To The Value In 'temp' (1st Byte Value)
 			texture.data[tempplace + 2] = texture.data[i + 2];

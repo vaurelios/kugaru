@@ -25,6 +25,7 @@
 #include <ctime>
 
 #include "Game.h"
+#include "Random.h"
 #include "openal_wrapper.h"
 
 using namespace std;
@@ -271,6 +272,8 @@ static console_handler cmd_handlers[] = {
 #include "ConsoleCmds.h"
 #undef  DECLARE_COMMAND
 };
+
+using namespace Kugaru;
 
 static void ch_quit(Game *game, const char *args)
 {
@@ -1831,7 +1834,7 @@ void	Game::Loadlevel(char *name){
 	OPENAL_SetPaused(channels[stream_firesound], true);
 
 	// Change the map filename into something that is os specific
-	char *FixedFN = ConvertFileName(name);
+	const char *FixedFN = ConvertFileName(name);
 
 	int mapvers;
 	FILE			*tfile;
@@ -2746,7 +2749,7 @@ void	Game::Tick()
 				if(newscreenwidth<0)newscreenwidth=screenwidth;
 				if(newscreenheight<0)newscreenheight=screenheight;
 
-				ofstream opstream(ConvertFileName(":Data:config.txt", "w"));
+				ofstream opstream(ConvertFileName(":Data:config.txt"));
 				opstream << "Screenwidth:\n";
 				opstream << newscreenwidth;
 				opstream << "\nScreenheight:\n";
@@ -3141,7 +3144,7 @@ void	Game::Tick()
 				if(newscreenheight<0)newscreenheight=screenheight;
 
 
-				ofstream opstream(ConvertFileName(":Data:config.txt", "w"));
+				ofstream opstream(ConvertFileName(":Data:config.txt"));
 				opstream << "Screenwidth:\n";
 				opstream << newscreenwidth;
 				opstream << "\nScreenheight:\n";
@@ -3769,7 +3772,7 @@ void	Game::Tick()
 				if(newscreenwidth<0)newscreenwidth=screenwidth;
 				if(newscreenheight<0)newscreenheight=screenheight;
 
-				ofstream opstream(ConvertFileName(":Data:config.txt", "w"));
+				ofstream opstream(ConvertFileName(":Data:config.txt"));
 				opstream << "Screenwidth:\n";
 				opstream << newscreenwidth;
 				opstream << "\nScreenheight:\n";
@@ -4204,7 +4207,7 @@ void	Game::Tick()
 				if(newscreenwidth<0)newscreenwidth=screenwidth;
 				if(newscreenheight<0)newscreenheight=screenheight;
 
-				ofstream opstream(ConvertFileName(":Data:config.txt", "w"));
+				ofstream opstream(ConvertFileName(":Data:config.txt"));
 				opstream << "Screenwidth:\n";
 				opstream << newscreenwidth;
 				opstream << "\nScreenheight:\n";

@@ -1,34 +1,35 @@
 /*
-Copyright (C) 2003, 2010 - Wolfire Games
+ * This file is part of Kugaru.
+ *
+ * Copyright (C) 2003, 2010 - Wolfire Games
+ * Copyright (C) 2014 Victor A. Santos
+ *
+ * Kugaru is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Kugaru is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Kugaru.  If not, see <http://www.gnu.org/licenses/>.
+ */
 
-This file is part of Lugaru.
 
-Lugaru is free software; you can redistribute it and/or
-modify it under the terms of the GNU General Public License
-as published by the Free Software Foundation; either version 2
-of the License, or (at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
-
-See the GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with this program; if not, write to the Free Software
-Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-*/
-
-/**> HEADER FILES <**/
 #include "Game.h"
 #include "Skeleton.h"
+#include "Random.h"
+#include "FileIO.h"
 #include "openal_wrapper.h"
 
 extern float multiplier;
 extern float gravity;
 extern Skeleton testskeleton;
 extern Terrain terrain;
-extern OPENAL_SAMPLE	*samp[100];
+extern OPENAL_SAMPLE *samp[100];
 extern int channels[100];
 extern Objects objects;
 extern Sprites sprites;
@@ -51,6 +52,8 @@ extern int whichjointendarray[26];
 extern Game * pgame;
 extern bool visibleloading;
 extern "C"	void PlaySoundEx(int channel, OPENAL_SAMPLE *sptr, OPENAL_DSPUNIT *dsp, signed char startpaused);
+
+using namespace Kugaru;
 
 void dealloc2(void* param){
 	free(param);
@@ -1018,7 +1021,7 @@ void Animation::Load(char *filename, int aheight, int aattack)
 	LOGFUNC;
 
 	// Changing the filename into something the OS can understand
-	char *fixedFN = ConvertFileName(filename);
+	const char *fixedFN = ConvertFileName(filename);
 
 	LOG(std::string("Loading animation...") + fixedFN);
 
