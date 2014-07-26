@@ -1526,6 +1526,7 @@ static bool load_image(const char *file_name, TGAImageRec &tex)
             return load_png(file_name, tex);
     }
 
+    printf("%s\n", file_name);
     STUBBED("Unsupported image type");
     return false;
 }

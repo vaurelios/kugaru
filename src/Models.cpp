@@ -502,21 +502,22 @@ bool Model::loadnotex(const char *filename )
 }
 
 
-bool Model::load(const char *filename,bool texture )
+bool Model::load(const char *filename, bool texture)
 {
-	FILE			*tfile;
-	long				i;
+	FILE *tfile;
+	long i;
 
 	LOGFUNC;
 
-	LOG(std::string("Loading model...") + filename);
+	LOG("Loading model...", filename);
 
 	if(visibleloading){
 		loadscreencolor=2;
 		pgame->LoadingScreen();
 	}
 
-	int oldvertexNum,oldTriangleNum;
+	int oldvertexNum;
+    int oldTriangleNum;
 	oldvertexNum=vertexNum;
 	oldTriangleNum=TriangleNum;
 

@@ -238,188 +238,188 @@ void Game::LoadSounds()
 
 	OPENAL_SetSFXMasterVolume((int)(volume*255));
 
-	samp[footstepsound] = OPENAL_Sample_LoadEx(OPENAL_FREE, ConvertFileName("data/Sounds/footstepsnow1.ogg"), OPENAL_HW3D, 0, 0); if(visibleloading){LoadingScreen(); loadscreencolor=5;}
+	samp[footstepsound] = OPENAL_Sample_LoadEx(OPENAL_FREE, ConvertFileName("data/sounds/footstepsnow1.ogg"), OPENAL_HW3D, 0, 0); if(visibleloading){LoadingScreen(); loadscreencolor=5;}
 	OPENAL_Sample_SetMinMaxDistance(samp[footstepsound], 4.0f, 1000.0f);
 
-	samp[footstepsound2] = OPENAL_Sample_LoadEx(OPENAL_FREE, ConvertFileName("data/Sounds/footstepsnow2.ogg"), OPENAL_HW3D, 0, 0); if(visibleloading){LoadingScreen(); loadscreencolor=5;}
+	samp[footstepsound2] = OPENAL_Sample_LoadEx(OPENAL_FREE, ConvertFileName("data/sounds/footstepsnow2.ogg"), OPENAL_HW3D, 0, 0); if(visibleloading){LoadingScreen(); loadscreencolor=5;}
 	OPENAL_Sample_SetMinMaxDistance(samp[footstepsound2], 4.0f, 1000.0f);
 
-	samp[footstepsound3] = OPENAL_Sample_LoadEx(OPENAL_FREE, ConvertFileName("data/Sounds/footstepstone1.ogg"), OPENAL_HW3D, 0, 0); if(visibleloading){LoadingScreen(); loadscreencolor=5;}
+	samp[footstepsound3] = OPENAL_Sample_LoadEx(OPENAL_FREE, ConvertFileName("data/sounds/footstepstone1.ogg"), OPENAL_HW3D, 0, 0); if(visibleloading){LoadingScreen(); loadscreencolor=5;}
 	OPENAL_Sample_SetMinMaxDistance(samp[footstepsound3], 4.0f, 1000.0f);
 
-	samp[footstepsound4] = OPENAL_Sample_LoadEx(OPENAL_FREE, ConvertFileName("data/Sounds/footstepstone2.ogg"), OPENAL_HW3D, 0, 0); if(visibleloading){LoadingScreen(); loadscreencolor=5;}
+	samp[footstepsound4] = OPENAL_Sample_LoadEx(OPENAL_FREE, ConvertFileName("data/sounds/footstepstone2.ogg"), OPENAL_HW3D, 0, 0); if(visibleloading){LoadingScreen(); loadscreencolor=5;}
 	OPENAL_Sample_SetMinMaxDistance(samp[footstepsound4], 4.0f, 1000.0f);
 
-	samp[landsound] = OPENAL_Sample_LoadEx(OPENAL_FREE, ConvertFileName("data/Sounds/land.ogg"), OPENAL_HW3D, 0, 0); if(visibleloading){LoadingScreen(); loadscreencolor=5;}
+	samp[landsound] = OPENAL_Sample_LoadEx(OPENAL_FREE, ConvertFileName("data/sounds/land.ogg"), OPENAL_HW3D, 0, 0); if(visibleloading){LoadingScreen(); loadscreencolor=5;}
 	OPENAL_Sample_SetMinMaxDistance(samp[landsound], 4.0f, 1000.0f);
 
-	samp[jumpsound] = OPENAL_Sample_LoadEx(OPENAL_FREE, ConvertFileName("data/Sounds/jump.ogg"), OPENAL_HW3D, 0, 0); if(visibleloading){LoadingScreen(); loadscreencolor=5;}
+	samp[jumpsound] = OPENAL_Sample_LoadEx(OPENAL_FREE, ConvertFileName("data/sounds/jump.ogg"), OPENAL_HW3D, 0, 0); if(visibleloading){LoadingScreen(); loadscreencolor=5;}
 	OPENAL_Sample_SetMinMaxDistance(samp[jumpsound], 4.0f, 1000.0f);
 
-	samp[hawksound] = OPENAL_Sample_LoadEx(OPENAL_FREE, ConvertFileName("data/Sounds/hawk.ogg"), OPENAL_HW3D, 0, 0); if(visibleloading){LoadingScreen(); loadscreencolor=5;}
+	samp[hawksound] = OPENAL_Sample_LoadEx(OPENAL_FREE, ConvertFileName("data/sounds/hawk.ogg"), OPENAL_HW3D, 0, 0); if(visibleloading){LoadingScreen(); loadscreencolor=5;}
 	OPENAL_Sample_SetMinMaxDistance(samp[hawksound], 40.0f, 10000.0f);
 
-	samp[whooshsound] = OPENAL_Sample_LoadEx(OPENAL_FREE, ConvertFileName("data/Sounds/whoosh.ogg"), OPENAL_HW3D, 0, 0); if(visibleloading){LoadingScreen(); loadscreencolor=5;}
+	samp[whooshsound] = OPENAL_Sample_LoadEx(OPENAL_FREE, ConvertFileName("data/sounds/whoosh.ogg"), OPENAL_HW3D, 0, 0); if(visibleloading){LoadingScreen(); loadscreencolor=5;}
 	OPENAL_Sample_SetMinMaxDistance(samp[whooshsound], 4.0f, 1000.0f);
 	OPENAL_Sample_SetMode(samp[whooshsound], OPENAL_LOOP_NORMAL);
 
-	samp[landsound1] = OPENAL_Sample_LoadEx(OPENAL_FREE, ConvertFileName("data/Sounds/land1.ogg"), OPENAL_HW3D, 0, 0); if(visibleloading){LoadingScreen(); loadscreencolor=5;}
+	samp[landsound1] = OPENAL_Sample_LoadEx(OPENAL_FREE, ConvertFileName("data/sounds/land1.ogg"), OPENAL_HW3D, 0, 0); if(visibleloading){LoadingScreen(); loadscreencolor=5;}
 	OPENAL_Sample_SetMinMaxDistance(samp[landsound1], 4.0f, 1000.0f);
 
 
 
-	samp[landsound2] = OPENAL_Sample_LoadEx(OPENAL_FREE, ConvertFileName("data/Sounds/land2.ogg"), OPENAL_HW3D, 0, 0); if(visibleloading){LoadingScreen(); loadscreencolor=5;}
+	samp[landsound2] = OPENAL_Sample_LoadEx(OPENAL_FREE, ConvertFileName("data/sounds/land2.ogg"), OPENAL_HW3D, 0, 0); if(visibleloading){LoadingScreen(); loadscreencolor=5;}
 	OPENAL_Sample_SetMinMaxDistance(samp[landsound2], 4.0f, 1000.0f);
 
-	samp[breaksound] = OPENAL_Sample_LoadEx(OPENAL_FREE, ConvertFileName("data/Sounds/broken.ogg"), OPENAL_HW3D, 0, 0); if(visibleloading){LoadingScreen(); loadscreencolor=5;}
+	samp[breaksound] = OPENAL_Sample_LoadEx(OPENAL_FREE, ConvertFileName("data/sounds/broken.ogg"), OPENAL_HW3D, 0, 0); if(visibleloading){LoadingScreen(); loadscreencolor=5;}
 	OPENAL_Sample_SetMinMaxDistance(samp[breaksound], 8.0f, 2000.0f);
 
-	samp[lowwhooshsound] = OPENAL_Sample_LoadEx(OPENAL_FREE, ConvertFileName("data/Sounds/Lowwhoosh.ogg"), OPENAL_HW3D, 0, 0); if(visibleloading){LoadingScreen(); loadscreencolor=5;}
+	samp[lowwhooshsound] = OPENAL_Sample_LoadEx(OPENAL_FREE, ConvertFileName("data/sounds/lowwhoosh.ogg"), OPENAL_HW3D, 0, 0); if(visibleloading){LoadingScreen(); loadscreencolor=5;}
 	OPENAL_Sample_SetMinMaxDistance(samp[lowwhooshsound], 8.0f, 2000.0f);
 
-	samp[midwhooshsound] = OPENAL_Sample_LoadEx(OPENAL_FREE, ConvertFileName("data/Sounds/midwhoosh.ogg"), OPENAL_HW3D, 0, 0); if(visibleloading){LoadingScreen(); loadscreencolor=5;}
+	samp[midwhooshsound] = OPENAL_Sample_LoadEx(OPENAL_FREE, ConvertFileName("data/sounds/midwhoosh.ogg"), OPENAL_HW3D, 0, 0); if(visibleloading){LoadingScreen(); loadscreencolor=5;}
 	OPENAL_Sample_SetMinMaxDistance(samp[midwhooshsound], 8.0f, 2000.0f);
 
-	samp[highwhooshsound] = OPENAL_Sample_LoadEx(OPENAL_FREE, ConvertFileName("data/Sounds/highwhoosh.ogg"), OPENAL_HW3D, 0, 0); if(visibleloading){LoadingScreen(); loadscreencolor=5;}
+	samp[highwhooshsound] = OPENAL_Sample_LoadEx(OPENAL_FREE, ConvertFileName("data/sounds/highwhoosh.ogg"), OPENAL_HW3D, 0, 0); if(visibleloading){LoadingScreen(); loadscreencolor=5;}
 	OPENAL_Sample_SetMinMaxDistance(samp[highwhooshsound], 8.0f, 2000.0f);
 
-	samp[movewhooshsound] = OPENAL_Sample_LoadEx(OPENAL_FREE, ConvertFileName("data/Sounds/movewhoosh.ogg"), OPENAL_HW3D, 0, 0); if(visibleloading){LoadingScreen(); loadscreencolor=5;}
+	samp[movewhooshsound] = OPENAL_Sample_LoadEx(OPENAL_FREE, ConvertFileName("data/sounds/movewhoosh.ogg"), OPENAL_HW3D, 0, 0); if(visibleloading){LoadingScreen(); loadscreencolor=5;}
 	OPENAL_Sample_SetMinMaxDistance(samp[movewhooshsound], 8.0f, 2000.0f);
 
-	samp[heavyimpactsound] = OPENAL_Sample_LoadEx(OPENAL_FREE, ConvertFileName("data/Sounds/heavyimpact.ogg"), OPENAL_HW3D, 0, 0); if(visibleloading){LoadingScreen(); loadscreencolor=5;}
+	samp[heavyimpactsound] = OPENAL_Sample_LoadEx(OPENAL_FREE, ConvertFileName("data/sounds/heavyimpact.ogg"), OPENAL_HW3D, 0, 0); if(visibleloading){LoadingScreen(); loadscreencolor=5;}
 	OPENAL_Sample_SetMinMaxDistance(samp[heavyimpactsound], 8.0f, 2000.0f);
 
-	samp[whooshhitsound] = OPENAL_Sample_LoadEx(OPENAL_FREE, ConvertFileName("data/Sounds/Whooshhit.ogg"), OPENAL_HW3D, 0, 0); if(visibleloading){LoadingScreen(); loadscreencolor=5;}
+	samp[whooshhitsound] = OPENAL_Sample_LoadEx(OPENAL_FREE, ConvertFileName("data/sounds/whooshhit.ogg"), OPENAL_HW3D, 0, 0); if(visibleloading){LoadingScreen(); loadscreencolor=5;}
 	OPENAL_Sample_SetMinMaxDistance(samp[whooshhitsound], 8.0f, 2000.0f);
 
-	samp[thudsound] = OPENAL_Sample_LoadEx(OPENAL_FREE, ConvertFileName("data/Sounds/thud.ogg"), OPENAL_HW3D, 0, 0); if(visibleloading){LoadingScreen(); loadscreencolor=5;}
+	samp[thudsound] = OPENAL_Sample_LoadEx(OPENAL_FREE, ConvertFileName("data/sounds/thud.ogg"), OPENAL_HW3D, 0, 0); if(visibleloading){LoadingScreen(); loadscreencolor=5;}
 	OPENAL_Sample_SetMinMaxDistance(samp[thudsound], 8.0f, 2000.0f);
 
-	samp[alarmsound] = OPENAL_Sample_LoadEx(OPENAL_FREE, ConvertFileName("data/Sounds/alarm.ogg"), OPENAL_2D, 0, 0); if(visibleloading){LoadingScreen(); loadscreencolor=5;}
+	samp[alarmsound] = OPENAL_Sample_LoadEx(OPENAL_FREE, ConvertFileName("data/sounds/alarm.ogg"), OPENAL_2D, 0, 0); if(visibleloading){LoadingScreen(); loadscreencolor=5;}
 	OPENAL_Sample_SetMinMaxDistance(samp[alarmsound], 8.0f, 2000.0f);
 
-	samp[breaksound2] = OPENAL_Sample_LoadEx(OPENAL_FREE, ConvertFileName("data/Sounds/break.ogg"), OPENAL_HW3D, 0, 0); if(visibleloading){LoadingScreen(); loadscreencolor=5;}
+	samp[breaksound2] = OPENAL_Sample_LoadEx(OPENAL_FREE, ConvertFileName("data/sounds/break.ogg"), OPENAL_HW3D, 0, 0); if(visibleloading){LoadingScreen(); loadscreencolor=5;}
 	OPENAL_Sample_SetMinMaxDistance(samp[breaksound2], 8.0f, 2000.0f);
 
-	samp[knifedrawsound] = OPENAL_Sample_LoadEx(OPENAL_FREE, ConvertFileName("data/Sounds/knifedraw.ogg"), OPENAL_HW3D, 0, 0); if(visibleloading){LoadingScreen(); loadscreencolor=5;}
+	samp[knifedrawsound] = OPENAL_Sample_LoadEx(OPENAL_FREE, ConvertFileName("data/sounds/knifedraw.ogg"), OPENAL_HW3D, 0, 0); if(visibleloading){LoadingScreen(); loadscreencolor=5;}
 	OPENAL_Sample_SetMinMaxDistance(samp[knifedrawsound], 8.0f, 2000.0f);
 
-	samp[knifesheathesound] = OPENAL_Sample_LoadEx(OPENAL_FREE, ConvertFileName("data/Sounds/knifesheathe.ogg"), OPENAL_HW3D, 0, 0); if(visibleloading){LoadingScreen(); loadscreencolor=5;}
+	samp[knifesheathesound] = OPENAL_Sample_LoadEx(OPENAL_FREE, ConvertFileName("data/sounds/knifesheathe.ogg"), OPENAL_HW3D, 0, 0); if(visibleloading){LoadingScreen(); loadscreencolor=5;}
 	OPENAL_Sample_SetMinMaxDistance(samp[knifesheathesound], 8.0f, 2000.0f);
 
-	samp[fleshstabsound] = OPENAL_Sample_LoadEx(OPENAL_FREE, ConvertFileName("data/Sounds/Fleshstab.ogg"), OPENAL_HW3D, 0, 0); if(visibleloading){LoadingScreen(); loadscreencolor=5;}
+	samp[fleshstabsound] = OPENAL_Sample_LoadEx(OPENAL_FREE, ConvertFileName("data/sounds/fleshstab.ogg"), OPENAL_HW3D, 0, 0); if(visibleloading){LoadingScreen(); loadscreencolor=5;}
 	OPENAL_Sample_SetMinMaxDistance(samp[fleshstabsound], 8.0f, 2000.0f);
 
-	samp[fleshstabremovesound] = OPENAL_Sample_LoadEx(OPENAL_FREE, ConvertFileName("data/Sounds/Fleshstabremove.ogg"), OPENAL_HW3D, 0, 0); if(visibleloading){LoadingScreen(); loadscreencolor=5;}
+	samp[fleshstabremovesound] = OPENAL_Sample_LoadEx(OPENAL_FREE, ConvertFileName("data/sounds/fleshstabremove.ogg"), OPENAL_HW3D, 0, 0); if(visibleloading){LoadingScreen(); loadscreencolor=5;}
 	OPENAL_Sample_SetMinMaxDistance(samp[fleshstabremovesound], 8.0f, 2000.0f);
 
-	samp[knifeswishsound] = OPENAL_Sample_LoadEx(OPENAL_FREE, ConvertFileName("data/Sounds/knifeswish.ogg"), OPENAL_HW3D, 0, 0); if(visibleloading){LoadingScreen(); loadscreencolor=5;}
+	samp[knifeswishsound] = OPENAL_Sample_LoadEx(OPENAL_FREE, ConvertFileName("data/sounds/knifeswish.ogg"), OPENAL_HW3D, 0, 0); if(visibleloading){LoadingScreen(); loadscreencolor=5;}
 	OPENAL_Sample_SetMinMaxDistance(samp[knifeswishsound], 8.0f, 2000.0f);
 
-	samp[knifeslicesound] = OPENAL_Sample_LoadEx(OPENAL_FREE, ConvertFileName("data/Sounds/knifeslice.ogg"), OPENAL_HW3D, 0, 0); if(visibleloading){LoadingScreen(); loadscreencolor=5;}
+	samp[knifeslicesound] = OPENAL_Sample_LoadEx(OPENAL_FREE, ConvertFileName("data/sounds/knifeslice.ogg"), OPENAL_HW3D, 0, 0); if(visibleloading){LoadingScreen(); loadscreencolor=5;}
 	OPENAL_Sample_SetMinMaxDistance(samp[knifeslicesound], 8.0f, 2000.0f);
 
-	samp[swordslicesound] = OPENAL_Sample_LoadEx(OPENAL_FREE, ConvertFileName("data/Sounds/swordslice.ogg"), OPENAL_HW3D, 0, 0); if(visibleloading){LoadingScreen(); loadscreencolor=5;}
+	samp[swordslicesound] = OPENAL_Sample_LoadEx(OPENAL_FREE, ConvertFileName("data/sounds/swordslice.ogg"), OPENAL_HW3D, 0, 0); if(visibleloading){LoadingScreen(); loadscreencolor=5;}
 	OPENAL_Sample_SetMinMaxDistance(samp[swordslicesound], 8.0f, 2000.0f);
 
-	samp[skidsound] = OPENAL_Sample_LoadEx(OPENAL_FREE, ConvertFileName("data/Sounds/skid.ogg"), OPENAL_HW3D, 0, 0); if(visibleloading){LoadingScreen(); loadscreencolor=5;}
+	samp[skidsound] = OPENAL_Sample_LoadEx(OPENAL_FREE, ConvertFileName("data/sounds/skid.ogg"), OPENAL_HW3D, 0, 0); if(visibleloading){LoadingScreen(); loadscreencolor=5;}
 	OPENAL_Sample_SetMinMaxDistance(samp[skidsound], 8.0f, 2000.0f);
 
-	samp[snowskidsound] = OPENAL_Sample_LoadEx(OPENAL_FREE, ConvertFileName("data/Sounds/snowskid.ogg"), OPENAL_HW3D, 0, 0); if(visibleloading){LoadingScreen(); loadscreencolor=5;}
+	samp[snowskidsound] = OPENAL_Sample_LoadEx(OPENAL_FREE, ConvertFileName("data/sounds/snowskid.ogg"), OPENAL_HW3D, 0, 0); if(visibleloading){LoadingScreen(); loadscreencolor=5;}
 	OPENAL_Sample_SetMinMaxDistance(samp[snowskidsound], 8.0f, 2000.0f);
 
-	samp[bushrustle] = OPENAL_Sample_LoadEx(OPENAL_FREE, ConvertFileName("data/Sounds/bushrustle.ogg"), OPENAL_HW3D, 0, 0); if(visibleloading){LoadingScreen(); loadscreencolor=5;}
+	samp[bushrustle] = OPENAL_Sample_LoadEx(OPENAL_FREE, ConvertFileName("data/sounds/bushrustle.ogg"), OPENAL_HW3D, 0, 0); if(visibleloading){LoadingScreen(); loadscreencolor=5;}
 	OPENAL_Sample_SetMinMaxDistance(samp[bushrustle], 4.0f, 1000.0f);
 
-	samp[clank1sound] = OPENAL_Sample_LoadEx(OPENAL_FREE, ConvertFileName("data/Sounds/clank1.ogg"), OPENAL_HW3D, 0, 0); if(visibleloading){LoadingScreen(); loadscreencolor=5;}
+	samp[clank1sound] = OPENAL_Sample_LoadEx(OPENAL_FREE, ConvertFileName("data/sounds/clank1.ogg"), OPENAL_HW3D, 0, 0); if(visibleloading){LoadingScreen(); loadscreencolor=5;}
 	OPENAL_Sample_SetMinMaxDistance(samp[clank1sound], 8.0f, 2000.0f);
 
-	samp[clank2sound] = OPENAL_Sample_LoadEx(OPENAL_FREE, ConvertFileName("data/Sounds/clank2.ogg"), OPENAL_HW3D, 0, 0); if(visibleloading){LoadingScreen(); loadscreencolor=5;}
+	samp[clank2sound] = OPENAL_Sample_LoadEx(OPENAL_FREE, ConvertFileName("data/sounds/clank2.ogg"), OPENAL_HW3D, 0, 0); if(visibleloading){LoadingScreen(); loadscreencolor=5;}
 	OPENAL_Sample_SetMinMaxDistance(samp[clank2sound], 8.0f, 2000.0f);
 
-	samp[clank3sound] = OPENAL_Sample_LoadEx(OPENAL_FREE, ConvertFileName("data/Sounds/clank3.ogg"), OPENAL_HW3D, 0, 0); if(visibleloading){LoadingScreen(); loadscreencolor=5;}
+	samp[clank3sound] = OPENAL_Sample_LoadEx(OPENAL_FREE, ConvertFileName("data/sounds/clank3.ogg"), OPENAL_HW3D, 0, 0); if(visibleloading){LoadingScreen(); loadscreencolor=5;}
 	OPENAL_Sample_SetMinMaxDistance(samp[clank3sound], 8.0f, 2000.0f);
 
-	samp[clank4sound] = OPENAL_Sample_LoadEx(OPENAL_FREE, ConvertFileName("data/Sounds/clank4.ogg"), OPENAL_HW3D, 0, 0); if(visibleloading){LoadingScreen(); loadscreencolor=5;}
+	samp[clank4sound] = OPENAL_Sample_LoadEx(OPENAL_FREE, ConvertFileName("data/sounds/clank4.ogg"), OPENAL_HW3D, 0, 0); if(visibleloading){LoadingScreen(); loadscreencolor=5;}
 	OPENAL_Sample_SetMinMaxDistance(samp[clank4sound], 8.0f, 2000.0f);
 
-	samp[consolesuccesssound] = OPENAL_Sample_LoadEx(OPENAL_FREE, ConvertFileName("data/Sounds/consolesuccess.ogg"), OPENAL_2D, 0, 0); if(visibleloading){LoadingScreen(); loadscreencolor=5;}
+	samp[consolesuccesssound] = OPENAL_Sample_LoadEx(OPENAL_FREE, ConvertFileName("data/sounds/consolesuccess.ogg"), OPENAL_2D, 0, 0); if(visibleloading){LoadingScreen(); loadscreencolor=5;}
 	OPENAL_Sample_SetMinMaxDistance(samp[consolesuccesssound], 4.0f, 1000.0f);
 
-	samp[consolefailsound] = OPENAL_Sample_LoadEx(OPENAL_FREE, ConvertFileName("data/Sounds/consolefail.ogg"), OPENAL_2D, 0, 0); if(visibleloading){LoadingScreen(); loadscreencolor=5;}
+	samp[consolefailsound] = OPENAL_Sample_LoadEx(OPENAL_FREE, ConvertFileName("data/sounds/consolefail.ogg"), OPENAL_2D, 0, 0); if(visibleloading){LoadingScreen(); loadscreencolor=5;}
 	OPENAL_Sample_SetMinMaxDistance(samp[consolefailsound], 4.0f, 1000.0f);
 
-	samp[metalhitsound] = OPENAL_Sample_LoadEx(OPENAL_FREE, ConvertFileName("data/Sounds/MetalHit.ogg"), OPENAL_HW3D, 0, 0); if(visibleloading){LoadingScreen(); loadscreencolor=5;}
+	samp[metalhitsound] = OPENAL_Sample_LoadEx(OPENAL_FREE, ConvertFileName("data/sounds/metalhit.ogg"), OPENAL_HW3D, 0, 0); if(visibleloading){LoadingScreen(); loadscreencolor=5;}
 	OPENAL_Sample_SetMinMaxDistance(samp[metalhitsound], 8.0f, 2000.0f);
 
-	samp[clawslicesound] = OPENAL_Sample_LoadEx(OPENAL_FREE, ConvertFileName("data/Sounds/clawslice.ogg"), OPENAL_HW3D, 0, 0); if(visibleloading){LoadingScreen(); loadscreencolor=5;}
+	samp[clawslicesound] = OPENAL_Sample_LoadEx(OPENAL_FREE, ConvertFileName("data/sounds/clawslice.ogg"), OPENAL_HW3D, 0, 0); if(visibleloading){LoadingScreen(); loadscreencolor=5;}
 	OPENAL_Sample_SetMinMaxDistance(samp[clawslicesound], 8.0f, 2000.0f);
 
-	samp[splattersound] = OPENAL_Sample_LoadEx(OPENAL_FREE, ConvertFileName("data/Sounds/splatter.ogg"), OPENAL_HW3D, 0, 0); if(visibleloading){LoadingScreen(); loadscreencolor=5;}
+	samp[splattersound] = OPENAL_Sample_LoadEx(OPENAL_FREE, ConvertFileName("data/sounds/splatter.ogg"), OPENAL_HW3D, 0, 0); if(visibleloading){LoadingScreen(); loadscreencolor=5;}
 	OPENAL_Sample_SetMinMaxDistance(samp[splattersound], 8.0f, 2000.0f);
 
-	samp[growlsound] = OPENAL_Sample_LoadEx(OPENAL_FREE, ConvertFileName("data/Sounds/Growl.ogg"), OPENAL_HW3D, 0, 0); if(visibleloading){LoadingScreen(); loadscreencolor=5;}
+	samp[growlsound] = OPENAL_Sample_LoadEx(OPENAL_FREE, ConvertFileName("data/sounds/growl.ogg"), OPENAL_HW3D, 0, 0); if(visibleloading){LoadingScreen(); loadscreencolor=5;}
 	OPENAL_Sample_SetMinMaxDistance(samp[growlsound], 1000.0f, 2000.0f);
 
-	samp[growl2sound] = OPENAL_Sample_LoadEx(OPENAL_FREE, ConvertFileName("data/Sounds/Growl2.ogg"), OPENAL_HW3D, 0, 0); if(visibleloading){LoadingScreen(); loadscreencolor=5;}
+	samp[growl2sound] = OPENAL_Sample_LoadEx(OPENAL_FREE, ConvertFileName("data/sounds/growl2.ogg"), OPENAL_HW3D, 0, 0); if(visibleloading){LoadingScreen(); loadscreencolor=5;}
 	OPENAL_Sample_SetMinMaxDistance(samp[growl2sound], 1000.0f, 2000.0f);
 
-	samp[barksound] = OPENAL_Sample_LoadEx(OPENAL_FREE, ConvertFileName("data/Sounds/bark.ogg"), OPENAL_HW3D, 0, 0); if(visibleloading){LoadingScreen(); loadscreencolor=5;}
+	samp[barksound] = OPENAL_Sample_LoadEx(OPENAL_FREE, ConvertFileName("data/sounds/bark.ogg"), OPENAL_HW3D, 0, 0); if(visibleloading){LoadingScreen(); loadscreencolor=5;}
 	OPENAL_Sample_SetMinMaxDistance(samp[barksound], 1000.0f, 2000.0f);
 
-	samp[bark2sound] = OPENAL_Sample_LoadEx(OPENAL_FREE, ConvertFileName("data/Sounds/bark2.ogg"), OPENAL_HW3D, 0, 0); if(visibleloading){LoadingScreen(); loadscreencolor=5;}
+	samp[bark2sound] = OPENAL_Sample_LoadEx(OPENAL_FREE, ConvertFileName("data/sounds/bark2.ogg"), OPENAL_HW3D, 0, 0); if(visibleloading){LoadingScreen(); loadscreencolor=5;}
 	OPENAL_Sample_SetMinMaxDistance(samp[bark2sound], 1000.0f, 2000.0f);
 
-	samp[bark3sound] = OPENAL_Sample_LoadEx(OPENAL_FREE, ConvertFileName("data/Sounds/bark3.ogg"), OPENAL_HW3D, 0, 0); if(visibleloading){LoadingScreen(); loadscreencolor=5;}
+	samp[bark3sound] = OPENAL_Sample_LoadEx(OPENAL_FREE, ConvertFileName("data/sounds/bark3.ogg"), OPENAL_HW3D, 0, 0); if(visibleloading){LoadingScreen(); loadscreencolor=5;}
 	OPENAL_Sample_SetMinMaxDistance(samp[bark3sound], 1000.0f, 2000.0f);
 
-	samp[snarlsound] = OPENAL_Sample_LoadEx(OPENAL_FREE, ConvertFileName("data/Sounds/snarl.ogg"), OPENAL_HW3D, 0, 0); if(visibleloading){LoadingScreen(); loadscreencolor=5;}
+	samp[snarlsound] = OPENAL_Sample_LoadEx(OPENAL_FREE, ConvertFileName("data/sounds/snarl.ogg"), OPENAL_HW3D, 0, 0); if(visibleloading){LoadingScreen(); loadscreencolor=5;}
 	OPENAL_Sample_SetMinMaxDistance(samp[snarlsound], 1000.0f, 2000.0f);
 
 
-	samp[snarl2sound] = OPENAL_Sample_LoadEx(OPENAL_FREE, ConvertFileName("data/Sounds/snarl2.ogg"), OPENAL_HW3D, 0, 0); if(visibleloading){LoadingScreen(); loadscreencolor=5;}
+	samp[snarl2sound] = OPENAL_Sample_LoadEx(OPENAL_FREE, ConvertFileName("data/sounds/snarl2.ogg"), OPENAL_HW3D, 0, 0); if(visibleloading){LoadingScreen(); loadscreencolor=5;}
 	OPENAL_Sample_SetMinMaxDistance(samp[snarl2sound], 1000.0f, 2000.0f);
 
-	samp[barkgrowlsound] = OPENAL_Sample_LoadEx(OPENAL_FREE, ConvertFileName("data/Sounds/barkgrowl.ogg"), OPENAL_HW3D, 0, 0); if(visibleloading){LoadingScreen(); loadscreencolor=5;}
+	samp[barkgrowlsound] = OPENAL_Sample_LoadEx(OPENAL_FREE, ConvertFileName("data/sounds/barkgrowl.ogg"), OPENAL_HW3D, 0, 0); if(visibleloading){LoadingScreen(); loadscreencolor=5;}
 	OPENAL_Sample_SetMinMaxDistance(samp[barkgrowlsound], 1000.0f, 2000.0f);
 
-	samp[rabbitattacksound] = OPENAL_Sample_LoadEx(OPENAL_FREE, ConvertFileName("data/Sounds/rabbitattack.ogg"), OPENAL_HW3D, 0, 0); if(visibleloading){LoadingScreen(); loadscreencolor=5;}
+	samp[rabbitattacksound] = OPENAL_Sample_LoadEx(OPENAL_FREE, ConvertFileName("data/sounds/rabbitattack.ogg"), OPENAL_HW3D, 0, 0); if(visibleloading){LoadingScreen(); loadscreencolor=5;}
 	OPENAL_Sample_SetMinMaxDistance(samp[rabbitattacksound], 1000.0f, 2000.0f);
 
-	samp[rabbitattack2sound] = OPENAL_Sample_LoadEx(OPENAL_FREE, ConvertFileName("data/Sounds/rabbitattack2.ogg"), OPENAL_HW3D, 0, 0); if(visibleloading){LoadingScreen(); loadscreencolor=5;}
+	samp[rabbitattack2sound] = OPENAL_Sample_LoadEx(OPENAL_FREE, ConvertFileName("data/sounds/rabbitattack2.ogg"), OPENAL_HW3D, 0, 0); if(visibleloading){LoadingScreen(); loadscreencolor=5;}
 	OPENAL_Sample_SetMinMaxDistance(samp[rabbitattack2sound], 1000.0f, 2000.0f);
 
-	samp[rabbitattack3sound] = OPENAL_Sample_LoadEx(OPENAL_FREE, ConvertFileName("data/Sounds/rabbitattack3.ogg"), OPENAL_HW3D, 0, 0); if(visibleloading){LoadingScreen(); loadscreencolor=5;}
+	samp[rabbitattack3sound] = OPENAL_Sample_LoadEx(OPENAL_FREE, ConvertFileName("data/sounds/rabbitattack3.ogg"), OPENAL_HW3D, 0, 0); if(visibleloading){LoadingScreen(); loadscreencolor=5;}
 	OPENAL_Sample_SetMinMaxDistance(samp[rabbitattack3sound], 1000.0f, 2000.0f);
 
-	samp[rabbitattack4sound] = OPENAL_Sample_LoadEx(OPENAL_FREE, ConvertFileName("data/Sounds/rabbitattack4.ogg"), OPENAL_HW3D, 0, 0); if(visibleloading){LoadingScreen(); loadscreencolor=5;}
+	samp[rabbitattack4sound] = OPENAL_Sample_LoadEx(OPENAL_FREE, ConvertFileName("data/sounds/rabbitattack4.ogg"), OPENAL_HW3D, 0, 0); if(visibleloading){LoadingScreen(); loadscreencolor=5;}
 	OPENAL_Sample_SetMinMaxDistance(samp[rabbitattack4sound], 1000.0f, 2000.0f);
 
-	samp[rabbitpainsound] = OPENAL_Sample_LoadEx(OPENAL_FREE, ConvertFileName("data/Sounds/rabbitpain.ogg"), OPENAL_HW3D, 0, 0); if(visibleloading){LoadingScreen(); loadscreencolor=5;}
+	samp[rabbitpainsound] = OPENAL_Sample_LoadEx(OPENAL_FREE, ConvertFileName("data/sounds/rabbitpain.ogg"), OPENAL_HW3D, 0, 0); if(visibleloading){LoadingScreen(); loadscreencolor=5;}
 	OPENAL_Sample_SetMinMaxDistance(samp[rabbitpainsound], 1000.0f, 2000.0f);
 
-	samp[rabbitpain1sound] = OPENAL_Sample_LoadEx(OPENAL_FREE, ConvertFileName("data/Sounds/rabbitpain2.ogg"), OPENAL_HW3D, 0, 0); if(visibleloading){LoadingScreen(); loadscreencolor=5;}
+	samp[rabbitpain1sound] = OPENAL_Sample_LoadEx(OPENAL_FREE, ConvertFileName("data/sounds/rabbitpain2.ogg"), OPENAL_HW3D, 0, 0); if(visibleloading){LoadingScreen(); loadscreencolor=5;}
 	OPENAL_Sample_SetMinMaxDistance(samp[rabbitpain1sound], 1000.0f, 2000.0f);
 
-	/*samp[rabbitpain2sound] = OPENAL_Sample_LoadEx(OPENAL_FREE, ConvertFileName("data/Sounds/rabbitpain2.ogg"), OPENAL_HW3D, 0, 0); if(visibleloading){LoadingScreen(); loadscreencolor=5;}
+	/*samp[rabbitpain2sound] = OPENAL_Sample_LoadEx(OPENAL_FREE, ConvertFileName("data/sounds/rabbitpain2.ogg"), OPENAL_HW3D, 0, 0); if(visibleloading){LoadingScreen(); loadscreencolor=5;}
 	OPENAL_Sample_SetMinMaxDistance(samp[rabbitpain2sound], 1000.0f, 2000.0f);
 	*/
-	samp[rabbitchitter] = OPENAL_Sample_LoadEx(OPENAL_FREE, ConvertFileName("data/Sounds/rabbitchitter.ogg"), OPENAL_HW3D, 0, 0); if(visibleloading){LoadingScreen(); loadscreencolor=5;}
+	samp[rabbitchitter] = OPENAL_Sample_LoadEx(OPENAL_FREE, ConvertFileName("data/sounds/rabbitchitter.ogg"), OPENAL_HW3D, 0, 0); if(visibleloading){LoadingScreen(); loadscreencolor=5;}
 	OPENAL_Sample_SetMinMaxDistance(samp[rabbitchitter], 1000.0f, 2000.0f);
 
-	samp[rabbitchitter2] = OPENAL_Sample_LoadEx(OPENAL_FREE, ConvertFileName("data/Sounds/rabbitchitter2.ogg"), OPENAL_HW3D, 0, 0); if(visibleloading){LoadingScreen(); loadscreencolor=5;}
+	samp[rabbitchitter2] = OPENAL_Sample_LoadEx(OPENAL_FREE, ConvertFileName("data/sounds/rabbitchitter2.ogg"), OPENAL_HW3D, 0, 0); if(visibleloading){LoadingScreen(); loadscreencolor=5;}
 	OPENAL_Sample_SetMinMaxDistance(samp[rabbitchitter2], 1000.0f, 2000.0f);
 
-	samp[swordstaffsound] = OPENAL_Sample_LoadEx(OPENAL_FREE, ConvertFileName("data/Sounds/swordstaff.ogg"), OPENAL_HW3D, 0, 0); if(visibleloading){LoadingScreen(); loadscreencolor=5;}
+	samp[swordstaffsound] = OPENAL_Sample_LoadEx(OPENAL_FREE, ConvertFileName("data/sounds/swordstaff.ogg"), OPENAL_HW3D, 0, 0); if(visibleloading){LoadingScreen(); loadscreencolor=5;}
 	OPENAL_Sample_SetMinMaxDistance(samp[swordstaffsound], 8.0f, 2000.0f);
 
-	samp[staffbodysound] = OPENAL_Sample_LoadEx(OPENAL_FREE, ConvertFileName("data/Sounds/staffbody.ogg"), OPENAL_HW3D, 0, 0); if(visibleloading){LoadingScreen(); loadscreencolor=5;}
+	samp[staffbodysound] = OPENAL_Sample_LoadEx(OPENAL_FREE, ConvertFileName("data/sounds/staffbody.ogg"), OPENAL_HW3D, 0, 0); if(visibleloading){LoadingScreen(); loadscreencolor=5;}
 	OPENAL_Sample_SetMinMaxDistance(samp[staffbodysound], 8.0f, 2000.0f);
 
-	samp[staffheadsound] = OPENAL_Sample_LoadEx(OPENAL_FREE, ConvertFileName("data/Sounds/staffhead.ogg"), OPENAL_HW3D, 0, 0); if(visibleloading){LoadingScreen(); loadscreencolor=5;}
+	samp[staffheadsound] = OPENAL_Sample_LoadEx(OPENAL_FREE, ConvertFileName("data/sounds/staffhead.ogg"), OPENAL_HW3D, 0, 0); if(visibleloading){LoadingScreen(); loadscreencolor=5;}
 	OPENAL_Sample_SetMinMaxDistance(samp[staffheadsound], 8.0f, 2000.0f);
 
-	samp[staffbreaksound] = OPENAL_Sample_LoadEx(OPENAL_FREE, ConvertFileName("data/Sounds/staffbreak.wav"), OPENAL_HW3D, 0, 0); if(visibleloading){LoadingScreen(); loadscreencolor=5;}
+	samp[staffbreaksound] = OPENAL_Sample_LoadEx(OPENAL_FREE, ConvertFileName("data/sounds/staffbreak.ogg"), OPENAL_HW3D, 0, 0); if(visibleloading){LoadingScreen(); loadscreencolor=5;}
 	OPENAL_Sample_SetMinMaxDistance(samp[staffbreaksound], 8.0f, 2000.0f);
 }
 
@@ -1148,7 +1148,7 @@ void Game::InitGame()
 
 	int temptexdetail=texdetail;
 	texdetail=1;
-	text.LoadFontTexture("data/Textures/Font.png");
+	text.LoadFontTexture("data/textures/font.png");
 	text.BuildFont();
 	texdetail=temptexdetail;
 
@@ -1217,7 +1217,7 @@ void Game::InitGame()
 
 	OPENAL_SetSFXMasterVolume((int)(volume*255));
 
-	strm[stream_music3] = OPENAL_Stream_Open(ConvertFileName("data/Sounds/music3.mp3"), OPENAL_2D, 0, 0); if(visibleloading){LoadingScreen(); loadscreencolor=0;}
+	strm[stream_music3] = OPENAL_Stream_Open(ConvertFileName("data/sounds/music3.ogg"), OPENAL_2D, 0, 0); if(visibleloading){LoadingScreen(); loadscreencolor=0;}
 //	OPENAL_Sample_SetMinMaxDistance(strm[stream_music3], 4.0f, 1000.0f);
 	OPENAL_Stream_SetMode(strm[stream_music3], OPENAL_LOOP_NORMAL);
 
@@ -1231,48 +1231,48 @@ void Game::InitGame()
 	FadeLoadingScreen(20);
 
 	if(ambientsound){
-		strm[stream_wind] = OPENAL_Stream_Open(ConvertFileName("data/Sounds/wind.mp3"), OPENAL_2D, 0, 0); if(visibleloading){LoadingScreen(); loadscreencolor=5;}
+		strm[stream_wind] = OPENAL_Stream_Open(ConvertFileName("data/sounds/wind.ogg"), OPENAL_2D, 0, 0); if(visibleloading){LoadingScreen(); loadscreencolor=5;}
 //		OPENAL_Sample_SetMinMaxDistance(strm[stream_wind], 4.0f, 1000.0f);
 		OPENAL_Stream_SetMode(strm[stream_wind], OPENAL_LOOP_NORMAL);
 
 		FadeLoadingScreen(30);
 
-		strm[stream_desertambient] = OPENAL_Stream_Open(ConvertFileName("data/Sounds/desertambient.mp3"), OPENAL_2D, 0, 0); if(visibleloading){LoadingScreen(); loadscreencolor=5;}
+		strm[stream_desertambient] = OPENAL_Stream_Open(ConvertFileName("data/sounds/desertambient.ogg"), OPENAL_2D, 0, 0); if(visibleloading){LoadingScreen(); loadscreencolor=5;}
 //		OPENAL_Sample_SetMinMaxDistance(strm[stream_desertambient], 4.0f, 1000.0f);
 		OPENAL_Stream_SetMode(strm[stream_desertambient], OPENAL_LOOP_NORMAL);
 	}
 
 	FadeLoadingScreen(40);
 
-	samp[firestartsound] = OPENAL_Sample_Load(OPENAL_FREE, ConvertFileName("data/Sounds/firestart.ogg"), OPENAL_2D, 0, 0); if(visibleloading){LoadingScreen(); loadscreencolor=5;}
+	samp[firestartsound] = OPENAL_Sample_Load(OPENAL_FREE, ConvertFileName("data/sounds/firestart.ogg"), OPENAL_2D, 0, 0); if(visibleloading){LoadingScreen(); loadscreencolor=5;}
 	OPENAL_Sample_SetMinMaxDistance(samp[firestartsound], 8.0f, 2000.0f);
 
-	strm[stream_firesound] = OPENAL_Stream_Open(ConvertFileName("data/Sounds/fire.ogg"), OPENAL_2D, 0, 0); if(visibleloading){LoadingScreen(); loadscreencolor=5;}
+	strm[stream_firesound] = OPENAL_Stream_Open(ConvertFileName("data/sounds/fire.ogg"), OPENAL_2D, 0, 0); if(visibleloading){LoadingScreen(); loadscreencolor=5;}
 //	OPENAL_Sample_SetMinMaxDistance(strm[stream_firesound], 8.0f, 2000.0f);
 	OPENAL_Stream_SetMode(strm[stream_firesound], OPENAL_LOOP_NORMAL);
 
 	FadeLoadingScreen(50);
 
-	samp[fireendsound] = OPENAL_Sample_Load(OPENAL_FREE, ConvertFileName("data/Sounds/fireend.ogg"), OPENAL_2D, 0, 0); if(visibleloading){LoadingScreen(); loadscreencolor=5;}
+	samp[fireendsound] = OPENAL_Sample_Load(OPENAL_FREE, ConvertFileName("data/sounds/fireend.ogg"), OPENAL_2D, 0, 0); if(visibleloading){LoadingScreen(); loadscreencolor=5;}
 	OPENAL_Sample_SetMinMaxDistance(samp[fireendsound], 8.0f, 2000.0f);
 
 	//if(musictoggle){
-	strm[stream_music1grass] = OPENAL_Stream_Open(ConvertFileName("data/Sounds/music1grass.mp3"), OPENAL_2D, 0, 0); if(visibleloading){LoadingScreen(); loadscreencolor=1;}
+	strm[stream_music1grass] = OPENAL_Stream_Open(ConvertFileName("data/sounds/music1grass.ogg"), OPENAL_2D, 0, 0); if(visibleloading){LoadingScreen(); loadscreencolor=1;}
 //	OPENAL_Sample_SetMinMaxDistance(strm[stream_music1grass], 4.0f, 1000.0f);
 	OPENAL_Stream_SetMode(strm[stream_music1grass], OPENAL_LOOP_NORMAL);
 
-	strm[stream_music1snow] = OPENAL_Stream_Open(ConvertFileName("data/Sounds/music1snow.mp3"), OPENAL_2D, 0, 0); if(visibleloading){LoadingScreen(); loadscreencolor=2;}
+	strm[stream_music1snow] = OPENAL_Stream_Open(ConvertFileName("data/sounds/music1snow.ogg"), OPENAL_2D, 0, 0); if(visibleloading){LoadingScreen(); loadscreencolor=2;}
 //	OPENAL_Sample_SetMinMaxDistance(strm[stream_music1snow], 4.0f, 1000.0f);
 	OPENAL_Stream_SetMode(strm[stream_music1snow], OPENAL_LOOP_NORMAL);
 
 	FadeLoadingScreen(60);
 
-	strm[stream_music1desert] = OPENAL_Stream_Open(ConvertFileName("data/Sounds/music1desert.mp3"), OPENAL_2D, 0, 0); if(visibleloading){LoadingScreen(); loadscreencolor=3;}
+	strm[stream_music1desert] = OPENAL_Stream_Open(ConvertFileName("data/sounds/music1desert.ogg"), OPENAL_2D, 0, 0); if(visibleloading){LoadingScreen(); loadscreencolor=3;}
 //	OPENAL_Sample_SetMinMaxDistance(strm[stream_music1desert], 4.0f, 1000.0f);
 	OPENAL_Stream_SetMode(strm[stream_music1desert], OPENAL_LOOP_NORMAL);
 
 	FadeLoadingScreen(80);
-	strm[stream_music2] = OPENAL_Stream_Open(ConvertFileName("data/Sounds/music2.ogg"), OPENAL_2D, 0, 0); if(visibleloading){LoadingScreen(); loadscreencolor=4;}
+	strm[stream_music2] = OPENAL_Stream_Open(ConvertFileName("data/sounds/music2.ogg"), OPENAL_2D, 0, 0); if(visibleloading){LoadingScreen(); loadscreencolor=4;}
 //	OPENAL_Sample_SetMinMaxDistance(strm[stream_music2], 4.0f, 1000.0f);
 	OPENAL_Stream_SetMode(strm[stream_music2], OPENAL_LOOP_NORMAL);
 
@@ -1282,21 +1282,21 @@ void Game::InitGame()
 	FadeLoadingScreen(90);
 
 
-	LoadTexture("data/Textures/Cursor.png",&cursortexture,0,1);
+	LoadTexture("data/textures/cursor.png",&cursortexture,0,1);
 
-	LoadTexture("data/Textures/MapCircle.png",&Mapcircletexture,0,1);
-	LoadTexture("data/Textures/MapBox.png",&Mapboxtexture,0,1);
-	LoadTexture("data/Textures/MapArrow.png",&Maparrowtexture,0,1);
+	LoadTexture("data/textures/mapcircle.png",&Mapcircletexture,0,1);
+	LoadTexture("data/textures/mapbox.png",&Mapboxtexture,0,1);
+	LoadTexture("data/textures/maparrow.png",&Maparrowtexture,0,1);
 
 	temptexdetail=texdetail;
 	if(texdetail>2)texdetail=2;
-	LoadTexture("data/Textures/Lugaru.png",&Mainmenuitems[0],0,0);
-	LoadTexture("data/Textures/Newgame.png",&Mainmenuitems[1],0,0);
-	LoadTexture("data/Textures/Options.png",&Mainmenuitems[2],0,0);
-	LoadTexture("data/Textures/Quit.png",&Mainmenuitems[3],0,0);
-	LoadTexture("data/Textures/World.png",&Mainmenuitems[7],0,0);
-	LoadTexture("data/Textures/Eyelid.png",&Mainmenuitems[4],0,1);
-	//LoadTexture("data/Textures/Eye.jpg",&Mainmenuitems[5],0,1);
+	LoadTexture("data/textures/lugaru.png",&Mainmenuitems[0],0,0);
+	LoadTexture("data/textures/newgame.png",&Mainmenuitems[1],0,0);
+	LoadTexture("data/textures/options.png",&Mainmenuitems[2],0,0);
+	LoadTexture("data/textures/quit.png",&Mainmenuitems[3],0,0);
+	LoadTexture("data/textures/world.png",&Mainmenuitems[7],0,0);
+	LoadTexture("data/textures/eyelid.png",&Mainmenuitems[4],0,1);
+	//LoadTexture("data/textures/eye.jpg",&Mainmenuitems[5],0,1);
 	texdetail=temptexdetail;
 
 	loaddistrib=0;
@@ -1371,12 +1371,12 @@ void Game::LoadStuff()
 	//temptexdetail=texdetail;
 	//texdetail=1;
 	i=abs(Random()%4);
-	LoadTexture("data/Textures/fire.jpg",&loadscreentexture,1,0);
+	LoadTexture("data/textures/fire.png",&loadscreentexture,1,0);
 	//texdetail=temptexdetail;
 
 	temptexdetail=texdetail;
 	texdetail=1;
-	text.LoadFontTexture("data/Textures/Font.png");
+	text.LoadFontTexture("data/textures/font.png");
 	text.BuildFont();
 	texdetail=temptexdetail;
 
@@ -1413,25 +1413,25 @@ void Game::LoadStuff()
 
 
 
-	/*LoadTexture("data/Textures/snow.png",&terraintexture,1);
+	/*LoadTexture("data/textures/snow.png",&terraintexture,1);
 
-	LoadTexture("data/Textures/rock.png",&terraintexture2,1);
+	LoadTexture("data/textures/rock.png",&terraintexture2,1);
 
-	LoadTexture("data/Textures/detail.png",&terraintexture3,1);
+	LoadTexture("data/textures/detail.png",&terraintexture3,1);
 	*/
 
 
 	LOG("Loading weapon data...");
 
-	LoadTexture("data/Textures/knife.png",&weapons.knifetextureptr,0,1);
-	LoadTexture("data/Textures/bloodknife.png",&weapons.bloodknifetextureptr,0,1);
-	LoadTexture("data/Textures/lightbloodknife.png",&weapons.lightbloodknifetextureptr,0,1);
-	LoadTexture("data/Textures/sword.jpg",&weapons.swordtextureptr,1,0);
-	LoadTexture("data/Textures/Swordblood.jpg",&weapons.bloodswordtextureptr,1,0);
-	LoadTexture("data/Textures/Swordbloodlight.jpg",&weapons.lightbloodswordtextureptr,1,0);
-	LoadTexture("data/Textures/Staff.jpg",&weapons.stafftextureptr,1,0);
+	LoadTexture("data/textures/knife.png",&weapons.knifetextureptr,0,1);
+	LoadTexture("data/textures/bloodknife.png",&weapons.bloodknifetextureptr,0,1);
+	LoadTexture("data/textures/lightbloodknife.png",&weapons.lightbloodknifetextureptr,0,1);
+	LoadTexture("data/textures/sword.png",&weapons.swordtextureptr,1,0);
+	LoadTexture("data/textures/swordblood.png",&weapons.bloodswordtextureptr,1,0);
+	LoadTexture("data/textures/swordbloodlight.png",&weapons.lightbloodswordtextureptr,1,0);
+	LoadTexture("data/textures/staff.png",&weapons.stafftextureptr,1,0);
 
-	weapons.throwingknifemodel.load((char *)"data/Models:throwingknife.solid",1);
+	weapons.throwingknifemodel.load(ConvertFileName("data/models/throwingknife.solid"), true);
 	weapons.throwingknifemodel.Scale(.001,.001,.001);
 	//weapons.throwingknifemodel.Rotate(0,0,-90);
 	weapons.throwingknifemodel.Rotate(90,0,0);
@@ -1440,7 +1440,7 @@ void Game::LoadStuff()
 	weapons.throwingknifemodel.CalculateNormals(1);
 	//weapons.throwingknifemodel.ScaleNormals(-1,-1,-1);
 
-	weapons.swordmodel.load((char *)"data/Models:sword.solid",1);
+	weapons.swordmodel.load(ConvertFileName("data/models/sword.solid"), true);
 	weapons.swordmodel.Scale(.001,.001,.001);
 	//weapons.swordmodel.Rotate(0,0,-90);
 	weapons.swordmodel.Rotate(90,0,0);
@@ -1450,7 +1450,7 @@ void Game::LoadStuff()
 	weapons.swordmodel.CalculateNormals(1);
 	//weapons.swordmodel.ScaleNormals(-1,-1,-1);
 
-	weapons.staffmodel.load((char *)"data/Models:staff.solid",1);
+	weapons.staffmodel.load(ConvertFileName("data/models/staff.solid"), true);
 	weapons.staffmodel.Scale(.005,.005,.005);
 	//weapons.staffmodel.Rotate(0,0,-90);
 	weapons.staffmodel.Rotate(90,0,0);
@@ -1462,54 +1462,54 @@ void Game::LoadStuff()
 
 	//temptexdetail=texdetail;
 	//if(texdetail>4)texdetail=4;
-	LoadTexture("data/Textures/shadow.png",&terrain.shadowtexture,0,1);
+	LoadTexture("data/textures/shadow.png",&terrain.shadowtexture,0,1);
 
-	LoadTexture("data/Textures/blood.png",&terrain.bloodtexture,0,1);
+	LoadTexture("data/textures/blood.png",&terrain.bloodtexture,0,1);
 
-	LoadTexture("data/Textures/break.png",&terrain.breaktexture,0,1);
+	LoadTexture("data/textures/break.png",&terrain.breaktexture,0,1);
 
-	LoadTexture("data/Textures/blood.png",&terrain.bloodtexture2,0,1);
+	LoadTexture("data/textures/blood.png",&terrain.bloodtexture2,0,1);
 
 
-	LoadTexture("data/Textures/footprint.png",&terrain.footprinttexture,0,1);
+	LoadTexture("data/textures/footprint.png",&terrain.footprinttexture,0,1);
 
-	LoadTexture("data/Textures/bodyprint.png",&terrain.bodyprinttexture,0,1);
+	LoadTexture("data/textures/bodyprint.png",&terrain.bodyprinttexture,0,1);
 
-	/*LoadTexture("data/Textures/cloud.png",&sprites.cloudtexture,1);
+	/*LoadTexture("data/textures/cloud.png",&sprites.cloudtexture,1);
 
-	LoadTexture("data/Textures/cloudimpact.png",&sprites.cloudimpacttexture,1);
+	LoadTexture("data/textures/cloudimpact.png",&sprites.cloudimpacttexture,1);
 
-	LoadTexture("data/Textures/bloodparticle.png",&sprites.bloodtexture,1);
+	LoadTexture("data/textures/bloodparticle.png",&sprites.bloodtexture,1);
 
-	LoadTexture("data/Textures/snowflake.png",&sprites.snowflaketexture,1);
+	LoadTexture("data/textures/snowflake.png",&sprites.snowflaketexture,1);
 
-	LoadTexture("data/Textures/flame.png",&sprites.flametexture,1);
+	LoadTexture("data/textures/flame.png",&sprites.flametexture,1);
 
-	LoadTexture("data/Textures/smoke.png",&sprites.smoketexture,1);
+	LoadTexture("data/textures/smoke.png",&sprites.smoketexture,1);
 	//texdetail=temptexdetail;
-	LoadTexture("data/Textures/shine.png",&sprites.shinetexture,1);*/
+	LoadTexture("data/textures/shine.png",&sprites.shinetexture,1);*/
 
 
 
-	LoadTexture("data/Textures/hawk.png",&hawktexture,0,1);
+	LoadTexture("data/textures/hawk.png",&hawktexture,0,1);
 
-	LoadTexture("data/Textures/logo.png",&logotexture,0,1);
-
-
-	//LoadTexture("data/Textures/box.jpg",&objects.boxtextureptr,1,0);
+	LoadTexture("data/textures/logo.png",&logotexture,0,1);
 
 
-	LoadTexture("data/Textures/cloud.png",&sprites.cloudtexture,1,1);
-	LoadTexture("data/Textures/cloudimpact.png",&sprites.cloudimpacttexture,1,1);
-	LoadTexture("data/Textures/bloodparticle.png",&sprites.bloodtexture,1,1);
-	LoadTexture("data/Textures/snowflake.png",&sprites.snowflaketexture,1,1);
-	LoadTexture("data/Textures/flame.png",&sprites.flametexture,1,1);
-	LoadTexture("data/Textures/bloodflame.png",&sprites.bloodflametexture,1,1);
-	LoadTexture("data/Textures/smoke.png",&sprites.smoketexture,1,1);
-	LoadTexture("data/Textures/shine.png",&sprites.shinetexture,1,0);
-	LoadTexture("data/Textures/splinter.png",&sprites.splintertexture,1,1);
-	LoadTexture("data/Textures/leaf.png",&sprites.leaftexture,1,1);
-	LoadTexture("data/Textures/tooth.png",&sprites.toothtexture,1,1);
+	//LoadTexture("data/textures/box.jpg",&objects.boxtextureptr,1,0);
+
+
+	LoadTexture("data/textures/cloud.png",&sprites.cloudtexture,1,1);
+	LoadTexture("data/textures/cloudimpact.png",&sprites.cloudimpacttexture,1,1);
+	LoadTexture("data/textures/bloodparticle.png",&sprites.bloodtexture,1,1);
+	LoadTexture("data/textures/snowflake.png",&sprites.snowflaketexture,1,1);
+	LoadTexture("data/textures/flame.png",&sprites.flametexture,1,1);
+	LoadTexture("data/textures/bloodflame.png",&sprites.bloodflametexture,1,1);
+	LoadTexture("data/textures/smoke.png",&sprites.smoketexture,1,1);
+	LoadTexture("data/textures/shine.png",&sprites.shinetexture,1,0);
+	LoadTexture("data/textures/splinter.png",&sprites.splintertexture,1,1);
+	LoadTexture("data/textures/leaf.png",&sprites.leaftexture,1,1);
+	LoadTexture("data/textures/tooth.png",&sprites.toothtexture,1,1);
 
 	rotation=0;
 	rotation2=0;
@@ -1553,7 +1553,7 @@ void Game::LoadStuff()
 	viewer.x=terrain.size/2*terrain.scale;
 	viewer.z=terrain.size/2*terrain.scale;
 
-	hawk.load((char *)"data/Models:hawk.solid",1);
+	hawk.load((char *)"data/models/hawk.solid",1);
 	hawk.Scale(.03,.03,.03);
 	hawk.Rotate(90,1,1);
 	hawk.CalculateNormals(0);
@@ -1563,20 +1563,20 @@ void Game::LoadStuff()
 	hawkcoords.y=terrain.getHeight(hawkcoords.x,hawkcoords.z)+25;
 
 
-	eye.load((char *)"data/Models:eye.solid",1);
+	eye.load((char *)"data/models/eye.solid",1);
 	eye.Scale(.03,.03,.03);
 	eye.CalculateNormals(0);
 
-	cornea.load((char *)"data/Models:cornea.solid",1);
+	cornea.load((char *)"data/models/cornea.solid",1);
 	cornea.Scale(.03,.03,.03);
 	cornea.CalculateNormals(0);
 
-	iris.load((char *)"data/Models:iris.solid",1);
+	iris.load((char *)"data/models/iris.solid",1);
 	iris.Scale(.03,.03,.03);
 	iris.CalculateNormals(0);
 
-	LoadSave("data/Textures/Bloodfur.png",0,1,&bloodText[0],0);
-	LoadSave("data/Textures/Wolfbloodfur.png",0,1,&wolfbloodText[0],0);
+	LoadSave("data/textures/bloodfur.png",0,1,&bloodText[0],0);
+	LoadSave("data/textures/wolfbloodfur.png",0,1,&wolfbloodText[0],0);
 
 	oldenvironment=-4;
 
@@ -1591,126 +1591,126 @@ void Game::LoadStuff()
 	rabbitcoords=player[0].coords;
 	rabbitcoords.y=terrain.getHeight(rabbitcoords.x,rabbitcoords.z);
 
-	animation[runanim].Load((char *)"data/Animations:Run",middleheight,neutral);
+	animation[runanim].Load((char *)"data/animations/run",middleheight,neutral);
 
-	animation[bounceidleanim].Load((char *)"data/Animations:Idle",middleheight,neutral);
-	animation[stopanim].Load((char *)"data/Animations:Stop",middleheight,neutral);
+	animation[bounceidleanim].Load((char *)"data/animations/idle",middleheight,neutral);
+	animation[stopanim].Load((char *)"data/animations/stop",middleheight,neutral);
 
-	animation[jumpupanim].Load((char *)"data/Animations:JumpUp",highheight,neutral);
-	animation[jumpdownanim].Load((char *)"data/Animations:JumpDown",highheight,neutral);
+	animation[jumpupanim].Load((char *)"data/animations/jumpup",highheight,neutral);
+	animation[jumpdownanim].Load((char *)"data/animations/jumpdown",highheight,neutral);
 
-	animation[landanim].Load((char *)"data/Animations:Landing",lowheight,neutral);
-	animation[landhardanim].Load((char *)"data/Animations:Landhard",lowheight,neutral);
-	animation[climbanim].Load((char *)"data/Animations:Climb",lowheight,neutral);
-	animation[hanganim].Load((char *)"data/Animations:Hangon",lowheight,neutral);
-	animation[spinkickanim].Load((char *)"data/Animations:SpinKick",middleheight,normalattack);
+	animation[landanim].Load((char *)"data/animations/landing",lowheight,neutral);
+	animation[landhardanim].Load((char *)"data/animations/landhard",lowheight,neutral);
+	animation[climbanim].Load((char *)"data/animations/climb",lowheight,neutral);
+	animation[hanganim].Load((char *)"data/animations/hangon",lowheight,neutral);
+	animation[spinkickanim].Load((char *)"data/animations/spinkick",middleheight,normalattack);
 
-	animation[getupfromfrontanim].Load((char *)"data/Animations:GetUpFromFront",lowheight,neutral);
-	animation[getupfrombackanim].Load((char *)"data/Animations:GetUpFromBack",lowheight,neutral);
-	animation[crouchanim].Load((char *)"data/Animations:Crouch",lowheight,neutral);
-	animation[sneakanim].Load((char *)"data/Animations:Sneak",lowheight,neutral);
-	animation[rollanim].Load((char *)"data/Animations:Roll",lowheight,neutral);
-	animation[flipanim].Load((char *)"data/Animations:Flip",highheight,neutral);
-	animation[frontflipanim].Load((char *)"data/Animations:Flip",highheight,neutral);
-	animation[spinkickreversedanim].Load((char *)"data/Animations:SpinKickCaught",middleheight,reversed);
+	animation[getupfromfrontanim].Load((char *)"data/animations/getupfromfront",lowheight,neutral);
+	animation[getupfrombackanim].Load((char *)"data/animations/getupfromback",lowheight,neutral);
+	animation[crouchanim].Load((char *)"data/animations/crouch",lowheight,neutral);
+	animation[sneakanim].Load((char *)"data/animations/sneak",lowheight,neutral);
+	animation[rollanim].Load((char *)"data/animations/roll",lowheight,neutral);
+	animation[flipanim].Load((char *)"data/animations/flip",highheight,neutral);
+	animation[frontflipanim].Load((char *)"data/animations/flip",highheight,neutral);
+	animation[spinkickreversedanim].Load((char *)"data/animations/spinkickcaught",middleheight,reversed);
 
-	animation[spinkickreversalanim].Load((char *)"data/Animations:SpinKickCatch",middleheight,reversal);
-	animation[lowkickanim].Load((char *)"data/Animations:lowkick",middleheight,normalattack);
-	animation[sweepanim].Load((char *)"data/Animations:sweep",lowheight,normalattack);
-	animation[sweepreversedanim].Load((char *)"data/Animations:SweepCaught",lowheight,reversed);
-	animation[sweepreversalanim].Load((char *)"data/Animations:SweepCatch",middleheight,reversal);
-	animation[rabbitkickanim].Load((char *)"data/Animations:RabbitKick",middleheight,normalattack);
-	animation[rabbitkickreversedanim].Load((char *)"data/Animations:RabbitKickCaught",middleheight,reversed);
-	animation[rabbitkickreversalanim].Load((char *)"data/Animations:RabbitKickCatch",lowheight,reversal);
-	animation[upunchanim].Load((char *)"data/Animations:Upunch",middleheight,normalattack);
-	animation[staggerbackhighanim].Load((char *)"data/Animations:Staggerbackhigh",middleheight,neutral);
-	animation[upunchreversedanim].Load((char *)"data/Animations:UpunchCaught",middleheight,reversed);
+	animation[spinkickreversalanim].Load((char *)"data/animations/spinkickcatch",middleheight,reversal);
+	animation[lowkickanim].Load((char *)"data/animations/lowkick",middleheight,normalattack);
+	animation[sweepanim].Load((char *)"data/animations/sweep",lowheight,normalattack);
+	animation[sweepreversedanim].Load((char *)"data/animations/sweepcaught",lowheight,reversed);
+	animation[sweepreversalanim].Load((char *)"data/animations/sweepcatch",middleheight,reversal);
+	animation[rabbitkickanim].Load((char *)"data/animations/rabbitkick",middleheight,normalattack);
+	animation[rabbitkickreversedanim].Load((char *)"data/animations/rabbitkickcaught",middleheight,reversed);
+	animation[rabbitkickreversalanim].Load((char *)"data/animations/rabbitkickcatch",lowheight,reversal);
+	animation[upunchanim].Load((char *)"data/animations/upunch",middleheight,normalattack);
+	animation[staggerbackhighanim].Load((char *)"data/animations/staggerbackhigh",middleheight,neutral);
+	animation[upunchreversedanim].Load((char *)"data/animations/upunchcaught",middleheight,reversed);
 
-	animation[upunchreversalanim].Load((char *)"data/Animations:UpunchCatch",middleheight,reversal);
-	animation[hurtidleanim].Load((char *)"data/Animations:Hurtidle",middleheight,neutral);
-	animation[backhandspringanim].Load((char *)"data/Animations:Backhandspring",middleheight,neutral);
-	animation[fightidleanim].Load((char *)"data/Animations:Fightidle",middleheight,neutral);
-	animation[walkanim].Load((char *)"data/Animations:Walk",middleheight,neutral);
+	animation[upunchreversalanim].Load((char *)"data/animations/upunchcatch",middleheight,reversal);
+	animation[hurtidleanim].Load((char *)"data/animations/hurtidle",middleheight,neutral);
+	animation[backhandspringanim].Load((char *)"data/animations/backhandspring",middleheight,neutral);
+	animation[fightidleanim].Load((char *)"data/animations/fightidle",middleheight,neutral);
+	animation[walkanim].Load((char *)"data/animations/walk",middleheight,neutral);
 
-	animation[fightsidestep].Load((char *)"data/Animations:Fightsidestep",middleheight,neutral);
-	animation[killanim].Load((char *)"data/Animations:Kill",middleheight,normalattack);
-	animation[sneakattackanim].Load((char *)"data/Animations:Sneakattack",middleheight,reversal);
-	animation[sneakattackedanim].Load((char *)"data/Animations:Sneakattacked",middleheight,reversed);
-	animation[drawrightanim].Load((char *)"data/Animations:drawright",middleheight,neutral);
-	animation[knifeslashstartanim].Load((char *)"data/Animations:slashstart",middleheight,normalattack);
-	animation[crouchdrawrightanim].Load((char *)"data/Animations:crouchdrawright",lowheight,neutral);
-	animation[crouchstabanim].Load((char *)"data/Animations:crouchstab",lowheight,normalattack);
+	animation[fightsidestep].Load((char *)"data/animations/fightsidestep",middleheight,neutral);
+	animation[killanim].Load((char *)"data/animations/kill",middleheight,normalattack);
+	animation[sneakattackanim].Load((char *)"data/animations/sneakattack",middleheight,reversal);
+	animation[sneakattackedanim].Load((char *)"data/animations/sneakattacked",middleheight,reversed);
+	animation[drawrightanim].Load((char *)"data/animations/drawright",middleheight,neutral);
+	animation[knifeslashstartanim].Load((char *)"data/animations/slashstart",middleheight,normalattack);
+	animation[crouchdrawrightanim].Load((char *)"data/animations/crouchdrawright",lowheight,neutral);
+	animation[crouchstabanim].Load((char *)"data/animations/crouchstab",lowheight,normalattack);
 
-	animation[knifefollowanim].Load((char *)"data/Animations:slashfollow",middleheight,reversal);
-	animation[knifefollowedanim].Load((char *)"data/Animations:slashfollowed",middleheight,reversed);
-	animation[knifethrowanim].Load((char *)"data/Animations:knifethrow",middleheight,normalattack);
-	animation[removeknifeanim].Load((char *)"data/Animations:removeknife",middleheight,neutral);
-	animation[crouchremoveknifeanim].Load((char *)"data/Animations:crouchremoveknife",lowheight,neutral);
-	animation[jumpreversedanim].Load((char *)"data/Animations:JumpCaught",middleheight,reversed);
-	animation[jumpreversalanim].Load((char *)"data/Animations:JumpCatch",middleheight,reversal);
-	animation[staggerbackhardanim].Load((char *)"data/Animations:Staggerbackhard",middleheight,neutral);
+	animation[knifefollowanim].Load((char *)"data/animations/slashfollow",middleheight,reversal);
+	animation[knifefollowedanim].Load((char *)"data/animations/slashfollowed",middleheight,reversed);
+	animation[knifethrowanim].Load((char *)"data/animations/knifethrow",middleheight,normalattack);
+	animation[removeknifeanim].Load((char *)"data/animations/removeknife",middleheight,neutral);
+	animation[crouchremoveknifeanim].Load((char *)"data/animations/crouchremoveknife",lowheight,neutral);
+	animation[jumpreversedanim].Load((char *)"data/animations/jumpcaught",middleheight,reversed);
+	animation[jumpreversalanim].Load((char *)"data/animations/jumpcatch",middleheight,reversal);
+	animation[staggerbackhardanim].Load((char *)"data/animations/staggerbackhard",middleheight,neutral);
 
-	animation[dropkickanim].Load((char *)"data/Animations:Dropkick",middleheight,normalattack);
-	animation[winduppunchanim].Load((char *)"data/Animations:Winduppunch",middleheight,normalattack);
-	animation[winduppunchblockedanim].Load((char *)"data/Animations:Winduppunchblocked",middleheight,normalattack);
-	animation[blockhighleftanim].Load((char *)"data/Animations:Blockhighleft",middleheight,normalattack);
-	animation[blockhighleftstrikeanim].Load((char *)"data/Animations:Blockhighleftstrike",middleheight,normalattack);
-	animation[backflipanim].Load((char *)"data/Animations:Backflip",highheight,neutral);
-	animation[walljumpbackanim].Load((char *)"data/Animations:Walljumpback",highheight,neutral);
-	animation[walljumpfrontanim].Load((char *)"data/Animations:Walljumpfront",highheight,neutral);
-	animation[rightflipanim].Load((char *)"data/Animations:Rightflip",highheight,neutral);
-	animation[walljumprightanim].Load((char *)"data/Animations:Walljumpright",highheight,neutral);
-	animation[leftflipanim].Load((char *)"data/Animations:Leftflip",highheight,neutral);
-	animation[walljumpleftanim].Load((char *)"data/Animations:Walljumpleft",highheight,neutral);
-	animation[walljumprightkickanim].Load((char *)"data/Animations:Walljumprightkick",highheight,neutral);
-	animation[walljumpleftkickanim].Load((char *)"data/Animations:Walljumpleftkick",highheight,neutral);
-	animation[knifefightidleanim].Load((char *)"data/Animations:Knifefightidle",middleheight,neutral);
-	animation[knifesneakattackanim].Load((char *)"data/Animations:Knifesneakattack",middleheight,reversal);
-	animation[knifesneakattackedanim].Load((char *)"data/Animations:Knifesneakattacked",middleheight,reversed);
-	animation[swordfightidleanim].Load((char *)"data/Animations:swordfightidle",middleheight,neutral);
-	animation[drawleftanim].Load((char *)"data/Animations:drawleft",middleheight,neutral);
-	animation[swordslashanim].Load((char *)"data/Animations:swordslash",middleheight,normalattack);
-	animation[swordgroundstabanim].Load((char *)"data/Animations:swordgroundstab",lowheight,normalattack);
-	animation[dodgebackanim].Load((char *)"data/Animations:dodgeback",middleheight,neutral);
-	animation[swordsneakattackanim].Load((char *)"data/Animations:Swordsneakattack",middleheight,reversal);
-	animation[swordsneakattackedanim].Load((char *)"data/Animations:Swordsneakattacked",middleheight,reversed);
-	animation[swordslashreversedanim].Load((char *)"data/Animations:swordslashCaught",middleheight,reversed);
-	animation[swordslashreversalanim].Load((char *)"data/Animations:swordslashCatch",middleheight,reversal);
-	animation[knifeslashreversedanim].Load((char *)"data/Animations:knifeslashCaught",middleheight,reversed);
-	animation[knifeslashreversalanim].Load((char *)"data/Animations:knifeslashCatch",middleheight,reversal);
-	animation[swordfightidlebothanim].Load((char *)"data/Animations:swordfightidleboth",middleheight,neutral);
-	animation[swordslashparryanim].Load((char *)"data/Animations:sworduprightparry",middleheight,normalattack);
-	animation[swordslashparriedanim].Load((char *)"data/Animations:swordslashparried",middleheight,normalattack);
-	animation[wolfidle].Load((char *)"data/Animations:Wolfidle",middleheight,neutral);
-	animation[wolfcrouchanim].Load((char *)"data/Animations:Wolfcrouch",lowheight,neutral);
-	animation[wolflandanim].Load((char *)"data/Animations:Wolflanding",lowheight,neutral);
-	animation[wolflandhardanim].Load((char *)"data/Animations:Wolflandhard",lowheight,neutral);
-	animation[wolfrunanim].Load((char *)"data/Animations:Wolfrun",middleheight,neutral);
-	animation[wolfrunninganim].Load((char *)"data/Animations:Wolfrunning",middleheight,neutral);
-	animation[rabbitrunninganim].Load((char *)"data/Animations:Rabbitrunning",middleheight,neutral);
-	animation[wolfstopanim].Load((char *)"data/Animations:Wolfstop",middleheight,neutral);
-	animation[rabbittackleanim].Load((char *)"data/Animations:Rabbittackle",middleheight,neutral);
-	animation[rabbittacklinganim].Load((char *)"data/Animations:Rabbittackling",middleheight,reversal);
-	animation[rabbittackledbackanim].Load((char *)"data/Animations:Rabbittackledback",middleheight,reversed);
-	animation[rabbittackledfrontanim].Load((char *)"data/Animations:Rabbittackledfront",middleheight,reversed);
-	animation[wolfslapanim].Load((char *)"data/Animations:Wolfslap",middleheight,normalattack);
-	animation[staffhitanim].Load((char *)"data/Animations:StaffHit",middleheight,normalattack);
-	animation[staffgroundsmashanim].Load((char *)"data/Animations:StaffGroundSmash",lowheight,normalattack);
-	animation[staffspinhitanim].Load((char *)"data/Animations:Spinwhack",middleheight,normalattack);
-	animation[staffhitreversedanim].Load((char *)"data/Animations:StaffHitCaught",middleheight,reversed);
-	animation[staffhitreversalanim].Load((char *)"data/Animations:StaffHitCatch",middleheight,reversal);
-	animation[staffspinhitreversedanim].Load((char *)"data/Animations:SpinWhackCaught",middleheight,reversed);
-	animation[staffspinhitreversalanim].Load((char *)"data/Animations:SpinWhackCatch",middleheight,reversal);
+	animation[dropkickanim].Load((char *)"data/animations/dropkick",middleheight,normalattack);
+	animation[winduppunchanim].Load((char *)"data/animations/winduppunch",middleheight,normalattack);
+	animation[winduppunchblockedanim].Load((char *)"data/animations/winduppunchblocked",middleheight,normalattack);
+	animation[blockhighleftanim].Load((char *)"data/animations/blockhighleft",middleheight,normalattack);
+	animation[blockhighleftstrikeanim].Load((char *)"data/animations/blockhighleftstrike",middleheight,normalattack);
+	animation[backflipanim].Load((char *)"data/animations/backflip",highheight,neutral);
+	animation[walljumpbackanim].Load((char *)"data/animations/walljumpback",highheight,neutral);
+	animation[walljumpfrontanim].Load((char *)"data/animations/walljumpfront",highheight,neutral);
+	animation[rightflipanim].Load((char *)"data/animations/rightflip",highheight,neutral);
+	animation[walljumprightanim].Load((char *)"data/animations/walljumpright",highheight,neutral);
+	animation[leftflipanim].Load((char *)"data/animations/leftflip",highheight,neutral);
+	animation[walljumpleftanim].Load((char *)"data/animations/walljumpleft",highheight,neutral);
+	animation[walljumprightkickanim].Load((char *)"data/animations/walljumprightkick",highheight,neutral);
+	animation[walljumpleftkickanim].Load((char *)"data/animations/walljumpleftkick",highheight,neutral);
+	animation[knifefightidleanim].Load((char *)"data/animations/knifefightidle",middleheight,neutral);
+	animation[knifesneakattackanim].Load((char *)"data/animations/knifesneakattack",middleheight,reversal);
+	animation[knifesneakattackedanim].Load((char *)"data/animations/knifesneakattacked",middleheight,reversed);
+	animation[swordfightidleanim].Load((char *)"data/animations/swordfightidle",middleheight,neutral);
+	animation[drawleftanim].Load((char *)"data/animations/drawleft",middleheight,neutral);
+	animation[swordslashanim].Load((char *)"data/animations/swordslash",middleheight,normalattack);
+	animation[swordgroundstabanim].Load((char *)"data/animations/swordgroundstab",lowheight,normalattack);
+	animation[dodgebackanim].Load((char *)"data/animations/dodgeback",middleheight,neutral);
+	animation[swordsneakattackanim].Load((char *)"data/animations/swordsneakattack",middleheight,reversal);
+	animation[swordsneakattackedanim].Load((char *)"data/animations/swordsneakattacked",middleheight,reversed);
+	animation[swordslashreversedanim].Load((char *)"data/animations/swordslashcaught",middleheight,reversed);
+	animation[swordslashreversalanim].Load((char *)"data/animations/swordslashcatch",middleheight,reversal);
+	animation[knifeslashreversedanim].Load((char *)"data/animations/knifeslashcaught",middleheight,reversed);
+	animation[knifeslashreversalanim].Load((char *)"data/animations/knifeslashcatch",middleheight,reversal);
+	animation[swordfightidlebothanim].Load((char *)"data/animations/swordfightidleboth",middleheight,neutral);
+	animation[swordslashparryanim].Load((char *)"data/animations/sworduprightparry",middleheight,normalattack);
+	animation[swordslashparriedanim].Load((char *)"data/animations/swordslashparried",middleheight,normalattack);
+	animation[wolfidle].Load((char *)"data/animations/wolfidle",middleheight,neutral);
+	animation[wolfcrouchanim].Load((char *)"data/animations/wolfcrouch",lowheight,neutral);
+	animation[wolflandanim].Load((char *)"data/animations/wolflanding",lowheight,neutral);
+	animation[wolflandhardanim].Load((char *)"data/animations/wolflandhard",lowheight,neutral);
+	animation[wolfrunanim].Load((char *)"data/animations/wolfrun",middleheight,neutral);
+	animation[wolfrunninganim].Load((char *)"data/animations/wolfrunning",middleheight,neutral);
+	animation[rabbitrunninganim].Load((char *)"data/animations/rabbitrunning",middleheight,neutral);
+	animation[wolfstopanim].Load((char *)"data/animations/wolfstop",middleheight,neutral);
+	animation[rabbittackleanim].Load((char *)"data/animations/rabbittackle",middleheight,neutral);
+	animation[rabbittacklinganim].Load((char *)"data/animations/rabbittackling",middleheight,reversal);
+	animation[rabbittackledbackanim].Load((char *)"data/animations/rabbittackledback",middleheight,reversed);
+	animation[rabbittackledfrontanim].Load((char *)"data/animations/rabbittackledfront",middleheight,reversed);
+	animation[wolfslapanim].Load((char *)"data/animations/wolfslap",middleheight,normalattack);
+	animation[staffhitanim].Load((char *)"data/animations/staffhit",middleheight,normalattack);
+	animation[staffgroundsmashanim].Load((char *)"data/animations/staffgroundsmash",lowheight,normalattack);
+	animation[staffspinhitanim].Load((char *)"data/animations/spinwhack",middleheight,normalattack);
+	animation[staffhitreversedanim].Load((char *)"data/animations/staffhitcaught",middleheight,reversed);
+	animation[staffhitreversalanim].Load((char *)"data/animations/staffhitcatch",middleheight,reversal);
+	animation[staffspinhitreversedanim].Load((char *)"data/animations/spinwhackcaught",middleheight,reversed);
+	animation[staffspinhitreversalanim].Load((char *)"data/animations/spinwhackcatch",middleheight,reversal);
 
-	animation[sitanim].Load((char *)"data/Animations:Sit",lowheight,neutral);
-	animation[sleepanim].Load((char *)"data/Animations:Sleep",lowheight,neutral);
-	animation[talkidleanim].Load((char *)"data/Animations:TalkIdle",middleheight,neutral);
+	animation[sitanim].Load((char *)"data/animations/sit",lowheight,neutral);
+	animation[sleepanim].Load((char *)"data/animations/sleep",lowheight,neutral);
+	animation[talkidleanim].Load((char *)"data/animations/talkidle",middleheight,neutral);
 
-	animation[sitwallanim].Load((char *)"data/Animations:Dying",lowheight,neutral);
-	animation[dead1anim].Load((char *)"data/Animations:Dead1",lowheight,neutral);
-	animation[dead2anim].Load((char *)"data/Animations:Dead2",lowheight,neutral);
-	animation[dead3anim].Load((char *)"data/Animations:Dead3",lowheight,neutral);
-	animation[dead4anim].Load((char *)"data/Animations:Dead4",lowheight,neutral);
+	animation[sitwallanim].Load((char *)"data/animations/dying",lowheight,neutral);
+	animation[dead1anim].Load((char *)"data/animations/dead1",lowheight,neutral);
+	animation[dead2anim].Load((char *)"data/animations/dead2",lowheight,neutral);
+	animation[dead3anim].Load((char *)"data/animations/dead3",lowheight,neutral);
+	animation[dead4anim].Load((char *)"data/animations/dead4",lowheight,neutral);
 	//Fix knife stab, too lazy to do it manually
 	XYZ moveamount;
 	moveamount=0;

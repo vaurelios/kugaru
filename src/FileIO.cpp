@@ -20,6 +20,7 @@
 
 #include "config.h"
 
+#include <stdio.h>
 #include <map>
 #include <boost/filesystem.hpp>
 
@@ -27,12 +28,12 @@ namespace fs = boost::filesystem;
 
 namespace Kugaru
 {
-    std::map<const char *, const char *> FileNameCache;
+    std::map<const char *, std::string> FileNameCache;
 
     const char* ConvertFileName( const char *name )
     {
         if ( FileNameCache.count( name ) )
-            return FileNameCache[ name ];
+            return FileNameCache[ name ].c_str();
 
         bool data_found = false;
         bool rel_found = false;
@@ -43,23 +44,23 @@ namespace Kugaru
             data_found = true;
 
         if ( fs::exists( relp ) )
-            data_found = true;
+            rel_found = true;
 
         if ( !(data_found || rel_found) )
             std::cout << "Warning: File '" << relp.generic_string() << "' Not Found..." << std::endl;
 
         if ( rel_found )
         {
-            FileNameCache[name] = relp.generic_string().c_str();
+            FileNameCache[name] = std::string(relp.generic_string());
 
-            return relp.generic_string().c_str();
+            return FileNameCache[name].c_str();
         }
 
         if ( data_found )
         {
-            FileNameCache[name] = datap.generic_string().c_str();
+            FileNameCache[name] = std::string(datap.generic_string());
 
-            return datap.generic_string().c_str();
+            return FileNameCache[name].c_str();
         }
 
         return name;
