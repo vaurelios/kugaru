@@ -1,3 +1,24 @@
+/*
+ * This file is part of Kugaru.
+ *
+ * Copyright (C) 2003, 2010 - Wolfire Games
+ * Copyright (C) 2014 Victor A. Santos
+ *
+ * Kugaru is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Kugaru is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Kugaru.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+
 #ifndef OPENAL_WRAPPER_H
 #define OPENAL_WRAPPER_H
 
@@ -12,36 +33,6 @@
 #include "vorbis/vorbisfile.h"
 
 #include "MacCompatibility.h"
-
-#if 0 /* this should only be enable if OPENAL doesn't provide AL_API on all platforms */
-#if (!defined(WIN32) && !defined(_WIN32) && !defined(__WIN32__) && !defined(_WIN64) && !defined(_WIN32_WCE) && !defined(_XBOX)) || (defined(__GNUC__) && defined(WIN32))
-#ifndef __cdecl
-#define __cdecl
-#endif
-#ifndef __stdcall
-#define __stdcall
-#endif
-#endif
-
-#if defined(_WIN32_WCE)
-#define AL_API _cdecl
-#define F_CALLBACKAPI _cdecl
-#else
-#define AL_API __stdcall
-#define F_CALLBACKAPI __stdcall
-#endif
-
-#ifdef DLL_EXPORTS
-#define DLL_API __declspec(dllexport)
-#else
-#if defined(__LCC__) || defined(__MINGW32__) || defined(__CYGWIN32__)
-#define DLL_API AL_API
-#else
-#define DLL_API
-#endif /* __LCC__ ||  __MINGW32__ || __CYGWIN32__ */
-#endif /* DLL_EXPORTS */
-#endif /* if 0 */
-
 
 typedef struct OPENAL_SAMPLE    OPENAL_SAMPLE;
 typedef struct OPENAL_STREAM    OPENAL_STREAM;
@@ -100,12 +91,7 @@ AL_API signed char OPENAL_SetOutput(int outputtype);
 }
 #endif
 
-#if USE_OPENAL
-#  define OPENAL_Sample_LoadEx(a, b, c, d, e) OPENAL_Sample_Load( a, ConvertFileName( b), c, d, e)
-#  define OPENAL_Stream_OpenEx(a, b, c, d) OPENAL_Stream_Open(ConvertFileName(a), b, c, d)
-#elif !PLATFORM_MACOSX
-#  define OPENAL_Sample_LoadEx(a, b, c, d, e) OPENAL_Sample_Load( a, ConvertFileName( b), c, d, e)
-#  define OPENAL_Stream_OpenEx(a, b, c, d) OPENAL_Stream_Open(ConvertFileName(a), b, c, d)
-#endif
+#define OPENAL_Sample_LoadEx(a, b, c, d, e) OPENAL_Sample_Load( a, ConvertFileName( b), c, d, e)
+#define OPENAL_Stream_OpenEx(a, b, c, d) OPENAL_Stream_Open(ConvertFileName(a), b, c, d)
 
-#endif
+#endif /* OPENAL_WRAPPER_H */

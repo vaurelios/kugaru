@@ -14,6 +14,7 @@ pkg_check_modules(AL REQUIRED openal)
 pkg_check_modules(SDL REQUIRED sdl)
 pkg_check_modules(PNG REQUIRED libpng)
 pkg_check_modules(ZLIB REQUIRED zlib)
+pkg_check_modules(VORBIS REQUIRED vorbis vorbisfile)
 
 include_directories(
     ${GL_INCLUDE_DIRS}
@@ -22,6 +23,7 @@ include_directories(
     ${SDL_INCLUDE_DIRS}
     ${PNG_INCLUDE_DIRS}
     ${ZLIB_INCLUDE_DIRS}
+    ${VORBIS_INCLUDE_DIRS}
 )
 
 set(KUGARU_LIBS
@@ -31,6 +33,7 @@ set(KUGARU_LIBS
     ${SDL_LIBRARIES}
     ${PNG_LIBRARIES}
     ${ZLIB_LIBRARIES}
+    ${VORBIS_LIBRARIES}
 )
 
 subdirs(src)

@@ -1,23 +1,23 @@
 /*
-Copyright (C) 2003, 2010 - Wolfire Games
+ * This file is part of Kugaru.
+ *
+ * Copyright (C) 2003, 2010 - Wolfire Games
+ * Copyright (C) 2014 Victor A. Santos
+ *
+ * Kugaru is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Kugaru is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Kugaru.  If not, see <http://www.gnu.org/licenses/>.
+ */
 
-This file is part of Lugaru.
-
-Lugaru is free software; you can redistribute it and/or
-modify it under the terms of the GNU General Public License
-as published by the Free Software Foundation; either version 2
-of the License, or (at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  
-
-See the GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with this program; if not, write to the Free Software
-Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-*/
 
 #if !PLATFORM_MACOSX
 
@@ -33,31 +33,28 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-
-#if PLATFORM_UNIX
 #include <unistd.h>
 #include <sys/time.h>
 #include <sys/stat.h>
 #include <assert.h>
-typedef long long __int64;
-typedef __int64 LARGE_INTEGER;
-static int QueryPerformanceFrequency(LARGE_INTEGER *liptr)
+#include <stdint.h>
+
+
+static int QueryPerformanceFrequency(int64_t *liptr)
 {
-    assert(sizeof (__int64) == 8);
-    assert(sizeof (LARGE_INTEGER) == 8);
+    assert(sizeof (int64_t) == 8);
     *liptr = 1000;
     return(1);
 }
 
-static int QueryPerformanceCounter(LARGE_INTEGER *liptr)
+static int QueryPerformanceCounter(int64_t *liptr)
 {
     struct timeval tv;
     gettimeofday(&tv, NULL);
-    *liptr = ( (((LARGE_INTEGER) tv.tv_sec) * 1000) +
-               (((LARGE_INTEGER) tv.tv_usec) / 1000) );
+    *liptr = ( (((int64_t) tv.tv_sec) * 1000) +
+               (((int64_t) tv.tv_usec) / 1000) );
     return(1);
 }
-#endif
 
 class AppTime
 {
@@ -66,11 +63,11 @@ public:
 	{
 		counterRate = 1;
 		baseCounter = 0;
-		QueryPerformanceFrequency( (LARGE_INTEGER*)&counterRate);
-		QueryPerformanceCounter( (LARGE_INTEGER*)&baseCounter);
+		QueryPerformanceFrequency( (int64_t *)&counterRate);
+		QueryPerformanceCounter( (int64_t *)&baseCounter);
 	}
-	__int64 counterRate;		// LARGE_INTEGER type has no math functions so use int64
-	__int64 baseCounter;
+	int64_t counterRate;
+	int64_t baseCounter;
 };
 static AppTime g_appTime;
 
@@ -93,8 +90,8 @@ void CopyPascalStringToC( const unsigned char* src, char* dst)
 
 AbsoluteTime UpTime()
 {
-	__int64 counter;
-	QueryPerformanceCounter( (LARGE_INTEGER*)&counter);
+	int64_t counter;
+	QueryPerformanceCounter( (int64_t*)&counter);
 
 	counter -= g_appTime.baseCounter;
 
@@ -107,10 +104,10 @@ AbsoluteTime UpTime()
 
 Duration AbsoluteDeltaToDuration( AbsoluteTime& a, AbsoluteTime& b)
 {
-	__int64 value = a.hi;
+	int64_t value = a.hi;
 	value <<= 32;
 	value |= a.lo;
-	__int64 value2 = b.hi;
+	int64_t value2 = b.hi;
 	value2 <<= 32;
 	value2 |= b.lo;
 	value -= value2;
@@ -118,7 +115,7 @@ Duration AbsoluteDeltaToDuration( AbsoluteTime& a, AbsoluteTime& b)
 	if (value <= 0)
 		return durationImmediate;
 
-	__int64 frac = value % g_appTime.counterRate;
+	int64_t frac = value % g_appTime.counterRate;
 	value /= g_appTime.counterRate;
 
 	Duration time;

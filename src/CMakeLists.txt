@@ -25,6 +25,7 @@ set(KUGARU_SRCS
     OpenGL_Windows.cpp
     openal_wrapper.cpp
     WinInput.cpp
+    MacCompatibility.cpp
 )
 
 set(KUGARU_H
@@ -58,6 +59,7 @@ set(KUGARU_H
     pack_private.h
     private.h
     unpack_private.h
+    MacCompatibility.h
 )
 
 add_executable(kugaru ${KUGARU_SRCS} ${KUGARU_H})
