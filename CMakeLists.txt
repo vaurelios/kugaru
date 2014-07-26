@@ -13,7 +13,6 @@ pkg_check_modules(GLU REQUIRED glu)
 pkg_check_modules(AL REQUIRED openal)
 pkg_check_modules(SDL REQUIRED sdl)
 pkg_check_modules(PNG REQUIRED libpng)
-pkg_check_modules(JPEG REQUIRED libopenjp2)
 pkg_check_modules(ZLIB REQUIRED zlib)
 
 include_directories(
@@ -22,7 +21,6 @@ include_directories(
     ${AL_INCLUDE_DIRS}
     ${SDL_INCLUDE_DIRS}
     ${PNG_INCLUDE_DIRS}
-    ${JPEG_INCLUDE_DIRS}
     ${ZLIB_INCLUDE_DIRS}
 )
 
@@ -32,7 +30,6 @@ set(KUGARU_LIBS
     ${AL_LIBRARIES}
     ${SDL_LIBRARIES}
     ${PNG_LIBRARIES}
-    ${JPEG_LIBRARIES}
     ${ZLIB_LIBRARIES}
 )
 

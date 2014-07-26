@@ -1,23 +1,22 @@
 /*
-Copyright (C) 2003, 2010 - Wolfire Games
-
-This file is part of Lugaru.
-
-Lugaru is free software; you can redistribute it and/or
-modify it under the terms of the GNU General Public License
-as published by the Free Software Foundation; either version 2
-of the License, or (at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  
-
-See the GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with this program; if not, write to the Free Software
-Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-*/
+ * This file is part of Kugaru.
+ *
+ * Copyright (C) 2003, 2010 - Wolfire Games
+ * Copyright (C) 2014 Victor A. Santos
+ *
+ * Kugaru is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Kugaru is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Kugaru.  If not, see <http://www.gnu.org/licenses/>.
+ */
 
 
 #ifdef WIN32
@@ -36,18 +35,10 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 extern "C" {
 	#include "zlib.h"
 	#include "png.h"
-   #ifdef WIN32
-		#define INT32 INT32_jpeg
-		#include "jpeglib.h"
-		#undef INT32
-	#else
-		#include "jpeglib.h"
-	#endif
 }
 
 static bool load_image(const char * fname, TGAImageRec & tex);
 static bool load_png(const char * fname, TGAImageRec & tex);
-static bool load_jpg(const char * fname, TGAImageRec & tex);
 static bool save_image(const char * fname);
 static bool save_png(const char * fname);
 
@@ -1539,73 +1530,10 @@ static bool load_image(const char *file_name, TGAImageRec &tex)
     {
         if (strcasecmp(ptr+1, "png") == 0)
             return load_png(file_name, tex);
-        else if (strcasecmp(ptr+1, "jpg") == 0)
-            return load_jpg(file_name, tex);
     }
 
     STUBBED("Unsupported image type");
     return false;
-}
-
-
-struct my_error_mgr {
-  struct jpeg_error_mgr pub;	/* "public" fields */
-  jmp_buf setjmp_buffer;	/* for return to caller */
-};
-typedef struct my_error_mgr * my_error_ptr;
-
-
-static void my_error_exit(j_common_ptr cinfo)
-{
-	struct my_error_mgr *err = (struct my_error_mgr *)cinfo->err;
-	longjmp(err->setjmp_buffer, 1);
-}
-
-/* stolen from public domain example.c code in libjpg distribution. */
-static bool load_jpg(const char *file_name, TGAImageRec &tex)
-{
-    struct jpeg_decompress_struct cinfo;
-    struct my_error_mgr jerr;
-    JSAMPROW buffer[1];		/* Output row buffer */
-    int row_stride;		/* physical row width in output buffer */
-    FILE *infile = fopen(file_name, "rb");
-
-    if (infile == NULL)
-        return false;
-
-    cinfo.err = jpeg_std_error(&jerr.pub);
-    jerr.pub.error_exit = my_error_exit;
-    if (setjmp(jerr.setjmp_buffer)) {
-        jpeg_destroy_decompress(&cinfo);
-        fclose(infile);
-        return false;
-    }
-
-    jpeg_create_decompress(&cinfo);
-    jpeg_stdio_src(&cinfo, infile);
-    (void) jpeg_read_header(&cinfo, TRUE);
-
-    cinfo.out_color_space = JCS_RGB;
-    cinfo.quantize_colors = 0;
-    (void) jpeg_calc_output_dimensions(&cinfo);
-    (void) jpeg_start_decompress(&cinfo);
-
-    row_stride = cinfo.output_width * cinfo.output_components;
-    tex.sizeX = cinfo.output_width;
-    tex.sizeY = cinfo.output_height;
-    tex.bpp = 24;
-
-    while (cinfo.output_scanline < cinfo.output_height) {
-        buffer[0] = (JSAMPROW)(char *)tex.data +
-                        ((cinfo.output_height-1) - cinfo.output_scanline) * row_stride;
-        (void) jpeg_read_scanlines(&cinfo, buffer, 1);
-    }
-
-    (void) jpeg_finish_decompress(&cinfo);
-    jpeg_destroy_decompress(&cinfo);
-    fclose(infile);
-
-    return true;
 }
 
 
@@ -1623,7 +1551,7 @@ static bool load_png(const char *file_name, TGAImageRec &tex)
     FILE *fp = fopen(file_name, "rb");
 
     if (fp == NULL)
-        return(NULL);
+        return false;
 
     png_ptr = png_create_read_struct(PNG_LIBPNG_VER_STRING, NULL, NULL, NULL);
     if (png_ptr == NULL)
