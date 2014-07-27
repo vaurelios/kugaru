@@ -35,7 +35,7 @@ extern "C" {
      *  - whitespace is ignored
      *  - each "group" consists of an optional count (defaults to 1),
      *    an optional byte-order marker (defaults to H, "host-native"),
-:     *    and a  data-type specifier.
+     *    and a  data-type specifier.
      *  - when unpacking, each variable argument is a pointer to the
      *    appropriate number of objects of the appropriate type.
      *  - when packing, each variable argument is an object of the
@@ -67,6 +67,22 @@ extern "C" {
      *  N network byte order
      */
 
+
+    #define BinIO_TYPE_IGNORE_BYTE         'x'
+    #define BinIO_TYPE_BYTE                'b'
+    #define BinIO_TYPE_INT16               's'
+    #define BinIO_TYPE_INT32               'i'
+    #define BinIO_TYPE_INT64               'l'
+    #define BinIO_TYPE_FLOAT32             'f'
+    #define BinIO_TYPE_FLOAT64             'd'
+
+    #define BinIO_LITTLE_ENDIAN_BYTE_ORDER 'L'
+    #define BinIO_BIG_ENDIAN_BYTE_ORDER    'B'
+    #define BinIO_HOST_BYTE_ORDER          'H'
+    #define BinIO_NETWORK_BYTE_ORDER       'N'
+
+    #define BinIO_BYTE_ORDER BinIO_LITTLE_ENDIAN_BYTE_ORDER
+
     typedef struct
     {
         double   d;
@@ -75,20 +91,19 @@ extern "C" {
         float    f;
         uint16_t s;
         uint8_t  b;
-    }
-    test_data;
+    } test_data;
 
-    extern void packf    (                    const char *format, ...);
-    extern void spackf   (void *buffer,       const char *format, ...);
-    extern void fpackf   (FILE *file,         const char *format, ...);
-    extern void vspackf  (void *buffer,       const char *format, va_list args);
-    extern void vfpackf  (FILE *file,         const char *format, va_list args);
+    void packf    (                    const char *format, ...);
+    void spackf   (void       *buffer, const char *format, ...);
+    void fpackf   (FILE       *file,   const char *format, ...);
+    void vspackf  (void       *buffer, const char *format, va_list args);
+    void vfpackf  (FILE       *file,   const char *format, va_list args);
 
-    extern void unpackf  (                    const char *format, ...);
-    extern void sunpackf (const void *buffer, const char *format, ...);
-    extern void funpackf (FILE       *file,   const char *format, ...);
-    extern void vsunpackf(const void *buffer, const char *format, va_list args);
-    extern void vfunpackf(FILE       *file,   const char *format, va_list args);
+    void unpackf  (                    const char *format, ...);
+    void sunpackf (const void *buffer, const char *format, ...);
+    void funpackf (FILE       *file,   const char *format, ...);
+    void vsunpackf(const void *buffer, const char *format, va_list args);
+    void vfunpackf(FILE       *file,   const char *format, va_list args);
 
 #if defined(__cplusplus)
 }
