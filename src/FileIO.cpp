@@ -20,6 +20,8 @@
 
 #include "config.h"
 
+#include "gamegl.h"
+
 #include <stdio.h>
 #include <map>
 #include <boost/filesystem.hpp>
@@ -28,41 +30,48 @@ namespace fs = boost::filesystem;
 
 namespace Kugaru
 {
-    std::map<const char *, std::string> FileNameCache;
+    std::map<const char *, std::string *> FileNameCache;
 
     const char* ConvertFileName( const char *name )
     {
+        LOGFUNC;
+
         if ( FileNameCache.count( name ) )
-            return FileNameCache[ name ].c_str();
+            return FileNameCache[ name ]->c_str();
 
-        bool data_found = false;
-        bool rel_found = false;
-        fs::path datap(std::string(DATADIR) + std::string(name));
-        fs::path relp(name);
+        std::string *path = NULL;
 
+        fs::path datap(std::string(DATADIR) + std::string(name)); 
         if ( fs::exists( datap ) )
-            data_found = true;
+        {
+            path = new std::string(datap.c_str());
+        }
 
+        fs::path relp(name); 
         if ( fs::exists( relp ) )
-            rel_found = true;
+        {
+            path = new std::string(relp.c_str());
+        }
 
-        if ( !(data_found || rel_found) )
+        fs::path *envp;
+        char *env_data;
+        if ( (env_data = getenv("KUGARU_DATA_DIR")) != NULL )
+        {
+            LOG("Picking up KUGARU_DATA_DIR...");
+
+            envp = new fs::path(std::string(env_data) + "/" + name);
+
+            path = new std::string(envp->c_str());
+        }
+
+        if ( path == NULL )
             std::cout << "Warning: File '" << relp.generic_string() << "' Not Found..." << std::endl;
 
-        if ( rel_found )
-        {
-            FileNameCache[name] = std::string(relp.generic_string());
+        if ( path == NULL )
+            path = new std::string();
 
-            return FileNameCache[name].c_str();
-        }
+        FileNameCache[name] = path;
 
-        if ( data_found )
-        {
-            FileNameCache[name] = std::string(datap.generic_string());
-
-            return FileNameCache[name].c_str();
-        }
-
-        return name;
+        return path->c_str();
     }
 }
