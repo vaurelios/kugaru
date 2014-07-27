@@ -61,7 +61,8 @@ namespace Kugaru
 
             envp = new fs::path(std::string(env_data) + "/" + name);
 
-            path = new std::string(envp->c_str());
+            if ( fs::exists( *envp ) )
+                path = new std::string(envp->c_str());
         }
 
         if ( path == NULL )
