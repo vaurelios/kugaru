@@ -1,0 +1,13 @@
+#! /usr/bin/env python
+# encoding: utf-8
+
+def build(bld):
+    bld.install_files('${INSTALL_DATA_DIR}/animations', bld.path.ant_glob('animations/*'))
+    bld.install_files('${INSTALL_DATA_DIR}/campaigns', bld.path.ant_glob('campaigns/*.txt'))
+    bld.install_files('${INSTALL_DATA_DIR}/dialogues', bld.path.ant_glob('dialogues/*.txt'))
+    bld.install_files('${INSTALL_DATA_DIR}/maps', bld.path.ant_glob('maps/*'))
+    bld.install_files('${INSTALL_DATA_DIR}/models', bld.path.ant_glob('models/*.solid'))
+    bld.install_files('${INSTALL_DATA_DIR}/skeleton', bld.path.ant_glob('skeleton/*'))
+    bld.install_files('${INSTALL_DATA_DIR}/sounds', bld.path.ant_glob('sounds/*.ogg'))
+    bld.install_files('${INSTALL_DATA_DIR}', bld.path.ant_glob('textures/**/*.png'), relative_trick=True)
+    bld.install_files('${INSTALL_DATA_DIR}', 'config.txt')

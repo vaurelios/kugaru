@@ -1,0 +1,19 @@
+#! /usr/bin/env python
+# encoding: utf-8
+
+def configure(cnf):
+    cnf.define('LIBDIR', cnf.env['LIBDIR'])
+    cnf.define('DATADIR', cnf.env['INSTALL_DATA_DIR'])
+    cnf.write_config_header('config.h')
+
+def build(bld):
+    srcs = 'binio.c Frustum.cpp GameDraw.cpp GameInitDispose.cpp GameTick.cpp Globals.cpp Lights.cpp Models.cpp Objects.cpp Person.cpp Quaternions.cpp Random.c Skeleton.cpp Skybox.cpp Sprites.cpp Terrain.cpp Text.cpp TGALoader.cpp Weapons.cpp OpenGL_Windows.cpp openal_wrapper.cpp WinInput.cpp FileIO.cpp Utility.cpp'
+    bld.program(
+            source=srcs,
+            target='kugaru',
+            features='c cxx cxxprogram',
+
+            use=['GL', 'GLU', 'OPENAL', 'SDL', 'LIBPNG', 'ZLIB', 'VORBIS', 'VORBISFILE'],
+            lib=['boost_filesystem', 'boost_system'],
+            includes='.')
+
