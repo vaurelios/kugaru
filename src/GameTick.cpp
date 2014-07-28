@@ -2764,7 +2764,7 @@ void	Game::Tick()
 				else if(mainmenu==1||mainmenu==2)mainmenu=0;
 				if(mainmenu&&musictoggle){
 					if(mainmenu==1||mainmenu==2||mainmenu==100){
-						OPENAL_SetFrequency(OPENAL_ALL, 0.001);
+						OPENAL_SetFrequency(OPENAL_ALL, 0);
 						PlayStreamEx( stream_music3, strm[stream_music3], NULL, true);
 						OPENAL_SetPaused(channels[stream_music3], false);
 						OPENAL_SetVolume(channels[stream_music3], 256);
@@ -4133,7 +4133,7 @@ void	Game::Tick()
 		if(IsKeyDown(theKeyMap, MAC_V_KEY)&&!freezetogglekeydown&&debugmode){
 			freeze=1-freeze;
 			if(freeze){
-				OPENAL_SetFrequency(OPENAL_ALL, 0.001);
+				OPENAL_SetFrequency(OPENAL_ALL, 0);
 			}
 			freezetogglekeydown=1;
 		}
@@ -4146,7 +4146,7 @@ void	Game::Tick()
 			console=1-console;
 			if(!console)freeze=0;
 			if(console){
-				OPENAL_SetFrequency(OPENAL_ALL, 0.001);
+				OPENAL_SetFrequency(OPENAL_ALL, 0);
 			}
 			consoletogglekeydown=1;
 		}
@@ -4335,7 +4335,7 @@ void	Game::Tick()
 
 		static int oldwinfreeze;
 		if(winfreeze&&!oldwinfreeze){
-			OPENAL_SetFrequency(OPENAL_ALL, 0.001);
+			OPENAL_SetFrequency(OPENAL_ALL, 0);
 			PlaySoundEx( consolesuccesssound, samp[consolesuccesssound], NULL, true);
 			OPENAL_SetVolume(channels[consolesuccesssound], 256);
 			OPENAL_SetPaused(channels[consolesuccesssound], false);
@@ -8475,7 +8475,9 @@ void	Game::Tick()
 																facing.y+=player[i].skeleton.joints[player[i].skeleton.jointlabels[head]].position.y*player[i].scale;
 																flatfacing.y+=player[0].skeleton.joints[player[0].skeleton.jointlabels[head]].position.y*player[0].scale;
 																if(player[i].occluded>=2)
-																	if(-1!=checkcollide(facing,flatfacing)){
+                                                                {
+																	if(-1!=checkcollide(facing,flatfacing))
+                                                                    {
 																		if(!player[i].pause)player[i].lastseentime-=.2;
 																		if(player[i].lastseentime<=0&&(player[i].creature!=wolftype||player[i].weaponstuck==-1)){
 																			player[i].aitype=searchtype;
@@ -8485,6 +8487,7 @@ void	Game::Tick()
 																		}
 																	}
 																	else player[i].lastseentime=1;
+                                                                }
 															}
 										}
 										if(animation[player[0].targetanimation].height==highheight&&(player[i].aitype==attacktypecutoff||player[i].aitype==searchtype)){
@@ -9348,7 +9351,7 @@ void	Game::Tick()
 									if(tutorialstage>=51)
 										if(findDistancefast(&temp,&player[0].coords)>=findDistancefast(&temp,&temp2)-1||findDistancefast(&temp3,&player[0].coords)<4){
 		                                    OPENAL_StopSound(OPENAL_ALL);  // hack...OpenAL renderer isn't stopping music after tutorial goes to level menu...
-											OPENAL_SetFrequency(OPENAL_ALL, 0.001);
+											OPENAL_SetFrequency(OPENAL_ALL, 0);
 
 											PlayStreamEx( stream_music3, strm[stream_music3], NULL, true);
 											OPENAL_SetPaused(channels[stream_music3], false);
@@ -9826,6 +9829,7 @@ void	Game::TickOnceAfter(){
 						}
 
 						if(campaign)
+                        {
 							if(mainmenu==0&&winfreeze&&(campaignchoosenext[campaignchoicewhich[whichchoice]])==1){
 								if(campaignnumnext[campaignchoicewhich[whichchoice]]==0){
 									endgame=1;
@@ -9961,7 +9965,7 @@ void	Game::TickOnceAfter(){
 							}
 
 							if(loading==3)loading=0;
-
+                        }
 					}
 
 					oldmusictype=musictype;

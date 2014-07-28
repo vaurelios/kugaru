@@ -1702,6 +1702,7 @@ void Person::FootLand(int which, float opacity){
 	static XYZ terrainlight;
 	static XYZ footvel,footpoint;
 	if(opacity>=1||skiddelay<=0)
+    {
 		if(opacity>1)
 		{
 			footvel=0;
@@ -1748,6 +1749,7 @@ void Person::FootLand(int which, float opacity){
 			//footpoint.y=coords.y;
 			if(findDistancefast(&footpoint,&viewer)<viewdistance*viewdistance/4)sprites.MakeSprite(cloudsprite, footpoint,footvel*.6, 1,1,1, .5, .2*opacity);
 		}
+    }
 }
 
 void Person::Puff(int whichlabel){

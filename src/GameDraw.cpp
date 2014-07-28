@@ -515,9 +515,9 @@ int Game::DrawGLScene(void)
 					if(distance>=.5){
 						checkpoint=DoRotation(player[k].skeleton.joints[abs(Random()%player[k].skeleton.num_joints)].position,0,player[k].rotation,0)*player[k].scale+player[k].coords;
 						checkpoint.y+=1;
-						if(!player[k].occluded==0)i=checkcollide(viewer,checkpoint,player[k].lastoccluded);
-						if(i==-1||player[k].occluded==0)i=checkcollide(viewer,checkpoint);
-						if(i!=-1){
+						if (!(player[k].occluded == 0)) i = checkcollide(viewer, checkpoint, player[k].lastoccluded);
+						if (i==-1||player[k].occluded==0)i=checkcollide(viewer,checkpoint);
+						if (i!=-1){
 							player[k].occluded+=1;
 							player[k].lastoccluded=i;
 						}
@@ -593,9 +593,10 @@ int Game::DrawGLScene(void)
 				if(distance>=.5){
 					checkpoint=DoRotation(player[k].skeleton.joints[abs(Random()%player[k].skeleton.num_joints)].position,0,player[k].rotation,0)*player[k].scale+player[k].coords;
 					checkpoint.y+=1;
-					if(!player[k].occluded==0)i=checkcollide(viewer,checkpoint,player[k].lastoccluded);
-					if(i==-1||player[k].occluded==0)i=checkcollide(viewer,checkpoint);
-					if(i!=-1){
+					if (!(player[k].occluded == 0)) i = checkcollide(viewer, checkpoint, player[k].lastoccluded);
+					if (i == -1 || player[k].occluded == 0) i = checkcollide(viewer, checkpoint);
+					if (i != -1)
+                    {
 						player[k].occluded+=1;
 						player[k].lastoccluded=i;
 					}
@@ -664,7 +665,7 @@ int Game::DrawGLScene(void)
 		glEnable(GL_TEXTURE_2D);
 		glColor4f(.5,.5,.5,1);
 		if(!console){
-			sprintf (string, " ",(int)(fps));
+			sprintf (string, "%d", (int) fps);
 			text.glPrint(10,30,string,0,.8,screenwidth,screenheight);
 
 			if(!tutoriallevel)
@@ -773,13 +774,15 @@ int Game::DrawGLScene(void)
 						sprintf (string2, " ");
 						sprintf (string3, " ");
 					}
-					if(tutorialstage==11){
-						sprintf (string, "When you jump at a wall, you can hold %s again",KeyToChar(jumpkey));
+					if (tutorialstage == 11)
+                    {
+						sprintf (string, "When you jump at a wall, you can hold %s again", KeyToChar(jumpkey));
 						sprintf (string2, "during impact to perform a walljump.");
 						sprintf (string3, "Be sure to use the movement keys to press against the wall");
 					}
-					if(tutorialstage==12){
-						sprintf (string, "While in the air, you can press crouch to flip.",KeyToChar(jumpkey));
+					if(tutorialstage == 12)
+                    {
+						sprintf (string, "While in the air, you can press crouch to flip.");
 						sprintf (string2, "Walljumps and flips confuse enemies and give you more control.");
 						sprintf (string3, " ");
 					}
@@ -992,7 +995,7 @@ int Game::DrawGLScene(void)
 					text.glPrint(screenwidth/2-7.6*strlen(string2)*screenwidth/1024,screenheight/16+screenheight*4/5-20*screenwidth/1024,string2,1,1.5*screenwidth/1024,screenwidth,screenheight);
 					text.glPrint(screenwidth/2-7.6*strlen(string3)*screenwidth/1024,screenheight/16+screenheight*4/5-40*screenwidth/1024,string3,1,1.5*screenwidth/1024,screenwidth,screenheight);
 
-					sprintf (string, "Press 'tab' to skip to the next item.",KeyToChar(jumpkey));
+					sprintf (string, "Press 'tab' to skip to the next item.");
 					sprintf (string2, "Press escape at any time to");
 					sprintf (string3, "pause or exit the tutorial.");
 
