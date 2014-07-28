@@ -17,3 +17,5 @@ def build(bld):
             lib=['boost_filesystem', 'boost_system'],
             includes='.')
 
+    # map related programs
+    bld.program(source='mapinfo.c binio.c', target='mapinfo', features='c cprogram') 

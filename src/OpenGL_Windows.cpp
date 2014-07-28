@@ -560,7 +560,7 @@ bool SetUp (Game & game)
 	randSeed = UpTime().lo;
 
 	osx = 0;
-	ifstream ipstream(ConvertFileName(":Data:config.txt"), std::ios::in /*| std::ios::nocreate*/);
+	ifstream ipstream(ConvertFileName("data/config.txt"), std::ios::in /*| std::ios::nocreate*/);
 	detail=1;
 	ismotionblur=0;
 	usermousesensitivity=1;
@@ -610,7 +610,7 @@ bool SetUp (Game & game)
 	selectDetail(kContextWidth, kContextHeight, kBitsPerPixel, detail);
 
 	if(!ipstream) {
-		ofstream opstream(ConvertFileName(":Data:config.txt"));
+		ofstream opstream(ConvertFileName("data/config.txt"));
 		opstream << "Screenwidth:\n";
 		opstream << kContextWidth;
 		opstream << "\nScreenheight:\n";
@@ -1535,6 +1535,7 @@ static bool load_image(const char *file_name, TGAImageRec &tex)
 /* stolen from public domain example.c code in libpng distribution. */
 static bool load_png(const char *file_name, TGAImageRec &tex)
 {
+    printf("Loading png '%s' file...\n", file_name);
     bool hasalpha = false;
     png_structp png_ptr = NULL;
     png_infop info_ptr = NULL;
