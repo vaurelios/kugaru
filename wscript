@@ -15,6 +15,7 @@ def configure(cnf):
 
     cnf.env['INSTALL_DATA_DIR'] = '{0}/share/{1}'.format(cnf.env['PREFIX'], APPNAME)
 
+    cnf.check_cfg(package='glib-2.0', uselib_store='GLIB', args='--cflags --libs', mandatory=True)
     cnf.check_cfg(package='gl', args='--cflags --libs', mandatory=True)
     cnf.check_cfg(package='glu', args='--cflags --libs', mandatory=True)
     cnf.check_cfg(package='openal', args='--cflags --libs', mandatory=True)

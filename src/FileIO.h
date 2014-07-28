@@ -24,7 +24,9 @@
 
 namespace Kugaru
 {
-    const char* ConvertFileName( const char* name );
+    const char *ConvertFileName  (const char* name);
+    const char *GetConfigFilePath(void);
+    FILE       *LoadConfigFile   (void);
 }
 
 #endif /* FILEIO_H */

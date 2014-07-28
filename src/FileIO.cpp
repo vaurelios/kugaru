@@ -24,55 +24,85 @@
 
 #include <stdio.h>
 #include <map>
-#include <boost/filesystem.hpp>
+#include <glib.h>
+#include <glib/gstdio.h>
 
-namespace fs = boost::filesystem;
 
 namespace Kugaru
 {
-    std::map<const char *, std::string *> FileNameCache;
+    std::map<const char *, GString *> FileNameCache;
 
     const char* ConvertFileName( const char *name )
     {
+        gchar **names = g_strsplit(name, "/", -1);
+        gchar *rpath = g_build_filenamev(names);
+        g_free(names);
+
         LOGFUNC;
 
-        if ( FileNameCache.count( name ) )
-            return FileNameCache[ name ]->c_str();
+        if ( FileNameCache.count(name) )
+            return FileNameCache[name]->str;
 
-        std::string *path = NULL;
+        GString *path = NULL;
 
-        fs::path datap(std::string(DATADIR) + std::string(name)); 
-        if ( fs::exists( datap ) )
+        gchar *datap = g_build_filename(DATADIR, rpath, NULL);
+        if ( g_file_test(datap, G_FILE_TEST_EXISTS) )
         {
-            path = new std::string(datap.c_str());
+            path = g_string_new(datap);
+        }
+        g_free(datap);
+ 
+        if ( g_file_test(rpath, G_FILE_TEST_EXISTS) )
+        {
+            if (path != NULL)
+                g_string_free(path, true);
+
+            path = g_string_new(rpath);
         }
 
-        fs::path relp(name); 
-        if ( fs::exists( relp ) )
-        {
-            path = new std::string(relp.c_str());
-        }
-
-        fs::path *envp;
         char *env_data;
         if ( (env_data = getenv("KUGARU_DATA_DIR")) != NULL )
         {
+            gchar *envp;
+
             LOG("Picking up KUGARU_DATA_DIR...");
 
-            envp = new fs::path(std::string(env_data) + "/" + name);
+            envp = g_build_filename(env_data, rpath, NULL);
 
-            if ( fs::exists( *envp ) )
-                path = new std::string(envp->c_str());
+            if ( g_file_test(envp, G_FILE_TEST_EXISTS) )
+                path = g_string_new(envp);
+
+            g_free(envp);
         }
 
         if ( path == NULL )
-            std::cout << "Warning: File '" << relp.generic_string() << "' Not Found..." << std::endl;
+        {
+            std::cout << "Warning: File '" << rpath << "' Not Found..." << std::endl;
 
-        if ( path == NULL )
-            path = new std::string();
+            path = g_string_new("");
+        }
 
         FileNameCache[name] = path;
 
-        return path->c_str();
+        return path->str;
+    }
+
+    gchar *GetConfigFilePath()
+    {
+        gchar *config_file = g_build_filename(g_get_user_config_dir(), "config.txt", NULL);
+
+        return config_file;
+    }
+
+    FILE *LoadConfigFile()
+    {
+        gchar *file = GetConfigFilePath();
+        FILE *fp;
+
+        fp = fopen(file, "w+");
+        
+        g_free(file);
+
+        return fp;
     }
 }

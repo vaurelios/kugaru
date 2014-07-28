@@ -13,8 +13,7 @@ def build(bld):
             target='kugaru',
             features='c cxx cxxprogram',
 
-            use=['GL', 'GLU', 'OPENAL', 'SDL', 'LIBPNG', 'ZLIB', 'VORBIS', 'VORBISFILE'],
-            lib=['boost_filesystem', 'boost_system'],
+            use=['GLIB', 'GL', 'GLU', 'OPENAL', 'SDL', 'LIBPNG', 'ZLIB', 'VORBIS', 'VORBISFILE'],
             includes='.')
 
     # map related programs
