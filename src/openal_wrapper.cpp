@@ -608,10 +608,10 @@ AL_API signed char OPENAL_SetPaused(int channel, signed char paused)
     return true;
 }
 
-AL_API void OPENAL_SetSFXMasterVolume(int volume)
+AL_API void OPENAL_SetSFXMasterVolume(float volume)
 {
     if (!initialized) return;
-    ALfloat gain = ((ALfloat) volume) / 255.0f;
+    ALfloat gain = (ALfloat) volume;
     alListenerf(AL_GAIN, gain);
 }
 

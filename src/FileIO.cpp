@@ -36,6 +36,7 @@ namespace Kugaru
     {
         gchar **names = g_strsplit(name, "/", -1);
         gchar *rpath = g_build_filenamev(names);
+
         g_free(names);
 
         LOGFUNC;
@@ -46,13 +47,13 @@ namespace Kugaru
         GString *path = NULL;
 
         gchar *datap = g_build_filename(DATADIR, rpath, NULL);
-        if ( g_file_test(datap, G_FILE_TEST_EXISTS) )
+        if ( g_file_test(datap, G_FILE_TEST_IS_REGULAR) )
         {
             path = g_string_new(datap);
         }
         g_free(datap);
  
-        if ( g_file_test(rpath, G_FILE_TEST_EXISTS) )
+        if ( g_file_test(rpath, G_FILE_TEST_IS_REGULAR) )
         {
             if (path != NULL)
                 g_string_free(path, true);
@@ -69,7 +70,7 @@ namespace Kugaru
 
             envp = g_build_filename(env_data, rpath, NULL);
 
-            if ( g_file_test(envp, G_FILE_TEST_EXISTS) )
+            if ( g_file_test(envp, G_FILE_TEST_IS_REGULAR) )
                 path = g_string_new(envp);
 
             g_free(envp);
@@ -89,7 +90,20 @@ namespace Kugaru
 
     gchar *GetConfigFilePath()
     {
-        gchar *config_file = g_build_filename(g_get_user_config_dir(), "config.txt", NULL);
+        gchar *config_path = g_build_filename(g_get_user_config_dir(), "kugaru", NULL);
+        gchar *config_file = g_build_filename(g_get_user_config_dir(), "kugaru", "config.ini", NULL);
+
+        if (!g_file_test(config_path, G_FILE_TEST_IS_DIR))
+            mkdir(config_path, 0700);
+        g_free(config_path);
+
+        if (!g_file_test(config_file, G_FILE_TEST_IS_REGULAR))
+        {
+            FILE *fp;
+
+            fp = fopen(config_file, "w");
+            fclose(fp);
+        }
 
         return config_file;
     }

@@ -24,201 +24,18 @@
 #include <unistd.h>
 #include <ctime>
 
+#include "Globals.h"
 #include "Game.h"
 #include "Random.h"
 #include "openal_wrapper.h"
+#include "Conf.h"
+
 
 using namespace std;
+using namespace Kugaru;
 
-extern float multiplier;
-extern XYZ viewer;
-extern int environment;
-extern float texscale;
-extern Terrain terrain;
-extern OPENAL_SAMPLE *samp[100];
-extern int channels[100];
-extern Sprites sprites;
-extern int kTextureSize;
-extern float screenwidth,screenheight;
-extern float gravity;
-extern int detail;
-extern float texdetail;
-extern Objects objects;
-extern int slomo;
-extern float slomodelay;
-extern bool floatjump;
-extern float volume;
-extern Animation animation[animation_count];
-extern Light light;
-extern float texdetail;
-extern GLubyte bloodText[512*512*3];
-extern GLubyte wolfbloodText[512*512*3];
-extern float terraindetail;
-extern float camerashake;
-extern float woozy;
-extern float blackout;
-extern bool cellophane;
-extern bool musictoggle;
-extern int difficulty;
-extern Weapons weapons;
-extern Person player[maxplayers];
-extern int numplayers;
-extern int bloodtoggle;
-extern bool invertmouse;
-extern float windvar;
-extern float precipdelay;
-extern XYZ viewerfacing;
-extern bool ambientsound;
-extern bool mousejump;
-extern float viewdistance;
-extern bool freeze;
-extern bool autoslomo;
-extern bool keyboardfrozen;
-extern int netdatanew;
-extern bool loadingstuff;
-extern char mapname[256];
-extern XYZ windvector;
-extern bool buttons[3];
-extern bool debugmode;
 static int music1;
-extern int mainmenu;
-extern int oldmainmenu;
-extern bool visibleloading;
-extern int loadscreencolor;
-extern float flashamount,flashr,flashg,flashb;
-extern int flashdelay;
-extern XYZ envsound[30];
-extern float envsoundvol[30];
-extern int numenvsounds;
-extern float envsoundlife[30];
-extern float usermousesensitivity;
-extern bool ismotionblur;
-extern bool foliage;
-extern bool trilinear;
-extern bool damageeffects;
-extern bool showpoints;
-extern bool texttoggle;
-extern bool alwaysblur;
-extern float gamespeed;
-extern bool decals;
-extern bool vblsync;
-extern bool immediate;
-extern bool velocityblur;
-extern int bonus;
-extern int oldbonus;
-extern float bonusvalue;
-extern float bonustotal;
-extern float bonustime;
-extern float startbonustotal;
-extern float tintr,tintg,tintb;
-extern float bonusnum[100];
-extern bool skyboxtexture;
-extern float skyboxr;
-extern float skyboxg;
-extern float skyboxb;
-extern float skyboxlightr;
-extern float skyboxlightg;
-extern float skyboxlightb;
-extern float fadestart;
-extern float slomospeed;
-extern float slomofreq;
-extern int tutoriallevel;
-extern float smoketex;
-extern float tutorialstagetime;
-extern int tutorialstage;
-extern float tutorialmaxtime;
-extern float tutorialsuccess;
-extern bool againbonus;
-extern bool reversaltrain;
-extern bool canattack;
-extern bool cananger;
-extern float damagedealt;
-extern float damagetaken;
-extern int maptype;
-extern int editoractive;
-extern int editorpathtype;
-extern bool oldbuttons[3];
 
-extern float hostiletime;
-
-extern bool gamestarted;
-
-extern int numhotspots;
-extern int winhotspot;
-extern int windialogue;
-extern int killhotspot;
-extern XYZ hotspot[40];
-extern int hotspottype[40];
-extern float hotspotsize[40];
-extern char hotspottext[40][256];
-extern int currenthotspot;
-
-extern int kBitsPerPixel;
-extern int hostile;
-
-extern int numaccounts;
-extern int accountactive;
-extern int accountdifficulty[10];
-extern int accountprogress[10];
-extern float accountpoints[10];
-extern float accounthighscore[10][50];
-extern float accountfasttime[10][50];
-extern bool accountunlocked[10][60];
-extern char accountname[10][256];
-
-extern bool stillloading;
-extern bool winfreeze;
-
-extern int numfalls;
-extern int numflipfail;
-extern int numseen;
-extern int numstaffattack;
-extern int numswordattack;
-extern int numknifeattack;
-extern int numunarmedattack;
-extern int numescaped;
-extern int numflipped;
-extern int numwallflipped;
-extern int numthrowkill;
-extern int numafterkill;
-extern int numreversals;
-extern int numattacks;
-extern int maxalarmed;
-extern int numresponded;
-
-extern int numdialogues;
-extern int numdialogueboxes[max_dialogues];
-extern int dialoguetype[max_dialogues];
-extern int dialogueboxlocation[max_dialogues][max_dialoguelength];
-extern float dialogueboxcolor[max_dialogues][max_dialoguelength][3];
-extern int dialogueboxsound[max_dialogues][max_dialoguelength];
-extern char dialoguetext[max_dialogues][max_dialoguelength][128];
-extern char dialoguename[max_dialogues][max_dialoguelength][64];
-extern XYZ dialoguecamera[max_dialogues][max_dialoguelength];
-extern XYZ participantlocation[max_dialogues][10];
-extern int participantfocus[max_dialogues][max_dialoguelength];
-extern int participantaction[max_dialogues][max_dialoguelength];
-extern float participantrotation[max_dialogues][10];
-extern XYZ participantfacing[max_dialogues][max_dialoguelength][10];
-extern float dialoguecamerarotation[max_dialogues][max_dialoguelength];
-extern float dialoguecamerarotation2[max_dialogues][max_dialoguelength];
-extern int indialogue;
-extern int whichdialogue;
-extern int directing;
-extern float dialoguetime;
-extern int dialoguegonethrough[20];
-
-extern bool campaign;
-
-extern float oldgamespeed;
-
-extern float accountcampaignhighscore[10];
-extern float accountcampaignfasttime[10];
-extern float accountcampaignscore[10];
-extern float accountcampaigntime[10];
-
-extern int accountcampaignchoicesmade[10];
-extern int accountcampaignchoices[10][5000];
 
 static const char *rabbitskin[] = {
     "data/textures/fur3.png",
@@ -2796,62 +2613,43 @@ void	Game::Tick()
 				if(newdetail<0)newdetail=detail;
 				if(newscreenwidth<0)newscreenwidth=screenwidth;
 				if(newscreenheight<0)newscreenheight=screenheight;
+                if(oldgamespeed==0)oldgamespeed=1;
 
-				ofstream opstream(ConvertFileName("data/config.txt"));
-				opstream << "Screenwidth:\n";
-				opstream << newscreenwidth;
-				opstream << "\nScreenheight:\n";
-				opstream << newscreenheight;
-				opstream << "\nMouse sensitivity:\n";
-				opstream << usermousesensitivity;
-				opstream << "\nBlur(0,1):\n";
-				opstream << ismotionblur;
-				opstream << "\nOverall Detail(0,1,2) higher=better:\n";
-				opstream << newdetail;
-				opstream << "\nFloating jump:\n";
-				opstream << floatjump;
-				opstream << "\nMouse jump:\n";
-				opstream << mousejump;
-				opstream << "\nAmbient sound:\n";
-				opstream << ambientsound;
-				opstream << "\nBlood (0,1,2):\n";
-				opstream << bloodtoggle;
-				opstream << "\nAuto slomo:\n";
-				opstream << autoslomo;
-				opstream << "\nFoliage:\n";
-				opstream << foliage;
-				opstream << "\nMusic:\n";
-				opstream << musictoggle;
-				opstream << "\nTrilinear:\n";
-				opstream << trilinear;
-				opstream << "\nDecals(shadows,blood puddles,etc):\n";
-				opstream << decals;
-				opstream << "\nInvert mouse:\n";
-				opstream << invertmouse;
-				opstream << "\nGamespeed:\n";
-				if(oldgamespeed==0)oldgamespeed=1;
-				opstream << oldgamespeed;
-				opstream << "\nDifficulty(0,1,2) higher=harder:\n";
-				opstream << difficulty;
-				opstream << "\nDamage effects(blackout, doublevision):\n";
-				opstream << damageeffects;
-				opstream << "\nText:\n";
-				opstream << texttoggle;
-				opstream << "\nDebug:\n";
-				opstream << debugmode;
-				opstream << "\nVBL Sync:\n";
-				opstream << vblsync;
-				opstream << "\nShow Points:\n";
-				opstream << showpoints;
-				opstream << "\nAlways Blur:\n";
-				opstream << alwaysblur;
-				opstream << "\nImmediate mode (turn on on G5):\n";
-				opstream << immediate;
-				opstream << "\nVelocity blur:\n";
-				opstream << velocityblur;
-			    opstream << "\nVolume:\n";
-		        opstream << volume;
-				opstream << "\nForward key:\n";
+                Conf &cnf = Conf::getInstance();
+
+                cnf.setGameInt ("game-speed",     oldgamespeed);
+                cnf.setGameInt ("difficulty",     difficulty);
+                cnf.setGameInt ("debug",          debugmode);
+                cnf.setGameBool("floating-jump",  floatjump);
+                cnf.setGameBool("show-text",      texttoggle);
+                cnf.setGameBool("show-points",    showpoints);
+                cnf.setGameBool("immediate-mode", immediate);
+
+                cnf.setDisplayInt ("width",            newscreenwidth);
+                cnf.setDisplayInt ("height",           newscreenheight);
+                cnf.setDisplayInt ("detail",           newdetail);
+                cnf.setDisplayInt ("decals",           decals);
+                cnf.setDisplayInt ("blood",            bloodtoggle);
+                cnf.setDisplayInt ("damage-effects",   damageeffects);
+                cnf.setDisplayInt ("velocity-blur",    velocityblur);
+                cnf.setDisplayBool("auto-slow-motion", autoslomo);
+                cnf.setDisplayBool("trilinear",        trilinear);
+                cnf.setDisplayBool("vsync",            vblsync);
+                cnf.setDisplayBool("show-foliage",     foliage);
+                cnf.setDisplayBool("always-blur",      alwaysblur);
+                cnf.setDisplayBool("motion-blur",      ismotionblur);
+
+                cnf.setSoundInt ("volume",  volume); 
+                cnf.setSoundBool("ambient", ambientsound);
+                cnf.setSoundBool("music",   musictoggle);
+
+                cnf.setMouseInt ("mouse-speed",  usermousesensitivity);
+                cnf.setMouseBool("mouse-invert", invertmouse);
+                cnf.setMouseBool("mouse-jump",   mousejump);
+
+                cnf.save();
+
+				/*opstream << "\nForward key:\n";
 				opstream << KeyToChar(forwardkey);
 				opstream << "\nBack key:\n";
 				opstream << KeyToChar(backkey);
@@ -2871,7 +2669,7 @@ void	Game::Tick()
 				opstream << KeyToChar(attackkey);
 				opstream << "\nChat key:\n";
 				opstream << KeyToChar(chatkey);
-				opstream.close();
+				opstream.close();*/
 			}
 			if(mainmenu==4||mainmenu==5||mainmenu==6||mainmenu==7||mainmenu==9||mainmenu==13||mainmenu==10||mainmenu==11||mainmenu==100){
 				float gLoc[3]={0,0,0};
@@ -3145,9 +2943,9 @@ void	Game::Tick()
 				if(usermousesensitivity>2)usermousesensitivity=.2;
 			}
 			if(Button()&&!oldbutton&&selected==11){
-				volume+=.1f;
-				if(volume>1.0001f)volume=0;
-				OPENAL_SetSFXMasterVolume((int)(volume*255));
+				volume++;
+				if (volume > 100) volume = 0;
+				OPENAL_SetSFXMasterVolume((float) volume / 100.0f);
 			}
 			if(Button()&&!oldbutton&&selected==7){
 				/*float gLoc[3]={0,0,0};
@@ -3192,60 +2990,40 @@ void	Game::Tick()
 				if(newscreenheight<0)newscreenheight=screenheight;
 
 
-				ofstream opstream(ConvertFileName("data/config.txt"));
-				opstream << "Screenwidth:\n";
-				opstream << newscreenwidth;
-				opstream << "\nScreenheight:\n";
-				opstream << newscreenheight;
-				opstream << "\nMouse sensitivity:\n";
-				opstream << usermousesensitivity;
-				opstream << "\nBlur(0,1):\n";
-				opstream << ismotionblur;
-				opstream << "\nOverall Detail(0,1,2) higher=better:\n";
-				opstream << newdetail;
-				opstream << "\nFloating jump:\n";
-				opstream << floatjump;
-				opstream << "\nMouse jump:\n";
-				opstream << mousejump;
-				opstream << "\nAmbient sound:\n";
-				opstream << ambientsound;
-				opstream << "\nBlood (0,1,2):\n";
-				opstream << bloodtoggle;
-				opstream << "\nAuto slomo:\n";
-				opstream << autoslomo;
-				opstream << "\nFoliage:\n";
-				opstream << foliage;
-				opstream << "\nMusic:\n";
-				opstream << musictoggle;
-				opstream << "\nTrilinear:\n";
-				opstream << trilinear;
-				opstream << "\nDecals(shadows,blood puddles,etc):\n";
-				opstream << decals;
-				opstream << "\nInvert mouse:\n";
-				opstream << invertmouse;
-				opstream << "\nGamespeed:\n";
-				if(oldgamespeed==0)oldgamespeed=1;
-				opstream << oldgamespeed;
-				opstream << "\nDifficulty(0,1,2) higher=harder:\n";
-				opstream << difficulty;
-				opstream << "\nDamage effects(blackout, doublevision):\n";
-				opstream << damageeffects;
-				opstream << "\nText:\n";
-				opstream << texttoggle;
-				opstream << "\nDebug:\n";
-				opstream << debugmode;
-				opstream << "\nVBL Sync:\n";
-				opstream << vblsync;
-				opstream << "\nShow Points:\n";
-				opstream << showpoints;
-				opstream << "\nAlways Blur:\n";
-				opstream << alwaysblur;
-				opstream << "\nImmediate mode (turn on on G5):\n";
-				opstream << immediate;
-				opstream << "\nVelocity blur:\n";
-				opstream << velocityblur;
-			    opstream << "\nVolume:\n";
-		        opstream << volume;
+                Conf &cnf = Conf::getInstance();
+
+			    cnf.setGameInt ("game-speed",     oldgamespeed);
+                cnf.setGameInt ("difficulty",     difficulty);
+                cnf.setGameInt ("debug",          debugmode);
+                cnf.setGameBool("floating-jump",  floatjump);
+                cnf.setGameBool("show-text",      texttoggle);
+                cnf.setGameBool("show-points",    showpoints);
+                cnf.setGameBool("immediate-mode", immediate);
+
+                cnf.setDisplayInt ("width",            newscreenwidth);
+                cnf.setDisplayInt ("height",           newscreenheight);
+                cnf.setDisplayInt ("detail",           newdetail);
+                cnf.setDisplayInt ("decals",           decals);
+                cnf.setDisplayInt ("blood",            bloodtoggle);
+                cnf.setDisplayInt ("damage-effects",   damageeffects);
+                cnf.setDisplayInt ("velocity-blur",    velocityblur);
+                cnf.setDisplayBool("auto-slow-motion", autoslomo);
+                cnf.setDisplayBool("trilinear",        trilinear);
+                cnf.setDisplayBool("vsync",            vblsync);
+                cnf.setDisplayBool("show-foliage",     foliage);
+                cnf.setDisplayBool("always-blur",      alwaysblur);
+                cnf.setDisplayBool("motion-blur",      ismotionblur);
+
+                cnf.setSoundInt ("volume",  volume); 
+                cnf.setSoundBool("ambient", ambientsound);
+                cnf.setSoundBool("music",   musictoggle);
+
+                cnf.setMouseInt ("mouse-speed",  usermousesensitivity);
+                cnf.setMouseBool("mouse-invert", invertmouse);
+                cnf.setMouseBool("mouse-jump",   mousejump);
+
+                cnf.save();
+                /*    
 				opstream << "\nForward key:\n";
 				opstream << KeyToChar(forwardkey);
 				opstream << "\nBack key:\n";
@@ -3266,7 +3044,7 @@ void	Game::Tick()
 				opstream << KeyToChar(attackkey);
 				opstream << "\nChat key:\n";
 				opstream << KeyToChar(chatkey);
-				opstream.close();
+				opstream.close();*/
 
 				if(mainmenu==3&&gameon)mainmenu=2;
 				if(mainmenu==3&&!gameon)mainmenu=1;
@@ -3820,60 +3598,39 @@ void	Game::Tick()
 				if(newscreenwidth<0)newscreenwidth=screenwidth;
 				if(newscreenheight<0)newscreenheight=screenheight;
 
-				ofstream opstream(ConvertFileName("data/config.txt"));
-				opstream << "Screenwidth:\n";
-				opstream << newscreenwidth;
-				opstream << "\nScreenheight:\n";
-				opstream << newscreenheight;
-				opstream << "\nMouse sensitivity:\n";
-				opstream << usermousesensitivity;
-				opstream << "\nBlur(0,1):\n";
-				opstream << ismotionblur;
-				opstream << "\nOverall Detail(0,1,2) higher=better:\n";
-				opstream << newdetail;
-				opstream << "\nFloating jump:\n";
-				opstream << floatjump;
-				opstream << "\nMouse jump:\n";
-				opstream << mousejump;
-				opstream << "\nAmbient sound:\n";
-				opstream << ambientsound;
-				opstream << "\nBlood (0,1,2):\n";
-				opstream << bloodtoggle;
-				opstream << "\nAuto slomo:\n";
-				opstream << autoslomo;
-				opstream << "\nFoliage:\n";
-				opstream << foliage;
-				opstream << "\nMusic:\n";
-				opstream << musictoggle;
-				opstream << "\nTrilinear:\n";
-				opstream << trilinear;
-				opstream << "\nDecals(shadows,blood puddles,etc):\n";
-				opstream << decals;
-				opstream << "\nInvert mouse:\n";
-				opstream << invertmouse;
-				opstream << "\nGamespeed:\n";
-				if(oldgamespeed==0)oldgamespeed=1;
-				opstream << oldgamespeed;
-				opstream << "\nDifficulty(0,1,2) higher=harder:\n";
-				opstream << difficulty;
-				opstream << "\nDamage effects(blackout, doublevision):\n";
-				opstream << damageeffects;
-				opstream << "\nText:\n";
-				opstream << texttoggle;
-				opstream << "\nDebug:\n";
-				opstream << debugmode;
-				opstream << "\nVBL Sync:\n";
-				opstream << vblsync;
-				opstream << "\nShow Points:\n";
-				opstream << showpoints;
-				opstream << "\nAlways Blur:\n";
-				opstream << alwaysblur;
-				opstream << "\nImmediate mode (turn on on G5):\n";
-				opstream << immediate;
-				opstream << "\nVelocity blur:\n";
-				opstream << velocityblur;
-			    opstream << "\nVolume:\n";
-		        opstream << volume;
+				Conf cnf& = Conf::getInstance();
+
+                cnf.setGameInt ("game-speed",     oldgamespeed);
+                cnf.setGameInt ("difficulty",     difficulty);
+                cnf.setGameInt ("debug",          debugmode);
+                cnf.setGameBool("floating-jump",  floatjump);
+                cnf.setGameBool("show-text",      texttoggle);
+                cnf.setGameBool("show-points",    showpoints);
+                cnf.setGameBool("immediate-mode", immediate);
+
+                cnf.setDisplayInt ("width",            newscreenwidth);
+                cnf.setDisplayInt ("height",           newscreenheight);
+                cnf.setDisplayInt ("detail",           newdetail);
+                cnf.setDisplayInt ("decals",           decals);
+                cnf.setDisplayInt ("blood",            bloodtoggle);
+                cnf.setDisplayInt ("damage-effects",   damageeffects);
+                cnf.setDisplayInt ("velocity-blur",    velocityblur);
+                cnf.setDisplayBool("auto-slow-motion", autoslomo);
+                cnf.setDisplayBool("trilinear",        trilinear);
+                cnf.setDisplayBool("vsync",            vblsync);
+                cnf.setDisplayBool("show-foliage",     foliage);
+                cnf.setDisplayBool("always-blur",      alwaysblur);
+                cnf.setDisplayBool("motion-blur",      ismotionblur);
+
+                cnf.setSoundInt ("volume",  volume); 
+                cnf.setSoundBool("ambient", ambientsound);
+                cnf.setSoundBool("music",   musictoggle);
+
+                cnf.setMouseInt ("mouse-speed",  usermousesensitivity);
+                cnf.setMouseBool("mouse-invert", invertmouse);
+                cnf.setMouseBool("mouse-jump",   mousejump);
+
+                /*
 				opstream << "\nForward key:\n";
 				opstream << KeyToChar(forwardkey);
 				opstream << "\nBack key:\n";
@@ -3894,7 +3651,7 @@ void	Game::Tick()
 				opstream << KeyToChar(attackkey);
 				opstream << "\nChat key:\n";
 				opstream << KeyToChar(chatkey);
-				opstream.close();
+				opstream.close();*/
 			}
 		}
 

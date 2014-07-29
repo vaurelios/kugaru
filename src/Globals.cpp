@@ -1,47 +1,34 @@
 /*
-Copyright (C) 2003, 2010 - Wolfire Games
+ * This file is part of Kugaru.
+ *
+ * Copyright (C) 2014 Victor A. Santos
+ *
+ * Kugaru is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Kugaru is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Kugaru.  If not, see <http://www.gnu.org/licenses/>.
+ */
 
-This file is part of Lugaru.
 
-Lugaru is free software; you can redistribute it and/or
-modify it under the terms of the GNU General Public License
-as published by the Free Software Foundation; either version 2
-of the License, or (at your option) any later version.
+#include "Globals.h"
 
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  
-
-See the GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with this program; if not, write to the Free Software
-Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-*/
-
-#include "SDL.h"
-
-#include "gamegl.h"
-#include "Quaternions.h"
-#include "Lights.h"
-#include "Skeleton.h"
-#include "Terrain.h"
-#include "Sprites.h"
-#include "Frustum.h"
-#include "Objects.h"
-#include "Weapons.h"
-#include "Person.h"
-#include "TGALoader.h"
-#include "openal_wrapper.h"
-
-#include "Constants.h"
 
 bool visibleloading = 0;
-OPENAL_SAMPLE	*samp[100] = {0};
-OPENAL_STREAM * strm[20] = {0};
+OPENAL_SAMPLE *samp[100] = {0};
+OPENAL_STREAM *strm[20] = {0};
 int channels[100] = {0};
 
-float volume = 0;bool buttons[3] = {0};
+static int music1;
+bool buttons[3] = {0};
+int volume = 0;
 bool oldbuttons[3] = {0};
 bool ismotionblur = 0;
 float usermousesensitivity = 0;
@@ -264,6 +251,3 @@ int numattacks = 0;
 int maxalarmed = 0;
 
 bool gamestarted = 0;
-
-//TextureList textures;
-

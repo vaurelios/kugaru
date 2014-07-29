@@ -236,7 +236,7 @@ void Game::LoadSounds()
 
 	OPENAL_3D_SetDopplerFactor(0);
 
-	OPENAL_SetSFXMasterVolume((int)(volume*255));
+	OPENAL_SetSFXMasterVolume((float) volume / 100.0f);
 
 	samp[footstepsound] = OPENAL_Sample_LoadEx(OPENAL_FREE, ConvertFileName("data/sounds/footstepsnow1.ogg"), OPENAL_HW3D, 0, 0); if(visibleloading){LoadingScreen(); loadscreencolor=5;}
 	OPENAL_Sample_SetMinMaxDistance(samp[footstepsound], 4.0f, 1000.0f);
@@ -1215,7 +1215,7 @@ void Game::InitGame()
 	OPENAL_Init(44100, 32, 0);
     #endif
 
-	OPENAL_SetSFXMasterVolume((int)(volume*255));
+	OPENAL_SetSFXMasterVolume((float) volume / 100.0f);
 
 	strm[stream_music3] = OPENAL_Stream_Open(ConvertFileName("data/sounds/music3.ogg"), OPENAL_2D, 0, 0); if(visibleloading){LoadingScreen(); loadscreencolor=0;}
 //	OPENAL_Sample_SetMinMaxDistance(strm[stream_music3], 4.0f, 1000.0f);
