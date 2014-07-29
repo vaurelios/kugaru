@@ -4,8 +4,4 @@ Kugaru is a Fork of Wolfire's Lugaru game.
 
 == Install ==
 
-Clone repository and run:
-
- $ cmake . -DCMAKE_INSTALL_PREFIX=/usr
- $ make
- # sudo make install
+See the [https://github.com/hotvic/kugaru/wiki/Install Install] wiki page.
