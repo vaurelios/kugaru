@@ -3598,7 +3598,7 @@ void	Game::Tick()
 				if(newscreenwidth<0)newscreenwidth=screenwidth;
 				if(newscreenheight<0)newscreenheight=screenheight;
 
-				Conf cnf& = Conf::getInstance();
+				Conf &cnf = Conf::getInstance();
 
                 cnf.setGameInt ("game-speed",     oldgamespeed);
                 cnf.setGameInt ("difficulty",     difficulty);
