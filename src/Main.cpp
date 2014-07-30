@@ -34,27 +34,39 @@
 #include "Utility.h"
 #include "openal_wrapper.h"
 
-
 extern "C" {
 	#include "zlib.h"
 	#include "png.h"
 }
 
-static bool load_image(const char * fname, TGAImageRec & tex);
-static bool load_png(const char * fname, TGAImageRec & tex);
-static bool save_image(const char * fname);
-static bool save_png(const char * fname);
-
-bool gameFocused;
-
-#ifdef WIN32
-#include <shellapi.h>
-#include "win-res/resource.h"
-#endif
 
 using namespace std;
 using namespace Kugaru;
 
+
+static bool load_image        (const char *fname, TGAImageRec &tex);
+static bool load_png          (const char *fname, TGAImageRec &tex);
+static bool save_image        (const char *fname);
+static bool save_png          (const char *fname);
+bool        selectDetail      (int        &width,
+                               int        &height,
+                               int        &bpp,
+                               int        &detail);
+int         closestResolution (int         width,
+                               int         height);
+int         resolutionID      (int         width,
+                               int         height);
+void        ReportError       (char       *strError);
+void        SetupDSpFullScreen();
+void        ShutdownDSp       ();
+void        DrawGL            (Game       &game);
+void        CreateGLWindow    ();
+bool        SetUp             (Game       &game);
+void        DoKey             (SInt8       theKey,
+                               SInt8       theCode);
+void        DoUpdate          (Game       &game);
+void        DoEvent           ();
+void        CleanUp           ();
 
 
 SDL_Rect **resolutions = NULL;
@@ -69,43 +81,33 @@ static SDL_Rect *hardcoded_resolutions[] = {
 };
 
 
+// Menu defs
+enum 
+{
+	MENU_FILE_QUIT = 1
+};
 
-unsigned int resolutionDepths[8][2] = {0};
+enum 
+{
+	FG_SLEEP_TIME = 10,
+	BG_SLEEP_TIME = 10000
+};
 
-bool selectDetail(int & width, int & height, int & bpp, int & detail);
-int closestResolution(int width, int height);
-int resolutionID(int width, int height);
+bool            gameFocused;
+unsigned int    resolutionDepths[8][2] = {0};
+static bool     g_button;
+static bool     fullscreen = true;
+Point           delta;
+int             kContextWidth;
+int             kContextHeight;
+GLuint          gFontList;
+char            gcstrMode[256] = "";
+UInt32          gSleepTime = FG_SLEEP_TIME;
+bool            gDone = false;
+bool            gfFrontProcess = true;
+Game           *pgame = 0;
+const RGBColor  RGB_BLACK = { 0x0000, 0x0000, 0x0000 };
 
-void ReportError (char * strError);
-
-void SetupDSpFullScreen();
-void ShutdownDSp();
-
-void DrawGL(Game & game);
-
-void CreateGLWindow (void);
-bool SetUp (Game & game);
-void DoKey (SInt8 theKey, SInt8 theCode);
-void DoUpdate (Game & game);
-
-void DoEvent (void);
-void CleanUp (void);
-
-
-// statics/globals (internal only) ------------------------------------------
-#ifndef WIN32
-typedef struct tagPOINT { 
-  int x;
-  int y;
-} POINT, *PPOINT; 
-#endif
-
-
-
-#ifdef _MSC_VER
-#pragma warning(push)
-#pragma warning(disable: 4273)
-#endif
 
 #define GL_FUNC(ret,fn,params,call,rt) \
     extern "C" { \
@@ -115,28 +117,29 @@ typedef struct tagPOINT {
 #include "glstubs.h"
 #undef GL_FUNC
 
-#ifdef _MSC_VER
-#pragma warning(pop)
-#endif
 
 static bool lookup_glsym(const char *funcname, void **func)
 {
     *func = SDL_GL_GetProcAddress(funcname);
+
     if (*func == NULL)
     {
         fprintf(stderr, "Failed to find OpenGL symbol \"%s\"\n", funcname);
         return false;
     }
+
     return true;
 }
 
 static bool lookup_all_glsyms(void)
 {
     bool retval = true;
-    #define GL_FUNC(ret,fn,params,call,rt) \
+
+    #define GL_FUNC(ret, fn, params, call, rt) \
         if (!lookup_glsym(#fn, (void **) &p##fn)) retval = false;
     #include "glstubs.h"
     #undef GL_FUNC
+
     return retval;
 }
 
@@ -145,93 +148,16 @@ static void GLAPIENTRY glDeleteTextures_doNothing(GLsizei n, const GLuint *textu
     // no-op.
 }
 
-
-
-void sdlGetCursorPos(POINT *pt)
-{
-    int x, y;
-    SDL_GetMouseState(&x, &y);
-    pt->x = x;
-    pt->y = y;
-}
-#define GetCursorPos(x) sdlGetCursorPos(x)
-#define SetCursorPos(x, y) SDL_WarpMouse(x, y)
-#define ScreenToClient(x, pt)
-#define ClientToScreen(x, pt)
 #ifdef MessageBox
 #undef MessageBox
 #endif
 #define MessageBox(hwnd,text,title,flags) STUBBED("msgbox")
+#define cmdline(c) false
 
 
-Point delta;
-
-static bool g_button, fullscreen = true;
-
-
-// Menu defs
-enum 
+void ReportError (char *strError)
 {
-	kFileQuit = 1
-};
-
-enum 
-{
-	kForegroundSleep = 10,
-	kBackgroundSleep = 10000
-};
-
-
-int kContextWidth;
-int kContextHeight;
-
-const RGBColor rgbBlack = { 0x0000, 0x0000, 0x0000 };
-
-GLuint gFontList;
-char gcstrMode [256] = "";
-
-UInt32 gSleepTime = kForegroundSleep;
-bool gDone = false, gfFrontProcess = true;
-
-Game * pgame = 0;
-
-#ifndef __MINGW32__
-static int _argc = 0;
-static char **_argv = NULL;
-#endif
-
-bool cmdline(const char *cmd)
-{
-    for (int i = 1; i < _argc; i++)
-    {
-        char *arg = _argv[i];
-        while (*arg == '-')
-            arg++;
-        if (strcasecmp(arg, cmd) == 0)
-            return true;
-    }
-
-    return false;
-}
-
-
-// --------------------------------------------------------------------------
-
-void ReportError (char * strError)
-{
-#ifdef _MSC_VER  // !!! FIXME.  --ryan.
-	throw std::exception( strError);
-#endif
-
-	/*	char errMsgCStr [256];
-	Str255 strErr;
-
-	sprintf (errMsgCStr, "%s", strError); 
-
-	// out as debug string
-	CToPStr (strErr, errMsgCStr);
-	DebugStr (strErr);
-	*/
+	fprintf(stderr, "Error: %s\n", strError);
 }
 
 void SetupDSpFullScreen ()
@@ -243,12 +169,9 @@ void ShutdownDSp ()
 {
 }
 
-
-//-----------------------------------------------------------------------------------------------------------------------
-
 // OpenGL Drawing
 
-void DrawGL (Game & game)
+void DrawGL (Game& game)
 {
 	game.DrawGLScene();
 }
@@ -256,19 +179,19 @@ void DrawGL (Game & game)
 
 static KeyMap g_theKeys;
 
-void SetKey( int key)
+void SetKey(int key)
 {
-    g_theKeys[ key >> 3] |= (1 << (key & 7));
+    g_theKeys[key >> 3] |= (1 << (key & 7));
 }
 
-void ClearKey( int key)
+void ClearKey(int key)
 {
-    g_theKeys[ key >> 3] &= (0xff ^ (1 << (key & 7)));
+    g_theKeys[key >> 3] &= (0xff ^ (1 << (key & 7)));
 }
 
-void GetKeys(  unsigned char theKeys[16])
+void GetKeys(unsigned char theKeys[16])
 {
-    memcpy( theKeys, &g_theKeys, 16);
+    memcpy(theKeys, &g_theKeys, 16);
 }
 
 bool Button()
@@ -636,7 +559,7 @@ bool SetUp (Game & game)
     if (!cmdline("windowed"))
         sdlflags |= SDL_FULLSCREEN;
 
-    SDL_WM_SetCaption("Lugaru", "Lugaru");
+    SDL_WM_SetCaption("Kugaru", "Kugaru");
 
     SDL_ShowCursor(0);
 
@@ -890,11 +813,6 @@ void CleanUp (void)
 {
 	LOGFUNC;
 
-//	game.Dispose();
-
-
-
-
     SDL_Quit();
     #define GL_FUNC(ret,fn,params,call,rt) p##fn = NULL;
     #include "glstubs.h"
@@ -902,7 +820,6 @@ void CleanUp (void)
     // cheat here...static destructors are calling glDeleteTexture() after
     //  the context is destroyed and libGL unloaded by SDL_Quit().
     pglDeleteTextures = glDeleteTextures_doNothing;
-
 }
 
 // --------------------------------------------------------------------------
@@ -910,30 +827,6 @@ void CleanUp (void)
 static bool IsFocused()
 {
     return ((SDL_GetAppState() & SDL_APPINPUTFOCUS) != 0);
-}
-
-
-static void launch_web_browser(const char *url)
-{
-#ifdef WIN32
-    ShellExecute(NULL, "open", url, NULL, NULL, SW_SHOWNORMAL);
-
-#elif (defined(__APPLE__) && defined(__MACH__))
-    const char *fmt = "open '%s'";
-    const size_t len = strlen(fmt) + strlen(url) + 16;
-    char *buf = new char[len];
-    snprintf(buf, len, fmt, url);
-    system(buf);
-    delete[] buf;
-
-#elif PLATFORM_LINUX
-    const char *fmt = "PATH=$PATH:. xdg-open '%s'";
-    const size_t len = strlen(fmt) + strlen(url) + 16;
-    char *buf = new char[len];
-    snprintf(buf, len, fmt, url);
-    system(buf);
-    delete[] buf;
-#endif
 }
 
 
@@ -1041,16 +934,6 @@ static inline void chdirToAppPath(const char *argv0)
 
 int main(int argc, char **argv)
 {
-#ifndef __MINGW32__
-    _argc = argc;
-    _argv = argv;
-#endif
-
-    // !!! FIXME: we could use a Win32 API for this.  --ryan.
-#ifndef WIN32
-    chdirToAppPath(argv[0]);
-#endif
-
 	LOGFUNC;
 
 	memset( &g_theKeys, 0, sizeof( KeyMap));
@@ -1059,80 +942,62 @@ int main(int argc, char **argv)
 
 	try
 	{
-		bool regnow = false;
+		Game game;
+		pgame = &game;
+
+		//ofstream os("error.txt");
+		//os.close();
+		//ofstream os("log.txt");
+		//os.close();
+
+		if (!SetUp (game))
+            return 42;
+
+		while (!gDone&&!game.quit&&(!game.tryquit))
 		{
-			Game game;
-			pgame = &game;
-
-			//ofstream os("error.txt");
-			//os.close();
-			//ofstream os("log.txt");
-			//os.close();
-
-			if (!SetUp (game))
-                return 42;
-
-			while (!gDone&&!game.quit&&(!game.tryquit))
+			if (IsFocused())
 			{
-				if (IsFocused())
-				{
-					gameFocused = true;
+				gameFocused = true;
 
-					// check windows messages
+				// check windows messages
 			
-					game.deltah = 0;
-					game.deltav = 0;
-					SDL_Event e;
-					// message pump
-					while( SDL_PollEvent( &e ) )
+				game.deltah = 0;
+				game.deltav = 0;
+				SDL_Event e;
+				// message pump
+				while( SDL_PollEvent( &e ) )
+				{
+					if( e.type == SDL_QUIT )
 					{
-						if( e.type == SDL_QUIT )
-						{
-							gDone=true;
-							break;
-						}
-						sdlEventProc(e, game);
+						gDone=true;
+						break;
 					}
+					sdlEventProc(e, game);
+				}
 				
 
-					// game
+				// game
+				DoUpdate(game);
+			}
+			else
+			{
+				if (gameFocused)
+				{
+					// allow game chance to pause
+					gameFocused = false;
 					DoUpdate(game);
 				}
-				else
-				{
-					if (gameFocused)
-					{
-						// allow game chance to pause
-						gameFocused = false;
-						DoUpdate(game);
-					}
 
-					// game is not in focus, give CPU time to other apps by waiting for messages instead of 'peeking'
-                    STUBBED("give up CPU but sniff the event queue");
-				}
+				// game is not in focus, give CPU time to other apps by waiting for messages instead of 'peeking'
+                STUBBED("give up CPU but sniff the event queue");
 			}
-
-			regnow = game.registernow;
 		}
+
 		pgame = 0;
 
 		CleanUp ();
-//		if(game.registernow){
-		if(regnow)
-		{
-            #if (defined(__APPLE__) && defined(__MACH__))
-            launch_web_browser("http://www.wolfire.com/purchase/lugaru/mac");
-            #elif PLATFORM_LINUX
-            launch_web_browser("http://www.wolfire.com/purchase/lugaru/linux");
-            #else
-            launch_web_browser("http://www.wolfire.com/purchase/lugaru/pc");
-            #endif
-		}
-
-        #if PLATFORM_LINUX  // (this may not be necessary any more.)
-        _exit(0);  // !!! FIXME: hack...crashes on exit!
-        #endif
-		return 0;
+		
+        return 0;
 	}
 	catch (const std::exception& error)
 	{

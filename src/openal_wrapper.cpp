@@ -26,10 +26,6 @@
 
 #include "openal_wrapper.h"
 
-// NOTE:
-// FMOD uses a Left Handed Coordinate system, OpenAL uses a Right Handed
-//  one...so we just need to flip the sign on the Z axis when appropriate.
-
 #define DYNAMIC_LOAD_OPENAL 0
 
 #if DYNAMIC_LOAD_OPENAL
@@ -242,14 +238,13 @@ AL_API signed char OPENAL_Init(int mixrate, int maxsoftwarechannels, unsigned in
     alcMakeContextCurrent(ctx);
     alcProcessContext(ctx);
 
-    bool cmdline(const char *cmd);
-    if (cmdline("openalinfo"))
+    /*if (cmdline("openalinfo"))
     {
         printf("AL_VENDOR: %s\n", (char *) alGetString(AL_VENDOR));
         printf("AL_RENDERER: %s\n", (char *) alGetString(AL_RENDERER));
         printf("AL_VERSION: %s\n", (char *) alGetString(AL_VERSION));
         printf("AL_EXTENSIONS: %s\n", (char *) alGetString(AL_EXTENSIONS));
-    }
+    }*/
 
     num_channels = maxsoftwarechannels;
     channels = new OPENAL_Channels[maxsoftwarechannels];
