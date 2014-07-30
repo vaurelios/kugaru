@@ -48,10 +48,6 @@ static bool load_image        (const char *fname, TGAImageRec &tex);
 static bool load_png          (const char *fname, TGAImageRec &tex);
 static bool save_image        (const char *fname);
 static bool save_png          (const char *fname);
-bool        selectDetail      (int        &width,
-                               int        &height,
-                               int        &bpp,
-                               int        &detail);
 int         closestResolution (int         width,
                                int         height);
 int         resolutionID      (int         width,
@@ -444,8 +440,6 @@ bool SetUp (Game & game)
 	game.attackkey=MAC_MOUSEBUTTON1;
 	game.chatkey=MAC_T_KEY;
 	
-	selectDetail(kContextWidth, kContextHeight, kBitsPerPixel, detail);
-
     kContextWidth        = cnf.getDisplayInt("width");
     kContextHeight       = cnf.getDisplayInt("height");
     usermousesensitivity = cnf.getMouseInt("mouse-speed");
@@ -497,11 +491,7 @@ bool SetUp (Game & game)
     if (kBitsPerPixel != 32 && kBitsPerPixel != 16)
         kBitsPerPixel = 16;
 
-
-    selectDetail(kContextWidth, kContextHeight, kBitsPerPixel, detail);
-
     SetupDSpFullScreen();
-
 
     if (!SDL_WasInit(SDL_INIT_VIDEO))
     {
@@ -1016,121 +1006,93 @@ int main(int argc, char **argv)
 	return -1;
 }
 
-
-
-	// --------------------------------------------------------------------------
-
-
-
-	bool selectDetail(int & width, int & height, int & bpp, int & detail)
+extern "C" void PlaySoundEx(int chan, OPENAL_SAMPLE *sptr, OPENAL_DSPUNIT *dsp, signed char startpaused)
+{
+	const OPENAL_SAMPLE * currSample = OPENAL_GetCurrentSample(channels[chan]);
+	if (currSample && currSample == samp[chan])
 	{
-		bool res = true;
-
-		// currently with SDL, we just use whatever is requested
-		//  and don't care.  --ryan.
-		
-
-		return res;
-	}
-
-	extern int channels[100];
-	extern OPENAL_SAMPLE * samp[100];
-	extern OPENAL_STREAM * strm[20];
-
-	extern "C" void PlaySoundEx(int chan, OPENAL_SAMPLE *sptr, OPENAL_DSPUNIT *dsp, signed char startpaused)
-	{
-		const OPENAL_SAMPLE * currSample = OPENAL_GetCurrentSample(channels[chan]);
-		if (currSample && currSample == samp[chan])
+		if (OPENAL_GetPaused(channels[chan]))
 		{
-			if (OPENAL_GetPaused(channels[chan]))
+			OPENAL_StopSound(channels[chan]);
+			channels[chan] = OPENAL_FREE;
+		}
+		else if (OPENAL_IsPlaying(channels[chan]))
+		{
+			int loop_mode = OPENAL_GetLoopMode(channels[chan]);
+			if (loop_mode & OPENAL_LOOP_OFF)
 			{
-				OPENAL_StopSound(channels[chan]);
 				channels[chan] = OPENAL_FREE;
 			}
-			else if (OPENAL_IsPlaying(channels[chan]))
-			{
-				int loop_mode = OPENAL_GetLoopMode(channels[chan]);
-				if (loop_mode & OPENAL_LOOP_OFF)
-				{
-					channels[chan] = OPENAL_FREE;
-				}
-			}
-		}
-		else
-		{
-			channels[chan] = OPENAL_FREE;
-		}
-
-		channels[chan] = OPENAL_PlaySoundEx(channels[chan], sptr, dsp, startpaused);
-		if (channels[chan] < 0)
-		{
-			channels[chan] = OPENAL_PlaySoundEx(OPENAL_FREE, sptr, dsp, startpaused);
 		}
 	}
-
-	extern "C" void PlayStreamEx(int chan, OPENAL_STREAM *sptr, OPENAL_DSPUNIT *dsp, signed char startpaused)
+	else
 	{
-		const OPENAL_SAMPLE * currSample = OPENAL_GetCurrentSample(channels[chan]);
-		if (currSample && currSample == OPENAL_Stream_GetSample(sptr))
-		{
-				OPENAL_StopSound(channels[chan]);
-				OPENAL_Stream_Stop(sptr);
-		}
-		else
-		{
-			OPENAL_Stream_Stop(sptr);
-			channels[chan] = OPENAL_FREE;
-		}
-
-		channels[chan] = OPENAL_Stream_PlayEx(channels[chan], sptr, dsp, startpaused);
-		if (channels[chan] < 0)
-		{
-			channels[chan] = OPENAL_Stream_PlayEx(OPENAL_FREE, sptr, dsp, startpaused);
-		}
+		channels[chan] = OPENAL_FREE;
 	}
 
-
-	bool LoadImage(const char * fname, TGAImageRec & tex)
+	channels[chan] = OPENAL_PlaySoundEx(channels[chan], sptr, dsp, startpaused);
+	if (channels[chan] < 0)
 	{
-		bool res = true;
-
-		if ( tex.data == NULL )
-		{
-			return false;
-		}
-
-       
-        res = load_image(fname, tex);
-    
-
-		return res;
+		channels[chan] = OPENAL_PlaySoundEx(OPENAL_FREE, sptr, dsp, startpaused);
 	}
+}
 
-	void ScreenShot(const char * fname)
+extern "C" void PlayStreamEx(int chan, OPENAL_STREAM *sptr, OPENAL_DSPUNIT *dsp, signed char startpaused)
+{
+	const OPENAL_SAMPLE * currSample = OPENAL_GetCurrentSample(channels[chan]);
+	if (currSample && currSample == OPENAL_Stream_GetSample(sptr))
 	{
-  
-        save_image(fname);
-  
+		OPENAL_StopSound(channels[chan]);
+		OPENAL_Stream_Stop(sptr);
+	}
+	else
+	{
+		OPENAL_Stream_Stop(sptr);
+		channels[chan] = OPENAL_FREE;
 	}
 
+	channels[chan] = OPENAL_Stream_PlayEx(channels[chan], sptr, dsp, startpaused);
+	if (channels[chan] < 0)
+	{
+		channels[chan] = OPENAL_Stream_PlayEx(OPENAL_FREE, sptr, dsp, startpaused);
+	}
+}
 
+bool LoadImage(const char * fname, TGAImageRec & tex)
+{
+	bool res = true;
+
+	if ( tex.data == NULL )
+	{
+		return false;
+	}
+
+    res = load_image(fname, tex);
+
+	return res;
+}
+
+void ScreenShot(const char * fname)
+{
+    save_image(fname);
+}
 
 static bool load_image(const char *file_name, TGAImageRec &tex)
 {
+    char error[256];
+
     const char *ptr = strrchr((char *)file_name, '.');
     if (ptr)
     {
-        if (strcasecmp(ptr+1, "png") == 0)
+        if (strcasecmp(ptr + 1, "png") == 0)
             return load_png(file_name, tex);
     }
 
-    printf("%s\n", file_name);
-    STUBBED("Unsupported image type");
+    sprintf(error, "Unsupported image type for file '%s'", file_name);
+    STUBBED(error);
     return false;
 }
 
-
-/* stolen from public domain example.c code in libpng distribution. */
 static bool load_png(const char *file_name, TGAImageRec &tex)
 {
     printf("Loading png '%s' file...\n", file_name);
@@ -1214,23 +1176,26 @@ png_done:
     png_destroy_read_struct(&png_ptr, &info_ptr, NULL);
     if (fp)
         fclose(fp);
+
     return (retval);
 }
 
-
 static bool save_image(const char *file_name)
 {
-    const char *ptr = strrchr((char *)file_name, '.');
+    const char *ptr = strrchr((char *) file_name, '.');
+    char error[256];
+
     if (ptr)
     {
-        if (strcasecmp(ptr+1, "png") == 0)
+        if (strcasecmp(ptr + 1, "png") == 0)
             return save_png(file_name);
     }
 
-    STUBBED("Unsupported image type");
+    sprintf(error, "Unsupported image type for file '%s'", file_name);
+    STUBBED(error);
+
     return false;
 }
-
 
 static bool save_png(const char *file_name)
 {
@@ -1300,6 +1265,4 @@ save_png_done:
         unlink(ConvertFileName(file_name));
     return retval;
 }
-
-
 
