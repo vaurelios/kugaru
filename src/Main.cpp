@@ -35,8 +35,8 @@
 #include "openal_wrapper.h"
 
 extern "C" {
-	#include "zlib.h"
-	#include "png.h"
+    #include "zlib.h"
+    #include "png.h"
 }
 
 
@@ -80,13 +80,13 @@ static SDL_Rect *hardcoded_resolutions[] = {
 // Menu defs
 enum 
 {
-	MENU_FILE_QUIT = 1
+    MENU_FILE_QUIT = 1
 };
 
 enum 
 {
-	FG_SLEEP_TIME = 10,
-	BG_SLEEP_TIME = 10000
+    FG_SLEEP_TIME = 10,
+    BG_SLEEP_TIME = 10000
 };
 
 bool            gameFocused;
@@ -153,7 +153,7 @@ static void GLAPIENTRY glDeleteTextures_doNothing(GLsizei n, const GLuint *textu
 
 void ReportError (char *strError)
 {
-	fprintf(stderr, "Error: %s\n", strError);
+    fprintf(stderr, "Error: %s\n", strError);
 }
 
 void SetupDSpFullScreen ()
@@ -169,7 +169,7 @@ void ShutdownDSp ()
 
 void DrawGL (Game& game)
 {
-	game.DrawGLScene();
+    game.DrawGLScene();
 }
 
 
@@ -313,34 +313,34 @@ static void sdlEventProc(const SDL_Event &e, Game &game)
     SDLMod mod;
 
     switch(e.type)
-	{
+    {
         case SDL_MOUSEMOTION:
             game.deltah += e.motion.xrel;
             game.deltav += e.motion.yrel;
             return;
 
-		case SDL_MOUSEBUTTONDOWN:
-			{
+        case SDL_MOUSEBUTTONDOWN:
+            {
                 val = clamp_sdl_mouse_button(e.button.button);
                 if ((val >= 0) && (val <= 2))
                 {
                     if (val == 0)
-    				    g_button = true;
-    				buttons[val] = true;
+                        g_button = true;
+                    buttons[val] = true;
                 }
-			}
-			return;
+            }
+            return;
 
-		case SDL_MOUSEBUTTONUP:
-			{
+        case SDL_MOUSEBUTTONUP:
+            {
                 val = clamp_sdl_mouse_button(e.button.button);
                 if ((val >= 0) && (val <= 2))
                 {
                     if (val == 0)
-    				    g_button = false;
-    				buttons[val] = false;
+                        g_button = false;
+                    buttons[val] = false;
                 }
-			}
+            }
             return;
 
         case SDL_KEYDOWN:
@@ -417,29 +417,29 @@ static Point gMidPoint;
 
 bool SetUp (Game & game)
 {
-	char string[10];
+    char string[10];
 
-	LOGFUNC;
+    LOGFUNC;
 
-	randSeed = UpTime().lo;
+    randSeed = UpTime().lo;
 
     Conf &cnf = Conf::getInstance();
 
-	slomospeed = 0.25;
-	slomofreq  = 8012;
+    slomospeed = 0.25;
+    slomofreq  = 8012;
     numplayers = 1;
 
-	game.crouchkey=MAC_SHIFT_KEY;
-	game.jumpkey=MAC_SPACE_KEY;
-	game.leftkey=MAC_A_KEY;
-	game.forwardkey=MAC_W_KEY;
-	game.backkey=MAC_S_KEY;
-	game.rightkey=MAC_D_KEY;
-	game.drawkey=MAC_E_KEY;
-	game.throwkey=MAC_Q_KEY;
-	game.attackkey=MAC_MOUSEBUTTON1;
-	game.chatkey=MAC_T_KEY;
-	
+    game.crouchkey=MAC_SHIFT_KEY;
+    game.jumpkey=MAC_SPACE_KEY;
+    game.leftkey=MAC_A_KEY;
+    game.forwardkey=MAC_W_KEY;
+    game.backkey=MAC_S_KEY;
+    game.rightkey=MAC_D_KEY;
+    game.drawkey=MAC_E_KEY;
+    game.throwkey=MAC_Q_KEY;
+    game.attackkey=MAC_MOUSEBUTTON1;
+    game.chatkey=MAC_T_KEY;
+    
     kContextWidth        = cnf.getDisplayInt("width");
     kContextHeight       = cnf.getDisplayInt("height");
     usermousesensitivity = cnf.getMouseInt("mouse-speed");
@@ -592,74 +592,74 @@ bool SetUp (Game & game)
         SDL_WM_GrabInput(SDL_GRAB_ON);
 
 
-	glClear( GL_COLOR_BUFFER_BIT );
-	swap_gl_buffers();
+    glClear( GL_COLOR_BUFFER_BIT );
+    swap_gl_buffers();
 
-	// clear all states
-	glDisable( GL_ALPHA_TEST);
-	glDisable( GL_BLEND);
-	glDisable( GL_DEPTH_TEST);
-	//	glDisable( GL_DITHER);
-	glDisable( GL_FOG);
-	glDisable( GL_LIGHTING);
-	glDisable( GL_LOGIC_OP);
-	glDisable( GL_STENCIL_TEST);
-	glDisable( GL_TEXTURE_1D);
-	glDisable( GL_TEXTURE_2D);
-	glPixelTransferi( GL_MAP_COLOR, GL_FALSE);
-	glPixelTransferi( GL_RED_SCALE, 1);
-	glPixelTransferi( GL_RED_BIAS, 0);
-	glPixelTransferi( GL_GREEN_SCALE, 1);
-	glPixelTransferi( GL_GREEN_BIAS, 0);
-	glPixelTransferi( GL_BLUE_SCALE, 1);
-	glPixelTransferi( GL_BLUE_BIAS, 0);
-	glPixelTransferi( GL_ALPHA_SCALE, 1);
-	glPixelTransferi( GL_ALPHA_BIAS, 0);
+    // clear all states
+    glDisable( GL_ALPHA_TEST);
+    glDisable( GL_BLEND);
+    glDisable( GL_DEPTH_TEST);
+    // glDisable( GL_DITHER);
+    glDisable( GL_FOG);
+    glDisable( GL_LIGHTING);
+    glDisable( GL_LOGIC_OP);
+    glDisable( GL_STENCIL_TEST);
+    glDisable( GL_TEXTURE_1D);
+    glDisable( GL_TEXTURE_2D);
+    glPixelTransferi( GL_MAP_COLOR, GL_FALSE);
+    glPixelTransferi( GL_RED_SCALE, 1);
+    glPixelTransferi( GL_RED_BIAS, 0);
+    glPixelTransferi( GL_GREEN_SCALE, 1);
+    glPixelTransferi( GL_GREEN_BIAS, 0);
+    glPixelTransferi( GL_BLUE_SCALE, 1);
+    glPixelTransferi( GL_BLUE_BIAS, 0);
+    glPixelTransferi( GL_ALPHA_SCALE, 1);
+    glPixelTransferi( GL_ALPHA_BIAS, 0);
 
-	// set initial rendering states
-	glShadeModel( GL_SMOOTH);
-	glClearDepth( 1.0f);
-	glDepthFunc( GL_LEQUAL);
-	glDepthMask( GL_TRUE);
-	//	glDepthRange( FRONT_CLIP, BACK_CLIP);
-	glEnable( GL_DEPTH_TEST);
-	glHint( GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
-	glCullFace( GL_FRONT);
-	glEnable( GL_CULL_FACE);
-	glEnable( GL_LIGHTING);
-//	glEnable( GL_LIGHT_MODEL_AMBIENT);
-	glEnable( GL_DITHER);
-	glEnable( GL_COLOR_MATERIAL);
-	glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-	glAlphaFunc( GL_GREATER, 0.5f);
+    // set initial rendering states
+    glShadeModel( GL_SMOOTH);
+    glClearDepth( 1.0f);
+    glDepthFunc( GL_LEQUAL);
+    glDepthMask( GL_TRUE);
+    // glDepthRange( FRONT_CLIP, BACK_CLIP);
+    glEnable( GL_DEPTH_TEST);
+    glHint( GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
+    glCullFace( GL_FRONT);
+    glEnable( GL_CULL_FACE);
+    glEnable( GL_LIGHTING);
+    // glEnable( GL_LIGHT_MODEL_AMBIENT);
+    glEnable( GL_DITHER);
+    glEnable( GL_COLOR_MATERIAL);
+    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glAlphaFunc( GL_GREATER, 0.5f);
 
-	GLint width = kContextWidth;
-	GLint height = kContextHeight;
-	gMidPoint.h = width / 2;
-	gMidPoint.v = height / 2;
-	screenwidth=width;
-	screenheight=height;
+    GLint width = kContextWidth;
+    GLint height = kContextHeight;
+    gMidPoint.h = width / 2;
+    gMidPoint.v = height / 2;
+    screenwidth=width;
+    screenheight=height;
 
-	game.newdetail=detail;
-	game.newscreenwidth=screenwidth;
-	game.newscreenheight=screenheight;
+    game.newdetail=detail;
+    game.newscreenwidth=screenwidth;
+    game.newscreenheight=screenheight;
 
-	game.InitGame();
+    game.InitGame();
 
-	return true;
+    return true;
 }
 
 
 static void DoMouse(Game & game)
 {
 
-	if(mainmenu||(abs(game.deltah)<10*realmultiplier*1000&&abs(game.deltav)<10*realmultiplier*1000))
-	{
-		game.deltah *= usermousesensitivity;
-		game.deltav *= usermousesensitivity;
-		game.mousecoordh += game.deltah;
-		game.mousecoordv += game.deltav;
+    if(mainmenu||(abs(game.deltah)<10*realmultiplier*1000&&abs(game.deltav)<10*realmultiplier*1000))
+    {
+        game.deltah *= usermousesensitivity;
+        game.deltav *= usermousesensitivity;
+        game.mousecoordh += game.deltah;
+        game.mousecoordv += game.deltav;
         if (game.mousecoordh < 0)
             game.mousecoordh = 0;
         else if (game.mousecoordh >= kContextWidth)
@@ -668,7 +668,7 @@ static void DoMouse(Game & game)
             game.mousecoordv = 0;
         else if (game.mousecoordv >= kContextHeight)
             game.mousecoordv = kContextHeight - 1;
-	}
+    }
 
 }
 
@@ -678,7 +678,7 @@ static void DoMouse(Game & game)
 
 void DoKey (SInt8 theKey, SInt8 theCode)
 {
-	// do nothing
+    // do nothing
 }
 
 // --------------------------------------------------------------------------
@@ -686,122 +686,118 @@ void DoKey (SInt8 theKey, SInt8 theCode)
 
 
 void DoFrameRate (int update)
-{	
-	static long frames = 0;
+{    
+    static long frames = 0;
 
-	static AbsoluteTime time = {0,0};
-	static AbsoluteTime frametime = {0,0};
-	AbsoluteTime currTime = UpTime ();
-	double deltaTime = (float) AbsoluteDeltaToDuration (currTime, frametime);
+    static AbsoluteTime time = {0,0};
+    static AbsoluteTime frametime = {0,0};
+    AbsoluteTime currTime = UpTime ();
+    double deltaTime = (float) AbsoluteDeltaToDuration (currTime, frametime);
 
-	if (0 > deltaTime)	// if negative microseconds
-		deltaTime /= -1000000.0;
-	else				// else milliseconds
-		deltaTime /= 1000.0;
+    if (0 > deltaTime)           // if negative microseconds
+        deltaTime /= -1000000.0;
+    else                         // else milliseconds
+        deltaTime /= 1000.0;
 
-	multiplier=deltaTime;
-	if(multiplier<.001)multiplier=.001;
-	if(multiplier>10)multiplier=10;
-	if(update)frametime = currTime;	// reset for next time interval
+    multiplier=deltaTime;
+    if(multiplier<.001)multiplier=.001;
+    if(multiplier>10)multiplier=10;
+    if(update)frametime = currTime;     // reset for next time interval
 
-	deltaTime = (float) AbsoluteDeltaToDuration (currTime, time);
+    deltaTime = (float) AbsoluteDeltaToDuration (currTime, time);
 
-	if (0 > deltaTime)	// if negative microseconds
-		deltaTime /= -1000000.0;
-	else				// else milliseconds
-		deltaTime /= 1000.0;
-	frames++;
-	if (0.001 <= deltaTime)	// has update interval passed
-	{
-		if(update){
-			time = currTime;	// reset for next time interval
-			frames = 0;
-		}
-	}
+    if (0 > deltaTime)           // if negative microseconds
+        deltaTime /= -1000000.0;
+    else                         // else milliseconds
+        deltaTime /= 1000.0;
+    frames++;
+    if (0.001 <= deltaTime)    // has update interval passed
+    {
+        if(update){
+            time = currTime;    // reset for next time interval
+            frames = 0;
+        }
+    }
 }
 
 
 void DoUpdate (Game & game)
 {
-	static float sps=200;
-	static int count;
-	static float oldmult;
+    static float sps=200;
+    static int count;
+    static float oldmult;
 
-	DoFrameRate(1);
-	if(multiplier>.6)multiplier=.6;
+    DoFrameRate(1);
+    if(multiplier>.6)multiplier=.6;
 
-	game.fps=1/multiplier;
+    game.fps=1/multiplier;
 
-	count = multiplier*sps;
-	if(count<2)count=2;
-	//if(count>10)count=10;
+    count = multiplier*sps;
+    if(count<2)count=2;
+    //if(count>10)count=10;
 
-	realmultiplier=multiplier;
-	multiplier*=gamespeed;
-	if(difficulty==1)multiplier*=.9;
-	if(difficulty==0)multiplier*=.8;
+    realmultiplier=multiplier;
+    multiplier*=gamespeed;
+    if(difficulty==1)multiplier*=.9;
+    if(difficulty==0)multiplier*=.8;
 
-	if(game.loading==4)multiplier*=.00001;
-	//multiplier*.9;
-	if(slomo&&!mainmenu)multiplier*=slomospeed;
-	//if(freeze)multiplier*=0.00001;
-	oldmult=multiplier;
-	multiplier/=(float)count;
+    if(game.loading==4)multiplier*=.00001;
+    //multiplier*.9;
+    if(slomo&&!mainmenu)multiplier*=slomospeed;
+    //if(freeze)multiplier*=0.00001;
+    oldmult=multiplier;
+    multiplier/=(float)count;
 
-	DoMouse(game);
+    DoMouse(game);
 
-	game.TickOnce();
+    game.TickOnce();
 
-	for(int i=0;i<count;i++)
-	{
-		game.Tick();
-	}
-	multiplier=oldmult;
+    for(int i=0;i<count;i++)
+    {
+        game.Tick();
+    }
+    multiplier=oldmult;
 
-	game.TickOnceAfter();
+    game.TickOnceAfter();
 /* - Debug code to test how many channels were active on average per frame
-	static long frames = 0;
+    static long frames = 0;
 
-	static AbsoluteTime start = {0,0};
-	AbsoluteTime currTime = UpTime ();
-	static int num_channels = 0;
-	
-	num_channels += OPENAL_GetChannelsPlaying();
-	double deltaTime = (float) AbsoluteDeltaToDuration (currTime, start);
+    static AbsoluteTime start = {0,0};
+    AbsoluteTime currTime = UpTime ();
+    static int num_channels = 0;
+    
+    num_channels += OPENAL_GetChannelsPlaying();
+    double deltaTime = (float) AbsoluteDeltaToDuration (currTime, start);
 
-	if (0 > deltaTime)	// if negative microseconds
-		deltaTime /= -1000000.0;
-	else				// else milliseconds
-		deltaTime /= 1000.0;
+    if (0 > deltaTime)           // if negative microseconds
+        deltaTime /= -1000000.0;
+    else                         // else milliseconds
+        deltaTime /= 1000.0;
 
-	++frames;
+    ++frames;
 
-	if (deltaTime >= 1)
-	{
-		start = currTime;
-		float avg_channels = (float)num_channels / (float)frames;
+    if (deltaTime >= 1)
+    {
+        start = currTime;
+        float avg_channels = (float)num_channels / (float)frames;
 
-		ofstream opstream("log.txt",ios::app); 
-		opstream << "Average frame count: ";
-		opstream << frames;
-		opstream << " frames - ";
-		opstream << avg_channels;
-		opstream << " per frame.\n";
-		opstream.close();
+        ofstream opstream("log.txt",ios::app); 
+        opstream << "Average frame count: ";
+        opstream << frames;
+        opstream << " frames - ";
+        opstream << avg_channels;
+        opstream << " per frame.\n";
+        opstream.close();
 
-		frames = 0;
-		num_channels = 0;
-	}
-*/
-	DrawGL (game);
+        frames = 0;
+        num_channels = 0;
+    } */
+    DrawGL (game);
 }
-
-// --------------------------------------------------------------------------
-
 
 void CleanUp (void)
 {
-	LOGFUNC;
+    LOGFUNC;
 
     SDL_Quit();
     #define GL_FUNC(ret,fn,params,call,rt) p##fn = NULL;
@@ -924,152 +920,152 @@ static inline void chdirToAppPath(const char *argv0)
 
 int main(int argc, char **argv)
 {
-	LOGFUNC;
+    LOGFUNC;
 
-	memset( &g_theKeys, 0, sizeof( KeyMap));
+    memset( &g_theKeys, 0, sizeof( KeyMap));
 
     initSDLKeyTable();
 
-	try
-	{
-		Game game;
-		pgame = &game;
+    try
+    {
+        Game game;
+        pgame = &game;
 
-		//ofstream os("error.txt");
-		//os.close();
-		//ofstream os("log.txt");
-		//os.close();
+        //ofstream os("error.txt");
+        //os.close();
+        //ofstream os("log.txt");
+        //os.close();
 
-		if (!SetUp (game))
+        if (!SetUp (game))
             return 42;
 
-		while (!gDone&&!game.quit&&(!game.tryquit))
-		{
-			if (IsFocused())
-			{
-				gameFocused = true;
+        while (!gDone&&!game.quit&&(!game.tryquit))
+        {
+            if (IsFocused())
+            {
+                gameFocused = true;
 
-				// check windows messages
-			
-				game.deltah = 0;
-				game.deltav = 0;
-				SDL_Event e;
-				// message pump
-				while( SDL_PollEvent( &e ) )
-				{
-					if( e.type == SDL_QUIT )
-					{
-						gDone=true;
-						break;
-					}
-					sdlEventProc(e, game);
-				}
-				
+                // check windows messages
 
-				// game
-				DoUpdate(game);
-			}
-			else
-			{
-				if (gameFocused)
-				{
-					// allow game chance to pause
-					gameFocused = false;
-					DoUpdate(game);
-				}
+                game.deltah = 0;
+                game.deltav = 0;
+                SDL_Event e;
+                // message pump
+                while( SDL_PollEvent( &e ) )
+                {
+                    if( e.type == SDL_QUIT )
+                    {
+                        gDone=true;
+                        break;
+                }
+                sdlEventProc(e, game);
+                }
 
-				// game is not in focus, give CPU time to other apps by waiting for messages instead of 'peeking'
+
+                // game
+                DoUpdate(game);
+            }
+            else
+            {
+                if (gameFocused)
+                {
+                    // allow game chance to pause
+                    gameFocused = false;
+                    DoUpdate(game);
+                }
+
+                // game is not in focus, give CPU time to other apps by waiting for messages instead of 'peeking'
                 STUBBED("give up CPU but sniff the event queue");
-			}
-		}
+            }
+        }
 
-		pgame = 0;
+        pgame = 0;
 
-		CleanUp ();
-		
+        CleanUp ();
+
         return 0;
-	}
-	catch (const std::exception& error)
-	{
-		CleanUp();
+    }
+    catch (const std::exception& error)
+    {
+        CleanUp();
 
-		std::string e = "Caught exception: ";
-		e += error.what();
+        std::string e = "Caught exception: ";
+        e += error.what();
 
-		LOG(e);
+        LOG(e);
 
-		MessageBox(g_windowHandle, error.what(), "ERROR", MB_OK | MB_ICONEXCLAMATION);
-	}
+        MessageBox(g_windowHandle, error.what(), "ERROR", MB_OK | MB_ICONEXCLAMATION);
+    }
 
-	CleanUp();
+    CleanUp();
 
-	return -1;
+    return -1;
 }
 
 extern "C" void PlaySoundEx(int chan, OPENAL_SAMPLE *sptr, OPENAL_DSPUNIT *dsp, signed char startpaused)
 {
-	const OPENAL_SAMPLE * currSample = OPENAL_GetCurrentSample(channels[chan]);
-	if (currSample && currSample == samp[chan])
-	{
-		if (OPENAL_GetPaused(channels[chan]))
-		{
-			OPENAL_StopSound(channels[chan]);
-			channels[chan] = OPENAL_FREE;
-		}
-		else if (OPENAL_IsPlaying(channels[chan]))
-		{
-			int loop_mode = OPENAL_GetLoopMode(channels[chan]);
-			if (loop_mode & OPENAL_LOOP_OFF)
-			{
-				channels[chan] = OPENAL_FREE;
-			}
-		}
-	}
-	else
-	{
-		channels[chan] = OPENAL_FREE;
-	}
+    const OPENAL_SAMPLE * currSample = OPENAL_GetCurrentSample(channels[chan]);
+    if (currSample && currSample == samp[chan])
+    {
+        if (OPENAL_GetPaused(channels[chan]))
+        {
+            OPENAL_StopSound(channels[chan]);
+            channels[chan] = OPENAL_FREE;
+        }
+        else if (OPENAL_IsPlaying(channels[chan]))
+        {
+            int loop_mode = OPENAL_GetLoopMode(channels[chan]);
+            if (loop_mode & OPENAL_LOOP_OFF)
+            {
+                channels[chan] = OPENAL_FREE;
+            }
+        }
+    }
+    else
+    {
+        channels[chan] = OPENAL_FREE;
+    }
 
-	channels[chan] = OPENAL_PlaySoundEx(channels[chan], sptr, dsp, startpaused);
-	if (channels[chan] < 0)
-	{
-		channels[chan] = OPENAL_PlaySoundEx(OPENAL_FREE, sptr, dsp, startpaused);
-	}
+    channels[chan] = OPENAL_PlaySoundEx(channels[chan], sptr, dsp, startpaused);
+    if (channels[chan] < 0)
+    {
+        channels[chan] = OPENAL_PlaySoundEx(OPENAL_FREE, sptr, dsp, startpaused);
+    }
 }
 
 extern "C" void PlayStreamEx(int chan, OPENAL_STREAM *sptr, OPENAL_DSPUNIT *dsp, signed char startpaused)
 {
-	const OPENAL_SAMPLE * currSample = OPENAL_GetCurrentSample(channels[chan]);
-	if (currSample && currSample == OPENAL_Stream_GetSample(sptr))
-	{
-		OPENAL_StopSound(channels[chan]);
-		OPENAL_Stream_Stop(sptr);
-	}
-	else
-	{
-		OPENAL_Stream_Stop(sptr);
-		channels[chan] = OPENAL_FREE;
-	}
+    const OPENAL_SAMPLE * currSample = OPENAL_GetCurrentSample(channels[chan]);
+    if (currSample && currSample == OPENAL_Stream_GetSample(sptr))
+    {
+        OPENAL_StopSound(channels[chan]);
+        OPENAL_Stream_Stop(sptr);
+    }
+    else
+    {
+        OPENAL_Stream_Stop(sptr);
+        channels[chan] = OPENAL_FREE;
+    }
 
-	channels[chan] = OPENAL_Stream_PlayEx(channels[chan], sptr, dsp, startpaused);
-	if (channels[chan] < 0)
-	{
-		channels[chan] = OPENAL_Stream_PlayEx(OPENAL_FREE, sptr, dsp, startpaused);
-	}
+    channels[chan] = OPENAL_Stream_PlayEx(channels[chan], sptr, dsp, startpaused);
+    if (channels[chan] < 0)
+    {
+        channels[chan] = OPENAL_Stream_PlayEx(OPENAL_FREE, sptr, dsp, startpaused);
+    }
 }
 
 bool LoadImage(const char * fname, TGAImageRec & tex)
 {
-	bool res = true;
+    bool res = true;
 
-	if ( tex.data == NULL )
-	{
-		return false;
-	}
+    if ( tex.data == NULL )
+    {
+        return false;
+    }
 
     res = load_image(fname, tex);
 
-	return res;
+    return res;
 }
 
 void ScreenShot(const char * fname)
@@ -1247,9 +1243,9 @@ static bool save_png(const char *file_name)
     if (setjmp(png_jmpbuf(png_ptr)))
         goto save_png_done;
 
-	png_write_image(png_ptr, row_pointers);
+    png_write_image(png_ptr, row_pointers);
 
-	if (setjmp(png_jmpbuf(png_ptr)))
+    if (setjmp(png_jmpbuf(png_ptr)))
         goto save_png_done;
 
     png_write_end(png_ptr, NULL);
