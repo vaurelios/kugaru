@@ -24,6 +24,9 @@
 #include <string.h>
 #include <fstream>
 #include <iostream>
+#include <SDL.h>
+#include <SDL/SDL_opengl.h>
+#include <glib.h>
 
 #include "Conf.h"
 #include "Game.h"
@@ -53,28 +56,13 @@ int         closestResolution (int         width,
 int         resolutionID      (int         width,
                                int         height);
 void        ReportError       (char       *strError);
-void        SetupDSpFullScreen();
 void        ShutdownDSp       ();
 void        DrawGL            (Game       &game);
 void        CreateGLWindow    ();
 bool        SetUp             (Game       &game);
-void        DoKey             (SInt8       theKey,
-                               SInt8       theCode);
 void        DoUpdate          (Game       &game);
 void        DoEvent           ();
 void        CleanUp           ();
-
-
-SDL_Rect **resolutions = NULL;
-static SDL_Rect rect_1024_768 = { 0, 0, 1024, 768 };
-static SDL_Rect rect_800_600  = { 0, 0, 800,  600 };
-static SDL_Rect rect_640_480  = { 0, 0, 640,  480 };
-static SDL_Rect *hardcoded_resolutions[] = {
-    &rect_1024_768,
-    &rect_800_600,
-    &rect_640_480,
-    NULL
-};
 
 
 // Menu defs
@@ -93,25 +81,16 @@ bool            gameFocused;
 unsigned int    resolutionDepths[8][2] = {0};
 static bool     g_button;
 static bool     fullscreen = true;
-Point           delta;
 int             kContextWidth;
 int             kContextHeight;
 GLuint          gFontList;
 char            gcstrMode[256] = "";
-UInt32          gSleepTime = FG_SLEEP_TIME;
+uint32_t        gSleepTime = FG_SLEEP_TIME;
 bool            gDone = false;
 bool            gfFrontProcess = true;
 Game           *pgame = 0;
+Point           delta;
 const RGBColor  RGB_BLACK = { 0x0000, 0x0000, 0x0000 };
-
-
-#define GL_FUNC(ret,fn,params,call,rt) \
-    extern "C" { \
-        static ret (GLAPIENTRY *p##fn) params = NULL; \
-        ret GLAPIENTRY fn params { rt p##fn call; } \
-    }
-#include "glstubs.h"
-#undef GL_FUNC
 
 
 static bool lookup_glsym(const char *funcname, void **func)
@@ -125,18 +104,6 @@ static bool lookup_glsym(const char *funcname, void **func)
     }
 
     return true;
-}
-
-static bool lookup_all_glsyms(void)
-{
-    bool retval = true;
-
-    #define GL_FUNC(ret, fn, params, call, rt) \
-        if (!lookup_glsym(#fn, (void **) &p##fn)) retval = false;
-    #include "glstubs.h"
-    #undef GL_FUNC
-
-    return retval;
 }
 
 static void GLAPIENTRY glDeleteTextures_doNothing(GLsizei n, const GLuint *textures)
@@ -156,290 +123,104 @@ void ReportError (char *strError)
     fprintf(stderr, "Error: %s\n", strError);
 }
 
-void SetupDSpFullScreen ()
-{
-}
-
-
 void ShutdownDSp ()
 {
 }
 
 // OpenGL Drawing
 
-void DrawGL (Game& game)
+void DrawGL(Game &game)
 {
     game.DrawGLScene();
-}
-
-
-static KeyMap g_theKeys;
-
-void SetKey(int key)
-{
-    g_theKeys[key >> 3] |= (1 << (key & 7));
-}
-
-void ClearKey(int key)
-{
-    g_theKeys[key >> 3] &= (0xff ^ (1 << (key & 7)));
-}
-
-void GetKeys(unsigned char theKeys[16])
-{
-    memcpy(theKeys, &g_theKeys, 16);
-}
-
-bool Button()
-{
-    return g_button;
-}
-
-
-#define MAX_SDLKEYS SDLK_LAST
-static unsigned short KeyTable[MAX_SDLKEYS];
-
-static void initSDLKeyTable(void)
-{
-    memset(KeyTable, 0xFF, sizeof (KeyTable));
-    KeyTable[SDLK_BACKSPACE] = MAC_DELETE_KEY;
-    KeyTable[SDLK_TAB] = MAC_TAB_KEY;
-    KeyTable[SDLK_RETURN] = MAC_RETURN_KEY;
-    KeyTable[SDLK_ESCAPE] = MAC_ESCAPE_KEY;
-    KeyTable[SDLK_SPACE] = MAC_SPACE_KEY;
-    KeyTable[SDLK_PAGEUP] = MAC_PAGE_UP_KEY;
-    KeyTable[SDLK_PAGEDOWN] = MAC_PAGE_DOWN_KEY;
-    KeyTable[SDLK_END] = MAC_END_KEY;
-    KeyTable[SDLK_HOME] = MAC_HOME_KEY;
-    KeyTable[SDLK_LEFT] = MAC_ARROW_LEFT_KEY;
-    KeyTable[SDLK_UP] = MAC_ARROW_UP_KEY;
-    KeyTable[SDLK_RIGHT] = MAC_ARROW_RIGHT_KEY;
-    KeyTable[SDLK_DOWN] = MAC_ARROW_DOWN_KEY;
-    KeyTable[SDLK_INSERT] = MAC_INSERT_KEY;
-    KeyTable[SDLK_DELETE] = MAC_DEL_KEY;
-    KeyTable[SDLK_0] = MAC_0_KEY;
-    KeyTable[SDLK_1] = MAC_1_KEY;
-    KeyTable[SDLK_2] = MAC_2_KEY;
-    KeyTable[SDLK_3] = MAC_3_KEY;
-    KeyTable[SDLK_4] = MAC_4_KEY;
-    KeyTable[SDLK_5] = MAC_5_KEY;
-    KeyTable[SDLK_6] = MAC_6_KEY;
-    KeyTable[SDLK_7] = MAC_7_KEY;
-    KeyTable[SDLK_8] = MAC_8_KEY;
-    KeyTable[SDLK_9] = MAC_9_KEY;
-    KeyTable[SDLK_a] = MAC_A_KEY;
-    KeyTable[SDLK_b] = MAC_B_KEY;
-    KeyTable[SDLK_c] = MAC_C_KEY;
-    KeyTable[SDLK_d] = MAC_D_KEY;
-    KeyTable[SDLK_e] = MAC_E_KEY;
-    KeyTable[SDLK_f] = MAC_F_KEY;
-    KeyTable[SDLK_g] = MAC_G_KEY;
-    KeyTable[SDLK_h] = MAC_H_KEY;
-    KeyTable[SDLK_i] = MAC_I_KEY;
-    KeyTable[SDLK_j] = MAC_J_KEY;
-    KeyTable[SDLK_k] = MAC_K_KEY;
-    KeyTable[SDLK_l] = MAC_L_KEY;
-    KeyTable[SDLK_m] = MAC_M_KEY;
-    KeyTable[SDLK_n] = MAC_N_KEY;
-    KeyTable[SDLK_o] = MAC_O_KEY;
-    KeyTable[SDLK_p] = MAC_P_KEY;
-    KeyTable[SDLK_q] = MAC_Q_KEY;
-    KeyTable[SDLK_r] = MAC_R_KEY;
-    KeyTable[SDLK_s] = MAC_S_KEY;
-    KeyTable[SDLK_t] = MAC_T_KEY;
-    KeyTable[SDLK_u] = MAC_U_KEY;
-    KeyTable[SDLK_v] = MAC_V_KEY;
-    KeyTable[SDLK_w] = MAC_W_KEY;
-    KeyTable[SDLK_x] = MAC_X_KEY;
-    KeyTable[SDLK_y] = MAC_Y_KEY;
-    KeyTable[SDLK_z] = MAC_Z_KEY;
-    KeyTable[SDLK_KP0] = MAC_NUMPAD_0_KEY;
-    KeyTable[SDLK_KP1] = MAC_NUMPAD_1_KEY;
-    KeyTable[SDLK_KP2] = MAC_NUMPAD_2_KEY;
-    KeyTable[SDLK_KP3] = MAC_NUMPAD_3_KEY;
-    KeyTable[SDLK_KP4] = MAC_NUMPAD_4_KEY;
-    KeyTable[SDLK_KP5] = MAC_NUMPAD_5_KEY;
-    KeyTable[SDLK_KP6] = MAC_NUMPAD_6_KEY;
-    KeyTable[SDLK_KP7] = MAC_NUMPAD_7_KEY;
-    KeyTable[SDLK_KP8] = MAC_NUMPAD_8_KEY;
-    KeyTable[SDLK_KP9] = MAC_NUMPAD_9_KEY;
-    KeyTable[SDLK_KP_MULTIPLY] = MAC_NUMPAD_ASTERISK_KEY;
-    KeyTable[SDLK_KP_PLUS] = MAC_NUMPAD_PLUS_KEY;
-    KeyTable[SDLK_KP_ENTER] = MAC_NUMPAD_ENTER_KEY;
-    KeyTable[SDLK_KP_MINUS] = MAC_NUMPAD_MINUS_KEY;
-    KeyTable[SDLK_KP_PERIOD] = MAC_NUMPAD_PERIOD_KEY;
-    KeyTable[SDLK_KP_DIVIDE] = MAC_NUMPAD_SLASH_KEY;
-    KeyTable[SDLK_F1] = MAC_F1_KEY;
-    KeyTable[SDLK_F2] = MAC_F2_KEY;
-    KeyTable[SDLK_F3] = MAC_F3_KEY;
-    KeyTable[SDLK_F4] = MAC_F4_KEY;
-    KeyTable[SDLK_F5] = MAC_F5_KEY;
-    KeyTable[SDLK_F6] = MAC_F6_KEY;
-    KeyTable[SDLK_F7] = MAC_F7_KEY;
-    KeyTable[SDLK_F8] = MAC_F8_KEY;
-    KeyTable[SDLK_F9] = MAC_F9_KEY;
-    KeyTable[SDLK_F10] = MAC_F10_KEY;
-    KeyTable[SDLK_F11] = MAC_F11_KEY;
-    KeyTable[SDLK_F12] = MAC_F12_KEY;
-    KeyTable[SDLK_SEMICOLON] = MAC_SEMICOLON_KEY;
-    KeyTable[SDLK_PLUS] = MAC_PLUS_KEY;
-    KeyTable[SDLK_COMMA] = MAC_COMMA_KEY;
-    KeyTable[SDLK_MINUS] = MAC_MINUS_KEY;
-    KeyTable[SDLK_PERIOD] = MAC_PERIOD_KEY;
-    KeyTable[SDLK_SLASH] = MAC_SLASH_KEY;
-    KeyTable[SDLK_BACKQUOTE] = MAC_TILDE_KEY;
-    KeyTable[SDLK_LEFTBRACKET] = MAC_LEFTBRACKET_KEY;
-    KeyTable[SDLK_BACKSLASH] = MAC_BACKSLASH_KEY;
-    KeyTable[SDLK_RIGHTBRACKET] = MAC_RIGHTBRACKET_KEY;
-    KeyTable[SDLK_QUOTE] = MAC_APOSTROPHE_KEY;
-}
-
-static inline int clamp_sdl_mouse_button(Uint8 button)
-{
-    if (button == 2)   // right mouse button is button 3 in SDL.
-        button = 3;
-    else if (button == 3)
-        button = 2;
-
-    if ((button >= 1) && (button <= 3))
-        return button - 1;
-    return -1;
 }
 
 static void sdlEventProc(const SDL_Event &e, Game &game)
 {
     int val;
     bool skipkey = false;
-    SDLMod mod;
 
     switch(e.type)
     {
         case SDL_MOUSEMOTION:
             game.deltah += e.motion.xrel;
             game.deltav += e.motion.yrel;
-            return;
+            break;
 
         case SDL_MOUSEBUTTONDOWN:
-            {
-                val = clamp_sdl_mouse_button(e.button.button);
-                if ((val >= 0) && (val <= 2))
-                {
-                    if (val == 0)
-                        g_button = true;
-                    buttons[val] = true;
-                }
-            }
-            return;
+            button = (SDL_MouseButtonEvent *) &e.button;
+            break;
 
         case SDL_MOUSEBUTTONUP:
-            {
-                val = clamp_sdl_mouse_button(e.button.button);
-                if ((val >= 0) && (val <= 2))
-                {
-                    if (val == 0)
-                        g_button = false;
-                    buttons[val] = false;
-                }
-            }
-            return;
+            button = NULL;
+            oldbutton = 0;
+            break;
 
         case SDL_KEYDOWN:
-            if (e.key.keysym.sym == SDLK_g)
+            /* Handle shortcuts */
+            switch (e.key.keysym.sym) // we use sym instead of scancode because physical location of key does not matter for shortcuts
             {
-                if (e.key.keysym.mod & KMOD_CTRL)
-                {
-                    skipkey = true;
-                    SDL_GrabMode mode = SDL_GRAB_ON;
-                    if ((SDL_GetVideoSurface()->flags & SDL_FULLSCREEN) == 0)
+                case SDLK_g:
+                    if (e.key.keysym.mod & KMOD_CTRL)
                     {
-                        mode = SDL_WM_GrabInput(SDL_GRAB_QUERY);
-                        mode = (mode==SDL_GRAB_ON) ? SDL_GRAB_OFF:SDL_GRAB_ON;
+                        skipkey = true;
+                        SDL_SetRelativeMouseMode(SDL_FALSE);                    
                     }
-                    SDL_WM_GrabInput(mode);
-                }
+                    break;
+                case SDLK_RETURN:
+                    if (e.key.keysym.mod & KMOD_ALT)
+                    {
+                        skipkey = true;
+                        fullscreen = !fullscreen;
+                        SDL_SetWindowFullscreen(screen, fullscreen);
+                    }
+                    break;
+                case SDLK_q:
+                    if (e.key.keysym.mod & KMOD_CTRL)
+                    {
+                        skipkey = true;
+                        SDL_Quit();
+                    }
+                    break;
+                default:
+                    skipkey = false;
+                    break;
             }
 
-            else if (e.key.keysym.sym == SDLK_RETURN)
+            if (!skipkey)
             {
-                if (e.key.keysym.mod & KMOD_ALT)
-                {
-                    skipkey = true;
-                    SDL_WM_ToggleFullScreen(SDL_GetVideoSurface());
-                }
+                keysym = (SDL_Keysym *) &e.key.keysym;
             }
 
-            if ((!skipkey) && (e.key.keysym.sym < SDLK_LAST))
-            {
-                if (KeyTable[e.key.keysym.sym] != 0xffff)
-                    SetKey(KeyTable[e.key.keysym.sym]);
-            }
-
-            mod = SDL_GetModState();
-            if (mod & KMOD_CTRL)
-                SetKey(MAC_CONTROL_KEY);
-            if (mod & KMOD_ALT)
-                SetKey(MAC_OPTION_KEY);
-            if (mod & KMOD_META)
-                SetKey(MAC_COMMAND_KEY);
-            if (mod & KMOD_SHIFT)
-                SetKey(MAC_SHIFT_KEY);
-            if (mod & KMOD_CAPS)
-                SetKey(MAC_CAPS_LOCK_KEY);
-
-            return;
+            break;
 
         case SDL_KEYUP:
-            if (e.key.keysym.sym < SDLK_LAST)
-            {
-                if (KeyTable[e.key.keysym.sym] != 0xffff)
-                    ClearKey(KeyTable[e.key.keysym.sym]);
-            }
-
-            mod = SDL_GetModState();
-            if ((mod & KMOD_CTRL) == 0)
-                ClearKey(MAC_CONTROL_KEY);
-            if ((mod & KMOD_ALT) == 0)
-                ClearKey(MAC_OPTION_KEY);
-            if ((mod & KMOD_META) == 0)
-                ClearKey(MAC_COMMAND_KEY);
-            if ((mod & KMOD_SHIFT) == 0)
-                ClearKey(MAC_SHIFT_KEY);
-            if ((mod & KMOD_CAPS) == 0)
-                ClearKey(MAC_CAPS_LOCK_KEY);
+            keysym = NULL;
+            oldscancode = SDL_SCANCODE_0;
             return;
+        case SDL_WINDOWEVENT:
+            if (e.window.event == SDL_WINDOWEVENT_FOCUS_GAINED)
+                IsFocused = true;
+            if (e.window.event == SDL_WINDOWEVENT_FOCUS_LOST)
+                IsFocused = false;
+            break;
     }
 }
 
-
-// --------------------------------------------------------------------------
-
 static Point gMidPoint;
 
-bool SetUp (Game & game)
+bool SetUp(Game &game)
 {
     char string[10];
+    SDL_GLContext glcontext;
 
     LOGFUNC;
 
     randSeed = UpTime().lo;
 
-    Conf &cnf = Conf::getInstance();
-
     slomospeed = 0.25;
     slomofreq  = 8012;
     numplayers = 1;
 
-    game.crouchkey=MAC_SHIFT_KEY;
-    game.jumpkey=MAC_SPACE_KEY;
-    game.leftkey=MAC_A_KEY;
-    game.forwardkey=MAC_W_KEY;
-    game.backkey=MAC_S_KEY;
-    game.rightkey=MAC_D_KEY;
-    game.drawkey=MAC_E_KEY;
-    game.throwkey=MAC_Q_KEY;
-    game.attackkey=MAC_MOUSEBUTTON1;
-    game.chatkey=MAC_T_KEY;
-    
     kContextWidth        = cnf.getDisplayInt("width");
     kContextHeight       = cnf.getDisplayInt("height");
     usermousesensitivity = cnf.getMouseInt("mouse-speed");
@@ -448,7 +229,7 @@ bool SetUp (Game & game)
     floatjump            = cnf.getGameBool("floating-jump");
     mousejump            = cnf.getMouseBool("mouse-jump");
     ambientsound         = cnf.getSoundBool("ambient");
-    bloodtoggle          = cnf.getDisplayInt("blood");
+    blooddetail          = cnf.getDisplayInt("blood");
     autoslomo            = cnf.getDisplayInt("auto-slow-motion");
     foliage              = cnf.getDisplayBool("show-foliage");
     musictoggle          = cnf.getSoundBool("music");
@@ -460,190 +241,188 @@ bool SetUp (Game & game)
     damageeffects        = cnf.getDisplayInt("damage-effects");
     texttoggle           = cnf.getGameBool("show-text");
     debugmode            = cnf.getGameBool("debug");
-    vblsync              = cnf.getDisplayBool("vsync");
+    vsync                = cnf.getDisplayBool("vsync");
     showpoints           = cnf.getGameBool("show-points");
     alwaysblur           = cnf.getDisplayBool("always-blur");
     immediate            = cnf.getGameBool("immediate-mode");
     velocityblur         = cnf.getDisplayInt("velocity-blur"); 
     volume               = cnf.getSoundInt("volume");
+    game.forwardkey      = GetMouseOrKbd(cnf.getKeysStr("key-forward"));
+    game.backkey         = GetMouseOrKbd(cnf.getKeysStr("key-back")   );
+    game.leftkey         = GetMouseOrKbd(cnf.getKeysStr("key-left")   );
+    game.rightkey        = GetMouseOrKbd(cnf.getKeysStr("key-right")  );
+    game.jumpkey         = GetMouseOrKbd(cnf.getKeysStr("key-jump")   );
+    game.crouchkey       = GetMouseOrKbd(cnf.getKeysStr("key-crouch") );
+    game.drawkey         = GetMouseOrKbd(cnf.getKeysStr("key-draw")   );
+    game.throwkey        = GetMouseOrKbd(cnf.getKeysStr("key-throw")  );
+    game.attackkey       = GetMouseOrKbd(cnf.getKeysStr("key-attack") );
+    game.chatkey         = GetMouseOrKbd(cnf.getKeysStr("key-chat")   );
 
     kBitsPerPixel = detail == 0 ? 16 : 32;
 
     if (gamespeed == 0) gamespeed = 1;
     oldgamespeed = gamespeed;
 
-    game.forwardkey = CharToKey("w");
-    game.backkey    = CharToKey("s");
-    game.leftkey    = CharToKey("a");
-    game.rightkey   = CharToKey("d");
-    game.jumpkey    = CharToKey("space");
-    game.crouchkey  = CharToKey("shift");
-    game.drawkey    = CharToKey("e");
-    game.throwkey   = CharToKey("q");
-    game.attackkey  = CharToKey("mouse1");
-    game.chatkey    = CharToKey("t");
-
     if (detail > 2) detail = 2;
     if (detail < 0) detail = 0;
-    if (screenwidth < 0) screenwidth = 640;
-    if (screenheight < 0) screenheight = 480;
+    if (kContextWidth < 0) kContextWidth = 800;
+    if (kContextHeight < 0) kContextHeight = 600;
+    screenwidth = kContextWidth;
+    screenheight = kContextHeight;
 
     if (kBitsPerPixel != 32 && kBitsPerPixel != 16)
         kBitsPerPixel = 16;
 
-    SetupDSpFullScreen();
-
-    if (!SDL_WasInit(SDL_INIT_VIDEO))
+    if (SDL_Init(SDL_INIT_VIDEO) == -1)
     {
-        if (SDL_Init(SDL_INIT_VIDEO) == -1)
-        {
-            fprintf(stderr, "SDL_Init() failed: %s\n", SDL_GetError());
-            return false;
-        }
-
-        if (SDL_GL_LoadLibrary(NULL) == -1)
-        {
-            fprintf(stderr, "SDL_GL_LoadLibrary() failed: %s\n", SDL_GetError());
-            SDL_Quit();
-            return false;
-        }
-
-        SDL_Rect **res = SDL_ListModes(NULL, SDL_FULLSCREEN|SDL_OPENGL);
-        if ( (res == NULL) || (res == ((SDL_Rect **)-1)) || (res[0] == NULL) || (res[0]->w < 640) || (res[0]->h < 480) )
-            res = hardcoded_resolutions;
-
-        // reverse list (it was sorted biggest to smallest by SDL)...
-        int count;
-        for (count = 0; res[count]; count++)
-        {
-            if ((res[count]->w < 640) || (res[count]->h < 480))
-                break;   // sane lower limit.
-        }
-
-        static SDL_Rect *resolutions_block = NULL;
-        resolutions_block = (SDL_Rect*) realloc(resolutions_block, sizeof (SDL_Rect) * count);
-        resolutions = (SDL_Rect**) realloc(resolutions, sizeof (SDL_Rect *) * (count + 1));
-        if ((resolutions_block == NULL) || (resolutions == NULL))
-        {
-            SDL_Quit();
-            fprintf(stderr, "Out of memory!\n");
-            return false;
-        }
-
-        resolutions[count--] = NULL;
-        for (int i = 0; count >= 0; i++, count--)
-        {
-            memcpy(&resolutions_block[count], res[i], sizeof (SDL_Rect));
-            resolutions[count] = &resolutions_block[count];
-        }
-
-        if (cmdline("showresolutions"))
-        {
-            printf("Resolutions we think are okay:\n");
-            for (int i = 0; resolutions[i]; i++)
-                printf("  %d x %d\n", (int) resolutions[i]->w, (int) resolutions[i]->h);
-        }
+        fprintf(stderr, "SDL_Init() failed: %s\n", SDL_GetError());
+        return false;
     }
 
-    Uint32 sdlflags = SDL_OPENGL;
-    if (!cmdline("windowed"))
-        sdlflags |= SDL_FULLSCREEN;
+    modes_count = SDL_GetNumDisplayModes(0); // TODO: Support multiple displays
 
-    SDL_WM_SetCaption("Kugaru", "Kugaru");
-
-    SDL_ShowCursor(0);
-
-    SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
-
-    if (SDL_SetVideoMode(kContextWidth, kContextHeight, 0, sdlflags) == NULL)
+    if (modes_count >= 1)
     {
-        fprintf(stderr, "SDL_SetVideoMode() failed: %s\n", SDL_GetError());
-        fprintf(stderr, "forcing 640x480...\n");
-        kContextWidth = 640;
-        kContextHeight = 480;
-        if (SDL_SetVideoMode(kContextWidth, kContextHeight, 0, sdlflags) == NULL)
+        for (int i = 0; i < modes_count; i++)
         {
-            fprintf(stderr, "SDL_SetVideoMode() failed: %s\n", SDL_GetError());
-            fprintf(stderr, "forcing 640x480 windowed mode...\n");
-            sdlflags &= ~SDL_FULLSCREEN;
-            if (SDL_SetVideoMode(kContextWidth, kContextHeight, 0, sdlflags) == NULL)
+            SDL_DisplayMode *mode = g_new(SDL_DisplayMode, 1);
+            SDL_DisplayMode *prev;
+
+            SDL_GetDisplayMode(0, i, mode);
+
+            if (i > 0)
             {
-                fprintf(stderr, "SDL_SetVideoMode() failed: %s\n", SDL_GetError());
-                return false;
+                prev = (SDL_DisplayMode *) g_slist_last(displaymodes)->data;
+
+                if (prev->w == mode->w && prev->h == mode->h) // Ignore same resolutions with different refresh rate
+                {
+                    displaymodes = g_slist_remove(displaymodes, mode);
+                    g_free(mode);
+                    continue;
+                }
             }
+
+            displaymodes = g_slist_append(displaymodes, mode); 
         }
+        // We set modes_count so it reflect the new value
+        modes_count = g_slist_index(displaymodes, g_slist_last(displaymodes)->data) + 1;
+    }
+    else 
+    {
+        fprintf(stderr, "GetNumDisplayModes() failed: %s\n", SDL_GetError());
     }
 
-    int dblbuf = 0;
-    if ((SDL_GL_GetAttribute(SDL_GL_DOUBLEBUFFER, &dblbuf) == -1) || (!dblbuf))
+    /* Get current display (ie system) resolution */
+    SDL_DisplayMode current;
+    if (SDL_GetCurrentDisplayMode(0, &current) == 0)
+    {
+        displaywidth = current.w;
+        displaywidth = current.h;
+    }
+
+    if (cmdline("showresolutions"))
+    {
+        GSList *scan;
+
+        printf("Resolutions we think are okay:\n");
+        
+        for (scan = displaymodes; scan != NULL; scan = scan->next)
+            printf("  %d x %d\n", ((SDL_DisplayMode *) scan->data)->w, ((SDL_DisplayMode *) scan->data)->h);
+    }
+
+    if (SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1) < 0)
     {
         fprintf(stderr, "Failed to get double buffered GL context!\n");
         SDL_Quit();
         return false;
     }
 
-    if (!lookup_all_glsyms())
+    Uint32 win_flags = 0;
+
+    //if (!cmdline("windowed"))
+    //    sdlflags |= SDL_FULLSCREEN;
+    if (kContextWidth == displaywidth && kContextHeight == displayheight && fullscreen)
+        win_flags |= SDL_WINDOW_FULLSCREEN_DESKTOP;
+    else if (fullscreen)
+        win_flags |= SDL_WINDOW_FULLSCREEN; 
+
+    screen = SDL_CreateWindow("Kugaru",
+                              SDL_WINDOWPOS_UNDEFINED,
+                              SDL_WINDOWPOS_UNDEFINED,
+                              screenwidth, screenheight,
+                              SDL_WINDOW_OPENGL | win_flags);
+
+    if (screen == NULL)
     {
-        SDL_Quit();
+        fprintf(stderr, "SDL_CreateWindow() failed: %s\n", SDL_GetError());
+
         return false;
     }
 
-    if (!cmdline("nomousegrab"))
-        SDL_WM_GrabInput(SDL_GRAB_ON);
+    glcontext = SDL_GL_CreateContext(screen);
 
+    if (glcontext == NULL)
+    {
+        fprintf(stderr, "Can't create a GL context: %s\n", SDL_GetError());
+        return false;
+    }
+
+    SDL_SetRelativeMouseMode(SDL_TRUE);
+    SDL_GL_SetSwapInterval(1);
 
     glClear( GL_COLOR_BUFFER_BIT );
-    swap_gl_buffers();
+    SDL_GL_SwapWindow(screen);
 
     // clear all states
-    glDisable( GL_ALPHA_TEST);
-    glDisable( GL_BLEND);
-    glDisable( GL_DEPTH_TEST);
+    glDisable( GL_ALPHA_TEST );
+    glDisable( GL_BLEND );
+    glDisable( GL_DEPTH_TEST) ;
     // glDisable( GL_DITHER);
-    glDisable( GL_FOG);
-    glDisable( GL_LIGHTING);
-    glDisable( GL_LOGIC_OP);
-    glDisable( GL_STENCIL_TEST);
-    glDisable( GL_TEXTURE_1D);
-    glDisable( GL_TEXTURE_2D);
-    glPixelTransferi( GL_MAP_COLOR, GL_FALSE);
-    glPixelTransferi( GL_RED_SCALE, 1);
-    glPixelTransferi( GL_RED_BIAS, 0);
-    glPixelTransferi( GL_GREEN_SCALE, 1);
-    glPixelTransferi( GL_GREEN_BIAS, 0);
-    glPixelTransferi( GL_BLUE_SCALE, 1);
-    glPixelTransferi( GL_BLUE_BIAS, 0);
-    glPixelTransferi( GL_ALPHA_SCALE, 1);
-    glPixelTransferi( GL_ALPHA_BIAS, 0);
+    glDisable( GL_FOG );
+    glDisable( GL_LIGHTING );
+    glDisable( GL_LOGIC_OP );
+    glDisable( GL_STENCIL_TEST );
+    glDisable( GL_TEXTURE_1D );
+    glDisable( GL_TEXTURE_2D );
+    glPixelTransferi( GL_MAP_COLOR, GL_FALSE );
+    glPixelTransferi( GL_RED_SCALE, 1 );
+    glPixelTransferi( GL_RED_BIAS, 0 );
+    glPixelTransferi( GL_GREEN_SCALE, 1 );
+    glPixelTransferi( GL_GREEN_BIAS, 0 );
+    glPixelTransferi( GL_BLUE_SCALE, 1 );
+    glPixelTransferi( GL_BLUE_BIAS, 0 );
+    glPixelTransferi( GL_ALPHA_SCALE, 1 );
+    glPixelTransferi( GL_ALPHA_BIAS, 0 );
 
     // set initial rendering states
-    glShadeModel( GL_SMOOTH);
-    glClearDepth( 1.0f);
-    glDepthFunc( GL_LEQUAL);
-    glDepthMask( GL_TRUE);
+    glShadeModel( GL_SMOOTH );
+    glClearDepth( 1.0f );
+    glDepthFunc( GL_LEQUAL );
+    glDepthMask( GL_TRUE );
     // glDepthRange( FRONT_CLIP, BACK_CLIP);
-    glEnable( GL_DEPTH_TEST);
-    glHint( GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
-    glCullFace( GL_FRONT);
-    glEnable( GL_CULL_FACE);
-    glEnable( GL_LIGHTING);
+    glEnable( GL_DEPTH_TEST );
+    glHint( GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST );
+    glCullFace( GL_FRONT );
+    glEnable( GL_CULL_FACE );
+    glEnable( GL_LIGHTING );
     // glEnable( GL_LIGHT_MODEL_AMBIENT);
-    glEnable( GL_DITHER);
-    glEnable( GL_COLOR_MATERIAL);
-    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-    glAlphaFunc( GL_GREATER, 0.5f);
+    glEnable( GL_DITHER );
+    glEnable( GL_COLOR_MATERIAL );
+    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
+    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST );
+    glAlphaFunc( GL_GREATER, 0.5f );
 
     GLint width = kContextWidth;
     GLint height = kContextHeight;
-    gMidPoint.h = width / 2;
-    gMidPoint.v = height / 2;
-    screenwidth=width;
-    screenheight=height;
+    gMidPoint.h = 783;//width / 2;
+    gMidPoint.v = 384;//height / 2;
 
-    game.newdetail=detail;
-    game.newscreenwidth=screenwidth;
-    game.newscreenheight=screenheight;
+    game.newdetail = detail;
+    game.newscreenwidth = screenwidth;
+    game.newscreenheight = screenheight;
+
+    screenwidth = 1366;
+    screenheight = 768;
 
     game.InitGame();
 
@@ -651,13 +430,13 @@ bool SetUp (Game & game)
 }
 
 
-static void DoMouse(Game & game)
+static void DoMouse(Game &game)
 {
 
     if(mainmenu||(abs(game.deltah)<10*realmultiplier*1000&&abs(game.deltav)<10*realmultiplier*1000))
     {
-        game.deltah *= usermousesensitivity;
-        game.deltav *= usermousesensitivity;
+        game.deltah *= (usermousesensitivity / 5.f);
+        game.deltav *= (usermousesensitivity / 5.f);
         game.mousecoordh += game.deltah;
         game.mousecoordv += game.deltav;
         if (game.mousecoordh < 0)
@@ -671,19 +450,6 @@ static void DoMouse(Game & game)
     }
 
 }
-
-
-
-// --------------------------------------------------------------------------
-
-void DoKey (SInt8 theKey, SInt8 theCode)
-{
-    // do nothing
-}
-
-// --------------------------------------------------------------------------
-
-
 
 void DoFrameRate (int update)
 {    
@@ -721,7 +487,7 @@ void DoFrameRate (int update)
 }
 
 
-void DoUpdate (Game & game)
+void DoUpdate(Game &game)
 {
     static float sps=200;
     static int count;
@@ -800,21 +566,7 @@ void CleanUp (void)
     LOGFUNC;
 
     SDL_Quit();
-    #define GL_FUNC(ret,fn,params,call,rt) p##fn = NULL;
-    #include "glstubs.h"
-    #undef GL_FUNC
-    // cheat here...static destructors are calling glDeleteTexture() after
-    //  the context is destroyed and libGL unloaded by SDL_Quit().
-    pglDeleteTextures = glDeleteTextures_doNothing;
 }
-
-// --------------------------------------------------------------------------
-
-static bool IsFocused()
-{
-    return ((SDL_GetAppState() & SDL_APPINPUTFOCUS) != 0);
-}
-
 
 #ifndef WIN32
 // (code lifted from physfs: http://icculus.org/physfs/ ... zlib license.)
@@ -922,10 +674,6 @@ int main(int argc, char **argv)
 {
     LOGFUNC;
 
-    memset( &g_theKeys, 0, sizeof( KeyMap));
-
-    initSDLKeyTable();
-
     try
     {
         Game game;
@@ -936,17 +684,13 @@ int main(int argc, char **argv)
         //ofstream os("log.txt");
         //os.close();
 
-        if (!SetUp (game))
+        if (!SetUp(game))
             return 42;
 
         while (!gDone&&!game.quit&&(!game.tryquit))
         {
-            if (IsFocused())
+            if (IsFocused)
             {
-                gameFocused = true;
-
-                // check windows messages
-
                 game.deltah = 0;
                 game.deltav = 0;
                 SDL_Event e;
@@ -961,18 +705,13 @@ int main(int argc, char **argv)
                 sdlEventProc(e, game);
                 }
 
-
                 // game
                 DoUpdate(game);
             }
             else
             {
-                if (gameFocused)
-                {
-                    // allow game chance to pause
-                    gameFocused = false;
+                if (IsFocused)
                     DoUpdate(game);
-                }
 
                 // game is not in focus, give CPU time to other apps by waiting for messages instead of 'peeking'
                 STUBBED("give up CPU but sniff the event queue");
@@ -981,7 +720,7 @@ int main(int argc, char **argv)
 
         pgame = 0;
 
-        CleanUp ();
+        CleanUp();
 
         return 0;
     }

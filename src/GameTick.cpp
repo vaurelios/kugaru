@@ -22,6 +22,7 @@
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <unistd.h>
+#include <SDL.h>
 #include <ctime>
 
 #include "Globals.h"
@@ -1210,7 +1211,8 @@ void Screenshot	(void)
 
 
 
-void	Game::SetUpLighting(){
+void Game::SetUpLighting()
+{
 	if(environment==snowyenvironment){
 		light.color[0]=.65;
 		light.color[1]=.65;
@@ -1394,7 +1396,7 @@ int Game::checkcollide(XYZ startpoint,XYZ endpoint,int what){
 	return -1;
 }
 
-void	Game::Setenvironment(int which)
+void Game::Setenvironment(int which)
 {
 	LOGFUNC;
 
@@ -1580,7 +1582,8 @@ void	Game::Setenvironment(int which)
 }
 
 
-void	Game::Loadlevel(int which){
+void Game::Loadlevel(int which)
+{
 	stealthloading=0;
 
 	if(which==0)Loadlevel((char *)"data/maps/map1");
@@ -1625,7 +1628,8 @@ return context.hex_digest();
 
 
 
-void	Game::Loadlevel(char *name){
+void Game::Loadlevel(char *name)
+{
 	int i,j,k,l,m;
 	static int oldlevel;
 	int templength;
@@ -2442,7 +2446,7 @@ void	Game::Loadlevel(char *name){
 	visibleloading=0;
 }
 
-void	Game::Tick()
+void Game::Tick()
 {
 	static int i,k,j,l,m;
 	static XYZ facing,flatfacing,absflatfacing;
@@ -2461,34 +2465,39 @@ void	Game::Tick()
 
 	float headprop,bodyprop,armprop,legprop;
 
-	for(i=0;i<15;i++){
-		displaytime[i]+=multiplier;
+	for(i = 0; i < 15; i++)
+    {
+		displaytime[i] += multiplier;
 	}
 
-	static unsigned char	theKeyMap[16];
-	GetKeys( theKeyMap );
-
-	keyboardfrozen=0;
-
+	keyboardfrozen = 0;
 
 	static bool mainmenutogglekeydown;
-	if(!console){
-		if(mainmenu&&endgame==1)mainmenu=10;
-		if(IsKeyDown(theKeyMap, MAC_ESCAPE_KEY)&&!mainmenutogglekeydown&&(mainmenu==7&&entername)){
-			for(j=0;j<255;j++){
+
+	if(!console)
+    {
+		if (mainmenu && endgame == 1)
+            mainmenu = MAIN_MENU_CONGRATS;
+
+		if(IsKeyPress(SDL_SCANCODE_ESCAPE) && !mainmenutogglekeydown && (mainmenu == MAIN_MENU_USER_LISTING && entername))
+        {
+			for (j = 0; j < 255; j++)
 				displaytext[0][j]=' ';
-			}
-			displaychars[0]=0;
-			displayselected=0;
-			entername=0;
-			mainmenutogglekeydown=1;
+
+			displaychars[0]       = 0;
+			displayselected       = 0;
+			entername             = 0;
+			mainmenutogglekeydown = 1;
 		}
-		if((IsKeyDown(theKeyMap, MAC_ESCAPE_KEY)||(mainmenu==0&&((IsKeyDown(theKeyMap, jumpkey)||IsKeyDown(theKeyMap, MAC_SPACE_KEY)||(campaign)))&&!oldjumpkeydown&&campaign&&winfreeze))&&!mainmenutogglekeydown&&(!mainmenu||gameon||mainmenu==3||mainmenu==4||mainmenu==5||mainmenu==6||(mainmenu==7&&!entername)||mainmenu==9||mainmenu==11||mainmenu==13||mainmenu==17||mainmenu==10)){
-			selected=-1;
-			if(mainmenu==1||mainmenu==2||mainmenu==0){
-				if(mainmenu==0&&!winfreeze)mainmenu=2;
-				else if(mainmenu==0&&winfreeze&&(campaignchoosenext[campaignchoicewhich[whichchoice]])==1)mainmenu=100;
-				else if(mainmenu==0&&winfreeze){
+		if (IsKeyDown(SDL_SCANCODE_ESCAPE))
+        {
+			selected = -1;
+			if (mainmenu == MAIN_MENU_RESUME || mainmenu == MAIN_MENU_IN_GAME)
+            {
+				if (mainmenu == MAIN_MENU_IN_GAME && !winfreeze) mainmenu = MAIN_MENU_RESUME;
+				else if (mainmenu == MAIN_MENU_IN_GAME && winfreeze && (campaignchoosenext[campaignchoicewhich[whichchoice]]) == 1) mainmenu = MAIN_MENU_LAST;
+				else if (mainmenu == MAIN_MENU_IN_GAME && winfreeze)
+                {
 					/*	if(campaignchoosenext[campaignchoicewhich[whichchoice]]==2)
 					stealthloading=1;
 					else stealthloading=0;
@@ -2578,9 +2587,11 @@ void	Game::Tick()
 
 					stealthloading=0;*/
 				}
-				else if(mainmenu==1||mainmenu==2)mainmenu=0;
-				if(mainmenu&&musictoggle){
-					if(mainmenu==1||mainmenu==2||mainmenu==100){
+				else if (mainmenu == MAIN_MENU_RESUME) mainmenu = MAIN_MENU_IN_GAME;
+				if (mainmenu && musictoggle)
+                {
+					if (mainmenu == MAIN_MENU_RESUME || mainmenu == MAIN_MENU_LAST)
+                    {
 						OPENAL_SetFrequency(OPENAL_ALL, 0);
 						PlayStreamEx( stream_music3, strm[stream_music3], NULL, true);
 						OPENAL_SetPaused(channels[stream_music3], false);
@@ -2588,12 +2599,14 @@ void	Game::Tick()
 						OPENAL_SetPaused(channels[music1], true);
 					}
 				}
-				if(!mainmenu){
+				if (!mainmenu)
+                {
 					OPENAL_SetPaused(channels[stream_music3], true);
 					OPENAL_SetPaused(channels[music1], false);
 				}
 			}
-			if(mainmenu==3){
+			if (mainmenu == MAIN_MENU_OPTIONS)
+            {
 				float gLoc[3]={0,0,0};
 				float vel[3]={0,0,0};
 				OPENAL_Sample_SetMinMaxDistance(samp[fireendsound], 9999.0f, 99999.0f);
@@ -2615,63 +2628,11 @@ void	Game::Tick()
 				if(newscreenheight<0)newscreenheight=screenheight;
                 if(oldgamespeed==0)oldgamespeed=1;
 
-                Conf &cnf = Conf::getInstance();
-
-                cnf.setGameInt ("game-speed",     oldgamespeed);
-                cnf.setGameInt ("difficulty",     difficulty);
-                cnf.setGameInt ("debug",          debugmode);
-                cnf.setGameBool("floating-jump",  floatjump);
-                cnf.setGameBool("show-text",      texttoggle);
-                cnf.setGameBool("show-points",    showpoints);
-                cnf.setGameBool("immediate-mode", immediate);
-
-                cnf.setDisplayInt ("width",            newscreenwidth);
-                cnf.setDisplayInt ("height",           newscreenheight);
-                cnf.setDisplayInt ("detail",           newdetail);
-                cnf.setDisplayInt ("decals",           decals);
-                cnf.setDisplayInt ("blood",            bloodtoggle);
-                cnf.setDisplayInt ("damage-effects",   damageeffects);
-                cnf.setDisplayInt ("velocity-blur",    velocityblur);
-                cnf.setDisplayBool("auto-slow-motion", autoslomo);
-                cnf.setDisplayBool("trilinear",        trilinear);
-                cnf.setDisplayBool("vsync",            vblsync);
-                cnf.setDisplayBool("show-foliage",     foliage);
-                cnf.setDisplayBool("always-blur",      alwaysblur);
-                cnf.setDisplayBool("motion-blur",      ismotionblur);
-
-                cnf.setSoundInt ("volume",  volume); 
-                cnf.setSoundBool("ambient", ambientsound);
-                cnf.setSoundBool("music",   musictoggle);
-
-                cnf.setMouseInt ("mouse-speed",  usermousesensitivity);
-                cnf.setMouseBool("mouse-invert", invertmouse);
-                cnf.setMouseBool("mouse-jump",   mousejump);
-
+                cnf.dump();
                 cnf.save();
-
-				/*opstream << "\nForward key:\n";
-				opstream << KeyToChar(forwardkey);
-				opstream << "\nBack key:\n";
-				opstream << KeyToChar(backkey);
-				opstream << "\nLeft key:\n";
-				opstream << KeyToChar(leftkey);
-				opstream << "\nRight key:\n";
-				opstream << KeyToChar(rightkey);
-				opstream << "\nJump key:\n";
-				opstream << KeyToChar(jumpkey);
-				opstream << "\nCrouch key:\n";
-				opstream << KeyToChar(crouchkey);
-				opstream << "\nDraw key:\n";
-				opstream << KeyToChar(drawkey);
-				opstream << "\nThrow key:\n";
-				opstream << KeyToChar(throwkey);
-				opstream << "\nAttack key:\n";
-				opstream << KeyToChar(attackkey);
-				opstream << "\nChat key:\n";
-				opstream << KeyToChar(chatkey);
-				opstream.close();*/
 			}
-			if(mainmenu==4||mainmenu==5||mainmenu==6||mainmenu==7||mainmenu==9||mainmenu==13||mainmenu==10||mainmenu==11||mainmenu==100){
+			if ((mainmenu >= MAIN_MENU_KEYS && mainmenu <= MAIN_MENU_CONGRATS_SCORES) || mainmenu == MAIN_MENU_CONGRATS_ENTER_NAME || mainmenu == MAIN_MENU_LAST)
+            {
 				float gLoc[3]={0,0,0};
 				float vel[3]={0,0,0};
 				OPENAL_Sample_SetMinMaxDistance(samp[fireendsound], 9999.0f, 99999.0f);
@@ -2687,59 +2648,67 @@ void	Game::Tick()
 				flashamount=1;
 				flashdelay=1;
 			}
-			if(mainmenu==3&&gameon)mainmenu=2;
-			if(mainmenu==3&&!gameon)mainmenu=1;
-			if(mainmenu==5&&gameon)mainmenu=2;
-			if(mainmenu==5&&!gameon)mainmenu=1;
-			if(mainmenu==4)mainmenu=3;
-			if(mainmenu==6)mainmenu=5;
-			if(mainmenu==7)mainmenu=1;
-			if(mainmenu==9)mainmenu=5;
-			if(mainmenu==11)mainmenu=5;
-			if(mainmenu==13)mainmenu=12;
-			if(mainmenu==10)mainmenu=5;
-			if(mainmenu==100){
-				mainmenu=5;
+			if (mainmenu == MAIN_MENU_OPTIONS && gameon) mainmenu = MAIN_MENU_RESUME;
+			if (mainmenu == MAIN_MENU_OPTIONS && !gameon) mainmenu = MAIN_MENU_MAIN;
+			if (mainmenu == MAIN_MENU_CAMPAIGNS && gameon) mainmenu = MAIN_MENU_RESUME;
+			if (mainmenu == MAIN_MENU_CAMPAIGNS && !gameon) mainmenu = MAIN_MENU_MAIN;
+			if (mainmenu == MAIN_MENU_KEYS) mainmenu = MAIN_MENU_OPTIONS;
+			if (mainmenu == MAIN_MENU_DELETE_USER) mainmenu = MAIN_MENU_CAMPAIGNS;
+			if (mainmenu == MAIN_MENU_USER_LISTING) mainmenu = MAIN_MENU_MAIN;
+			if (mainmenu == MAIN_MENU_LEVEL_LISTING) mainmenu = MAIN_MENU_CAMPAIGNS;
+			if (mainmenu == MAIN_MENU_CONGRATS_SCORES) mainmenu = MAIN_MENU_CAMPAIGNS;
+			if (mainmenu == MAIN_MENU_CONGRATS_ENTER_NAME) mainmenu = MAIN_MENU_12;
+			if (mainmenu == MAIN_MENU_CONGRATS) mainmenu = MAIN_MENU_CAMPAIGNS;
+			if (mainmenu == MAIN_MENU_LAST)
+            {
+				mainmenu = MAIN_MENU_CAMPAIGNS;
 				gameon=0;
 				winfreeze=0;
 			}
 			mainmenutogglekeydown=1;
 		}
-		if(!IsKeyDown(theKeyMap, MAC_ESCAPE_KEY)){
-			mainmenutogglekeydown=0;
+		if(IsKeyDown(SDL_SCANCODE_ESCAPE))
+        {
+			mainmenutogglekeydown = 0;
 		}
 	}
 
 	/*static bool minimaptogglekeydown;
-	if(IsKeyDown(theKeyMap, MAC_TAB_KEY)&&!minimaptogglekeydown){
+	if(IsKeyDown(SDL_SCANCODE_TAB)&&!minimaptogglekeydown){
 	minimap=1-minimap;
 	minimaptogglekeydown=1;
 	}
-	if(!IsKeyDown(theKeyMap, MAC_TAB_KEY)){
+	if(!IsKeyDown(SDL_SCANCODE_TAB)){
 	minimaptogglekeydown=0;
 	}
 	*/
 
 	static bool minimaptogglekeydown;
-	if(IsKeyDown(theKeyMap, MAC_TAB_KEY)&&!minimaptogglekeydown&&tutoriallevel){
-		if(tutorialstage!=51)
-			tutorialstagetime=tutorialmaxtime;
+	if (IsKeyDown(SDL_SCANCODE_TAB) && !minimaptogglekeydown && tutoriallevel)
+    {
+		if(tutorialstage != 51)
+			tutorialstagetime = tutorialmaxtime;
 		PlaySoundEx( consolefailsound, samp[consolefailsound], NULL, true);
 		OPENAL_SetVolume(channels[consolefailsound], 128);
 		OPENAL_SetPaused(channels[consolefailsound], false);
 		minimaptogglekeydown=1;
 	}
-	if(!IsKeyDown(theKeyMap, MAC_TAB_KEY)){
-		minimaptogglekeydown=0;
+	if (IsKeyDown(SDL_SCANCODE_TAB))
+    {
+		minimaptogglekeydown = 0;
 	}
 
-	if(mainmenu){
-		//menu buttons
-		if(mainmenu==1||mainmenu==2){
-			if(Button()&&!oldbutton&&selected==1){
-				if(!gameon){
-					float gLoc[3]={0,0,0};
-					float vel[3]={0,0,0};
+	if (mainmenu)
+    {
+		// menu buttons
+		if (mainmenu == MAIN_MENU_MAIN || mainmenu == MAIN_MENU_RESUME)
+        {
+			if (IsButtonDown(SDL_BUTTON_LEFT) && selected == 1)
+            {
+				if (!gameon)
+                {
+					float gLoc[3] = {0, 0, 0};
+					float vel[3]  = {0, 0, 0};
 					OPENAL_Sample_SetMinMaxDistance(samp[firestartsound], 9999.0f, 99999.0f);
 					PlaySoundEx( firestartsound, samp[firestartsound], NULL, true);
 					OPENAL_3D_SetAttributes(channels[firestartsound], gLoc, vel);
@@ -2747,15 +2716,15 @@ void	Game::Tick()
 					OPENAL_SetPaused(channels[firestartsound], false);
 					OPENAL_Sample_SetMinMaxDistance(samp[firestartsound], 8.0f, 2000.0f);
 
-					flashr=1;
-					flashg=0;
-					flashb=0;
-					flashamount=1;
-					flashdelay=1;
+					flashr      = 1;
+					flashg      = 0;
+					flashb      = 0;
+					flashamount = 1;
+					flashdelay  = 1;
 
-					//new game
-					if(accountactive!=-1)mainmenu=5;
-					else mainmenu=7;
+					// new game
+					if (accountactive != -1) mainmenu = MAIN_MENU_CAMPAIGNS;
+					else mainmenu = MAIN_MENU_USER_LISTING;
 					/*
 					startbonustotal=0;
 
@@ -2772,14 +2741,15 @@ void	Game::Tick()
 				}
 				else
 				{
-					//resume
-					mainmenu=0;
+					// resume
+					mainmenu = MAIN_MENU_IN_GAME;
 					OPENAL_SetPaused(channels[stream_music3], true);
 					OPENAL_SetPaused(channels[music1], false);
 				}
 			}
 
-			if(Button()&&!oldbutton&&selected==2){
+			if (IsButtonDown(SDL_BUTTON_LEFT) && selected == 2)
+            {
 				float gLoc[3]={0,0,0};
 				float vel[3]={0,0,0};
 				OPENAL_Sample_SetMinMaxDistance(samp[firestartsound], 9999.0f, 99999.0f);
@@ -2797,17 +2767,18 @@ void	Game::Tick()
 
 				//options
 
-				mainmenu=3;
+				mainmenu = MAIN_MENU_OPTIONS;
 
-				if(newdetail>2)newdetail=detail;
-				if(newdetail<0)newdetail=detail;
-				if(newscreenwidth>3000)newscreenwidth=screenwidth;
-				if(newscreenwidth<0)newscreenwidth=screenwidth;
-				if(newscreenheight>3000)newscreenheight=screenheight;
-				if(newscreenheight<0)newscreenheight=screenheight;
+				if (newdetail > 2) newdetail = detail;
+				if (newdetail < 0) newdetail = detail;
+				if (newscreenwidth > 3000) newscreenwidth = screenwidth;
+				if (newscreenwidth < 0) newscreenwidth = screenwidth;
+				if (newscreenheight > 3000) newscreenheight = screenheight;
+				if (newscreenheight < 0) newscreenheight = screenheight;
 			}
 
-			if(Button()&&!oldbutton&&selected==3){
+			if (IsButtonDown(SDL_BUTTON_LEFT) && selected == 3)
+            {
 				float gLoc[3]={0,0,0};
 				float vel[3]={0,0,0};
 				OPENAL_Sample_SetMinMaxDistance(samp[fireendsound], 9999.0f, 99999.0f);
@@ -2823,237 +2794,238 @@ void	Game::Tick()
 				flashamount=1;
 				flashdelay=1;
 
-				if(!gameon){
+				if (!gameon)
+                {
 					//quit
-					tryquit=1;
+					tryquit = 1;
 					OPENAL_SetPaused(channels[stream_music3], true);
 				}
-				else{
+				else
+                {
 					//end game
-					gameon=0;
-					mainmenu=1;
+					gameon = 0;
+					mainmenu = MAIN_MENU_MAIN;
 				}
 			}
-			if(Button())oldbutton=1;
-			else oldbutton=0;
 		}
 
-		if(mainmenu==3){
-			if(Button()&&!oldbutton&&selected!=-1){
-				float gLoc[3]={0,0,0};
-				float vel[3]={0,0,0};
-				OPENAL_Sample_SetMinMaxDistance(samp[firestartsound], 9999.0f, 99999.0f);
-				PlaySoundEx( firestartsound, samp[firestartsound], NULL, true);
-				OPENAL_3D_SetAttributes(channels[firestartsound], gLoc, vel);
-				OPENAL_SetVolume(channels[firestartsound], 256);
-				OPENAL_SetPaused(channels[firestartsound], false);
+		if (mainmenu == MAIN_MENU_OPTIONS)
+        {
+			if(IsButtonDown(SDL_BUTTON_LEFT) && selected != -1)
+            {
+				float gLoc[3] = {0, 0, 0};
+				float vel[3]  = {0, 0, 0};
+				OPENAL_Sample_SetMinMaxDistance( samp[firestartsound], 9999.0f, 99999.0f );
+				PlaySoundEx( firestartsound, samp[firestartsound], NULL, true );
+				OPENAL_3D_SetAttributes( channels[firestartsound], gLoc, vel );
+				OPENAL_SetVolume( channels[firestartsound], 100 );
+				OPENAL_SetPaused( channels[firestartsound], false );
 				OPENAL_Sample_SetMinMaxDistance(samp[firestartsound], 8.0f, 2000.0f);
 			}
-			if(Button()&&!oldbutton&&selected==0){
-			
-				extern SDL_Rect **resolutions;
-				bool isCustomResolution = true;
-				bool found = false;
-				for (int i = 0; (!found) && (resolutions[i]); i++)
-				{
-					if ((resolutions[i]->w == screenwidth) && (resolutions[i]->h == screenwidth))
-						isCustomResolution = false;
 
-					if ((resolutions[i]->w == newscreenwidth) && (resolutions[i]->h == newscreenheight))
-					{
-						i++;
-						if (resolutions[i] != NULL)
-						{
-							newscreenwidth = (int) resolutions[i]->w;
-							newscreenheight = (int) resolutions[i]->h;
-						}
-						else if (isCustomResolution)
-						{
-							if ((screenwidth == newscreenwidth) && (screenheight == newscreenheight))
-							{
-								newscreenwidth = (int) resolutions[0]->w;
-								newscreenheight = (int) resolutions[0]->h;
-							}
-							else
-							{
-								newscreenwidth = screenwidth;
-								newscreenheight = screenheight;
-							}
-						}
-						else
-						{
-							newscreenwidth = (int) resolutions[0]->w;
-							newscreenheight = (int) resolutions[0]->h;
-						}
-						found = true;
-					}
-				}
+            if (IsButtonPress(SDL_BUTTON_LEFT) || IsKeyPress(SDL_SCANCODE_RIGHT) || IsKeyPress(SDL_SCANCODE_RETURN))
+            {
+                switch (selected)
+                    case 0: // Resolution
+                    {
+                        static int current_options_res = 0;
+                        SDL_DisplayMode *mode;
 
-				if (!found)
-				{
-					newscreenwidth = (int) resolutions[0]->w;
-					newscreenheight = (int) resolutions[0]->h;
-				}
+                        current_options_res++;
+                        if (current_options_res > (modes_count - 1)) current_options_res = 0;
 
+                        mode = (SDL_DisplayMode *) g_slist_nth(displaymodes, current_options_res)->data;
+                        newscreenwidth = mode->w;
+                        newscreenheight = mode->h;
+                    break;
+                    case 1: // Detail
+                        newdetail++;
+                        if (newdetail > 2) newdetail = 0;
+                    break;
+                    case 2: // Blood
+                        blooddetail++;
+				        if (blooddetail > 2) blooddetail = 0;
+                    break;
+                    case 3: // Difficulty
+                        difficulty++;
+				        if (difficulty > 2) difficulty = 0;
+                    break;
+                    case 4: // Motion blur
+                        ismotionblur = 1 - ismotionblur;
+                    break;
+                    case 5: // Decals
+                        decals = 1 - decals; 
+                    break;
+                    case 6: // Music
+                        musictoggle = 1 - musictoggle;
+
+				        if(!musictoggle)
+                        {
+					        OPENAL_SetPaused( channels[music1], true );
+					        OPENAL_SetPaused( channels[stream_music2], true );
+					        OPENAL_SetPaused( channels[stream_music3], true );
+
+					        for (i = 0; i < 4; i++)
+                            {
+						        oldmusicvolume[i] = 0;
+						        musicvolume[i]    = 0;
+					        }
+				        }
+                        else
+                        {
+					        PlayStreamEx( stream_music3, strm[stream_music3], NULL, true );
+					        OPENAL_SetPaused( channels[stream_music3], false );
+					        OPENAL_SetVolume( channels[stream_music3], 256 );
+				        } 
+                    break;
+                    case 7: // Switch to Keys main menu
+                        flashr      = 1;
+				        flashg      = 0;
+				        flashb      = 0;
+				        flashamount = 1;
+				        flashdelay  = 1;
+
+				        mainmenu = MAIN_MENU_KEYS;
+				        keyselect = -1; 
+                    break;
+                    case 8: // Back to main menu or resume menu
+                        flashr      = 1;
+				        flashg      = 0;
+				        flashb      = 0;
+				        flashamount = 1;
+				        flashdelay  = 1;
+
+				        if (newdetail > 2) newdetail = detail;
+				        if (newdetail < 0) newdetail = detail;
+				        if (newscreenwidth < 0) newscreenwidth = screenwidth;
+				        if (newscreenheight < 0) newscreenheight = screenheight;
+
+                        cnf.dump();
+                        cnf.save();
 				
-			}
-			if(Button()&&!oldbutton&&selected==1){
-				newdetail++;
-				if(newdetail>2)newdetail=0;
-			}
-			if(Button()&&!oldbutton&&selected==2){
-				bloodtoggle++;
-				if(bloodtoggle>2)bloodtoggle=0;
-			}
-			if(Button()&&!oldbutton&&selected==3){
-				difficulty++;
-				if(difficulty>2)difficulty=0;
-			}
-			if(Button()&&!oldbutton&&selected==4){
-				ismotionblur=1-ismotionblur;
-			}
-			if(Button()&&!oldbutton&&selected==5){
-				decals=1-decals;
-			}
-			if(Button()&&!oldbutton&&selected==6){
-				musictoggle=1-musictoggle;
+                        if (mainmenu == MAIN_MENU_OPTIONS && gameon) mainmenu = MAIN_MENU_RESUME;
+				        if (mainmenu == MAIN_MENU_OPTIONS && !gameon) mainmenu = MAIN_MENU_MAIN;
+                    break;
+                    case 9: // Invert Mouse
+                        invertmouse = 1 - invertmouse;
+                    break;
+                    case 10: // Mouse sensitivity
+                        usermousesensitivity++;
 
-				if(!musictoggle){
-					OPENAL_SetPaused(channels[music1], true);
-					OPENAL_SetPaused(channels[stream_music2], true);
-					OPENAL_SetPaused(channels[stream_music3], true);
+				        if (usermousesensitivity > 25) usermousesensitivity = 1; 
+                    break;
+                    case 11: // Volume
+                        volume++;
 
-					for(i=0;i<4;i++){
-						oldmusicvolume[i]=0;
-						musicvolume[i]=0;
-					}
-				}
+				        if (volume > 100) volume = 0;
+				        OPENAL_SetSFXMasterVolume((float) volume / 100.0f);
+                    break;
+                }
+            }
+            if (IsKeyPress(SDL_SCANCODE_LEFT))
+            {
+                switch (selected)
+                {
+                    case 0: // Resolution
+                        static int current_options_res = 0;
+                        SDL_DisplayMode *mode;
 
-				if(musictoggle){
-					PlayStreamEx( stream_music3, strm[stream_music3], NULL, true);
-					OPENAL_SetPaused(channels[stream_music3], false);
-					OPENAL_SetVolume(channels[stream_music3], 256);
-				}
-			}
-			if(Button()&&!oldbutton&&selected==9){
-				invertmouse=1-invertmouse;
-			}
-			if(Button()&&!oldbutton&&selected==10){
-				usermousesensitivity+=.2;
-				if(usermousesensitivity>2)usermousesensitivity=.2;
-			}
-			if(Button()&&!oldbutton&&selected==11){
-				volume++;
-				if (volume > 100) volume = 0;
-				OPENAL_SetSFXMasterVolume((float) volume / 100.0f);
-			}
-			if(Button()&&!oldbutton&&selected==7){
-				/*float gLoc[3]={0,0,0};
-				float vel[3]={0,0,0};
-				OPENAL_Sample_SetMinMaxDistance(samp[firestartsound], 9999.0f, 99999.0f);
-				PlaySoundEx( firestartsound, samp[firestartsound], NULL, true);
-				OPENAL_3D_SetAttributes(channels[firestartsound], gLoc, vel);
-				OPENAL_SetVolume(channels[firestartsound], 256);
-				OPENAL_SetPaused(channels[firestartsound], false);
-				OPENAL_Sample_SetMinMaxDistance(samp[firestartsound], 8.0f, 2000.0f);
-				*/
-				flashr=1;
-				flashg=0;
-				flashb=0;
-				flashamount=1;
-				flashdelay=1;
+                        current_options_res--;
+                        if (current_options_res < 0) current_options_res = modes_count - 1;
 
-				//options
+                        mode = (SDL_DisplayMode *) g_slist_nth(displaymodes, current_options_res)->data;
+                        newscreenwidth = mode->w;
+                        newscreenheight = mode->h;
+                        break;
+                    case 1: // Detail
+                        newdetail--;
+                        if (newdetail < 0) newdetail = 2;
+                    case 2: // Blood
+                        blooddetail--;
+                        if (blooddetail < 0) blooddetail = 2;
+                    case 3: // Difficulty
+                        difficulty--;
+				        if (difficulty < 0) difficulty = 2;
+                        break;
+                    case 4: // Motion blur
+                        ismotionblur = 1 - ismotionblur;  
+                        break;
+                    case 5: // Decals
+                        decals = 1 - decals; 
+                        break;
+                    case 6: // Music
+                        musictoggle = 1 - musictoggle;
 
-				mainmenu=4;
-				keyselect=-1;
-			}
-			if(Button()&&!oldbutton&&selected==8){
-				float gLoc[3]={0,0,0};
-				float vel[3]={0,0,0};
-				OPENAL_Sample_SetMinMaxDistance(samp[fireendsound], 9999.0f, 99999.0f);
-				PlaySoundEx( fireendsound, samp[fireendsound], NULL, true);
-				OPENAL_3D_SetAttributes(channels[fireendsound], gLoc, vel);
-				OPENAL_SetVolume(channels[fireendsound], 256);
-				OPENAL_SetPaused(channels[fireendsound], false);
-				OPENAL_Sample_SetMinMaxDistance(samp[fireendsound], 8.0f, 2000.0f);
+				        if(!musictoggle)
+                        {
+					        OPENAL_SetPaused( channels[music1], true );
+					        OPENAL_SetPaused( channels[stream_music2], true );
+					        OPENAL_SetPaused( channels[stream_music3], true );
 
-				flashr=1;
-				flashg=0;
-				flashb=0;
-				flashamount=1;
-				flashdelay=1;
+					        for (i = 0; i < 4; i++)
+                            {
+						        oldmusicvolume[i] = 0;
+						        musicvolume[i]    = 0;
+					        }
+				        }
+                        else
+                        {
+					        PlayStreamEx( stream_music3, strm[stream_music3], NULL, true );
+					        OPENAL_SetPaused( channels[stream_music3], false );
+					        OPENAL_SetVolume( channels[stream_music3], 256 );
+				        }
+                        break;
+                    case 7: // Switch to Keys main menu
+                        flashr      = 1;
+				        flashg      = 0;
+				        flashb      = 0;
+				        flashamount = 1;
+				        flashdelay  = 1;
 
-				if(newdetail>2)newdetail=detail;
-				if(newdetail<0)newdetail=detail;
-				if(newscreenwidth<0)newscreenwidth=screenwidth;
-				if(newscreenheight<0)newscreenheight=screenheight;
+				        mainmenu = MAIN_MENU_KEYS;
+				        keyselect = -1; 
+                        break;
+                    case 8: // Back to main menu or resume menu
+                        flashr      = 1;
+				        flashg      = 0;
+				        flashb      = 0;
+				        flashamount = 1;
+				        flashdelay  = 1;
 
+				        if (newdetail > 2) newdetail = detail;
+				        if (newdetail < 0) newdetail = detail;
+				        if (newscreenwidth < 0) newscreenwidth = screenwidth;
+				        if (newscreenheight < 0) newscreenheight = screenheight;
 
-                Conf &cnf = Conf::getInstance();
+                        cnf.dump();
+                        cnf.save();
+				
+                        if (mainmenu == MAIN_MENU_OPTIONS && gameon) mainmenu = MAIN_MENU_RESUME;
+				        if (mainmenu == MAIN_MENU_OPTIONS && !gameon) mainmenu = MAIN_MENU_MAIN;
+                        break;
+                    case 9: // Invert Mouse
+                        invertmouse = 1 - invertmouse;
+                        break;
+                    case 10: // Mouse sensitivity
+                        usermousesensitivity--;
 
-			    cnf.setGameInt ("game-speed",     oldgamespeed);
-                cnf.setGameInt ("difficulty",     difficulty);
-                cnf.setGameInt ("debug",          debugmode);
-                cnf.setGameBool("floating-jump",  floatjump);
-                cnf.setGameBool("show-text",      texttoggle);
-                cnf.setGameBool("show-points",    showpoints);
-                cnf.setGameBool("immediate-mode", immediate);
+				        if (usermousesensitivity < 0) usermousesensitivity = 25; 
+                        break;
+                    case 11: // Volume
+                    {
+                        volume--;
 
-                cnf.setDisplayInt ("width",            newscreenwidth);
-                cnf.setDisplayInt ("height",           newscreenheight);
-                cnf.setDisplayInt ("detail",           newdetail);
-                cnf.setDisplayInt ("decals",           decals);
-                cnf.setDisplayInt ("blood",            bloodtoggle);
-                cnf.setDisplayInt ("damage-effects",   damageeffects);
-                cnf.setDisplayInt ("velocity-blur",    velocityblur);
-                cnf.setDisplayBool("auto-slow-motion", autoslomo);
-                cnf.setDisplayBool("trilinear",        trilinear);
-                cnf.setDisplayBool("vsync",            vblsync);
-                cnf.setDisplayBool("show-foliage",     foliage);
-                cnf.setDisplayBool("always-blur",      alwaysblur);
-                cnf.setDisplayBool("motion-blur",      ismotionblur);
-
-                cnf.setSoundInt ("volume",  volume); 
-                cnf.setSoundBool("ambient", ambientsound);
-                cnf.setSoundBool("music",   musictoggle);
-
-                cnf.setMouseInt ("mouse-speed",  usermousesensitivity);
-                cnf.setMouseBool("mouse-invert", invertmouse);
-                cnf.setMouseBool("mouse-jump",   mousejump);
-
-                cnf.save();
-                /*    
-				opstream << "\nForward key:\n";
-				opstream << KeyToChar(forwardkey);
-				opstream << "\nBack key:\n";
-				opstream << KeyToChar(backkey);
-				opstream << "\nLeft key:\n";
-				opstream << KeyToChar(leftkey);
-				opstream << "\nRight key:\n";
-				opstream << KeyToChar(rightkey);
-				opstream << "\nJump key:\n";
-				opstream << KeyToChar(jumpkey);
-				opstream << "\nCrouch key:\n";
-				opstream << KeyToChar(crouchkey);
-				opstream << "\nDraw key:\n";
-				opstream << KeyToChar(drawkey);
-				opstream << "\nThrow key:\n";
-				opstream << KeyToChar(throwkey);
-				opstream << "\nAttack key:\n";
-				opstream << KeyToChar(attackkey);
-				opstream << "\nChat key:\n";
-				opstream << KeyToChar(chatkey);
-				opstream.close();*/
-
-				if(mainmenu==3&&gameon)mainmenu=2;
-				if(mainmenu==3&&!gameon)mainmenu=1;
-			}
-			if(Button())oldbutton=1;
-			else oldbutton=0;
+				        if (volume < 0) volume = 100;
+				        OPENAL_SetSFXMasterVolume((float) volume / 100.0f);
+                    }
+                    break; 
+                }
+            }
 		}
-		if(mainmenu==4){
-			if(Button()&&!oldbutton&&selected!=-1&&keyselect==-1){
+		if (mainmenu == MAIN_MENU_KEYS)
+        {
+		    if (IsButtonPress(SDL_BUTTON_LEFT) && selected != -1 && keyselect == -1)
+            {
 				float gLoc[3]={0,0,0};
 				float vel[3]={0,0,0};
 				OPENAL_Sample_SetMinMaxDistance(samp[firestartsound], 9999.0f, 99999.0f);
@@ -3063,48 +3035,12 @@ void	Game::Tick()
 				OPENAL_SetPaused(channels[firestartsound], false);
 				OPENAL_Sample_SetMinMaxDistance(samp[firestartsound], 8.0f, 2000.0f);
 			}
-			if(Button()&&!oldbutton&&selected<9&&keyselect==-1){
-				keyselect=selected;
-				oldbuttons[0]=1;
-				oldbuttons[1]=1;
-				oldbuttons[2]=1;
+			if (IsButtonPress(SDL_BUTTON_LEFT) && selected < 9 && keyselect == -1)
+            {
+				keyselect = selected;
 			}
-			if(keyselect!=-1){
-				for(i=0;i<3;i++)
-					if(!buttons[i]&&!oldbutton&&!Button())oldbuttons[i]=0;
-				for(i=0;i<140;i++){
-					if((IsKeyDown(theKeyMap, i)||(buttons[0]&&!oldbuttons[0]&&!oldbutton)||(buttons[1]&&!oldbuttons[1]&&!oldbutton))&&keyselect!=-1){
-						if(i!=MAC_ESCAPE_KEY&&(strcmp(KeyToChar(i),"unknown")||(buttons[0]&&!oldbuttons[0]&&!oldbutton)||(buttons[1]&&!oldbuttons[1]&&!oldbutton))){
-							float gLoc[3]={0,0,0};
-							float vel[3]={0,0,0};
-							OPENAL_Sample_SetMinMaxDistance(samp[fireendsound], 9999.0f, 99999.0f);
-							PlaySoundEx( fireendsound, samp[fireendsound], NULL, true);
-							OPENAL_3D_SetAttributes(channels[fireendsound], gLoc, vel);
-							OPENAL_SetVolume(channels[fireendsound], 256);
-							OPENAL_SetPaused(channels[fireendsound], false);
-							OPENAL_Sample_SetMinMaxDistance(samp[fireendsound], 8.0f, 2000.0f);
-
-							int keynum;
-							keynum=i;
-							if(buttons[0]&&!oldbuttons[0])keynum=MAC_MOUSEBUTTON1;
-							if(buttons[1]&&!oldbuttons[1])keynum=MAC_MOUSEBUTTON2;
-
-
-
-							if(keyselect==0)forwardkey=keynum;
-							if(keyselect==1)backkey=keynum;
-							if(keyselect==2)leftkey=keynum;
-							if(keyselect==3)rightkey=keynum;
-							if(keyselect==4)crouchkey=keynum;
-							if(keyselect==5)jumpkey=keynum;
-							if(keyselect==6)drawkey=keynum;
-							if(keyselect==7)throwkey=keynum;
-							if(keyselect==8)attackkey=keynum;
-							keyselect=-1;
-						}
-					}
-				}}
-			if(Button()&&!oldbutton&&selected==9){
+			if (IsButtonPress(SDL_BUTTON_LEFT) && selected == 9)
+            {
 				float gLoc[3]={0,0,0};
 				float vel[3]={0,0,0};
 				OPENAL_Sample_SetMinMaxDistance(samp[fireendsound], 9999.0f, 99999.0f);
@@ -3120,7 +3056,7 @@ void	Game::Tick()
 				flashamount=1;
 				flashdelay=1;
 
-				mainmenu=3;
+				mainmenu = MAIN_MENU_OPTIONS;
 
 				if(newdetail>2)newdetail=detail;
 				if(newdetail<0)newdetail=detail;
@@ -3131,7 +3067,8 @@ void	Game::Tick()
 			}
 		}
 
-		if(mainmenu==5){
+		if (mainmenu == MAIN_MENU_CAMPAIGNS)
+        {
 
 			if(endgame==2){
 				accountcampaignchoicesmade[accountactive]=0;
@@ -3140,7 +3077,8 @@ void	Game::Tick()
 				endgame=0;
 			}
 
-			if(Button()&&!oldbutton&&selected==1){
+			if (IsButtonDown(SDL_BUTTON_LEFT) && selected == 1)
+            {
 				float gLoc[3]={0,0,0};
 				float vel[3]={0,0,0};
 				OPENAL_Sample_SetMinMaxDistance(samp[firestartsound], 9999.0f, 99999.0f);
@@ -3167,11 +3105,12 @@ void	Game::Tick()
 					Loadlevel(-1);
 				}
 
-				mainmenu=0;
-				gameon=1;
+				mainmenu = MAIN_MENU_IN_GAME;
+				gameon = 1;
 				OPENAL_SetPaused(channels[stream_music3], true);
 			}
-			if(Button()&&!oldbutton&&selected-7>=accountcampaignchoicesmade[accountactive]){//selected>=7&&(selected-7<=campaignnumchoices)){
+			if (IsButtonDown(SDL_BUTTON_LEFT) && selected - 7 >= accountcampaignchoicesmade[accountactive])
+            {
 				float gLoc[3]={0,0,0};
 				float vel[3]={0,0,0};
 				OPENAL_Sample_SetMinMaxDistance(samp[firestartsound], 9999.0f, 99999.0f);
@@ -3198,17 +3137,16 @@ void	Game::Tick()
 				for(i=0;i<255;i++){
 					mapname[i]='\0';
 				}
-				mapname[0]=':';
-				mapname[1]='D';
-				mapname[2]='a';
-				mapname[3]='t';
-				mapname[4]='a';
-				mapname[5]=':';
-				mapname[6]='M';
-				mapname[7]='a';
-				mapname[8]='p';
-				mapname[9]='s';
-				mapname[10]=':';
+				mapname[0]='d';
+				mapname[1]='a';
+				mapname[2]='t';
+				mapname[3]='a';
+				mapname[4]='/';
+				mapname[5]='m';
+				mapname[6]='a';
+				mapname[7]='p';
+				mapname[8]='s';
+				mapname[9]='/';
 				strcat(mapname,campaignmapname[campaignchoicewhich[selected-7-accountcampaignchoicesmade[accountactive]]]);
 				whichchoice=selected-7-accountcampaignchoicesmade[accountactive];
 				visibleloading=1;
@@ -3217,11 +3155,12 @@ void	Game::Tick()
 				//Loadlevel(campaignmapname[levelorder[selected-7]]);
 				//}
 				campaign=1;
-				mainmenu=0;
+				mainmenu = MAIN_MENU_IN_GAME;
 				gameon=1;
 				OPENAL_SetPaused(channels[stream_music3], true);
 			}
-			if(Button()&&!oldbutton&&selected==4){
+			if (IsButtonDown(SDL_BUTTON_LEFT) && selected == 4)
+            {
 				float gLoc[3]={0,0,0};
 				float vel[3]={0,0,0};
 				OPENAL_Sample_SetMinMaxDistance(samp[fireendsound], 9999.0f, 99999.0f);
@@ -3237,10 +3176,11 @@ void	Game::Tick()
 				flashamount=1;
 				flashdelay=1;
 
-				if(mainmenu==5&&gameon)mainmenu=2;
-				if(mainmenu==5&&!gameon)mainmenu=1;
+				if (mainmenu == MAIN_MENU_CAMPAIGNS && gameon) mainmenu = MAIN_MENU_RESUME;
+				if (mainmenu == MAIN_MENU_CAMPAIGNS && !gameon) mainmenu = MAIN_MENU_MAIN;
 			}
-			if(Button()&&!oldbutton&&selected==5){
+			if (IsButtonDown(SDL_BUTTON_LEFT) && selected == 5)
+            {
 				float gLoc[3]={0,0,0};
 				float vel[3]={0,0,0};
 				OPENAL_Sample_SetMinMaxDistance(samp[fireendsound], 9999.0f, 99999.0f);
@@ -3256,9 +3196,10 @@ void	Game::Tick()
 				flashamount=1;
 				flashdelay=1;
 
-				mainmenu=7;
+				mainmenu = MAIN_MENU_USER_LISTING;
 			}
-			if(Button()&&!oldbutton&&selected==3){
+			if (IsButtonDown(SDL_BUTTON_LEFT) && selected == 3)
+            {
 				float gLoc[3]={0,0,0};
 				float vel[3]={0,0,0};
 				OPENAL_Sample_SetMinMaxDistance(samp[firestartsound], 9999.0f, 99999.0f);
@@ -3274,9 +3215,10 @@ void	Game::Tick()
 				flashamount=1;
 				flashdelay=1;
 
-				mainmenu=6;
+				mainmenu = MAIN_MENU_DELETE_USER;
 			}
-			if(Button()&&!oldbutton&&selected==2){
+			if (IsButtonDown(SDL_BUTTON_LEFT) && selected == 2)
+            {
 				float gLoc[3]={0,0,0};
 				float vel[3]={0,0,0};
 				OPENAL_Sample_SetMinMaxDistance(samp[firestartsound], 9999.0f, 99999.0f);
@@ -3292,13 +3234,13 @@ void	Game::Tick()
 				flashamount=1;
 				flashdelay=1;
 
-				mainmenu=9;
+				mainmenu = MAIN_MENU_LEVEL_LISTING;
 			}
-			if(Button())oldbutton=1;
-			else oldbutton=0;
 		}
-		if(mainmenu==9){
-			if(Button()&&!oldbutton&&selected<numchallengelevels&&selected>=0&&selected<=accountprogress[accountactive]){
+		if (mainmenu == MAIN_MENU_LEVEL_LISTING)
+        {
+			if (IsButtonPress(SDL_BUTTON_LEFT) && selected < numchallengelevels && selected >= 0 && selected <= accountprogress[accountactive])
+            {
 				float gLoc[3]={0,0,0};
 				float vel[3]={0,0,0};
 				OPENAL_Sample_SetMinMaxDistance(samp[firestartsound], 9999.0f, 99999.0f);
@@ -3326,11 +3268,12 @@ void	Game::Tick()
 				}
 				campaign=0;
 
-				mainmenu=0;
-				gameon=1;
+				mainmenu = MAIN_MENU_IN_GAME;
+				gameon = 1;
 				OPENAL_SetPaused(channels[stream_music3], true);
 			}
-			if(Button()&&!oldbutton&&selected==numchallengelevels){
+			if (IsButtonPress(SDL_BUTTON_LEFT) && selected == numchallengelevels)
+            {
 				float gLoc[3]={0,0,0};
 				float vel[3]={0,0,0};
 				OPENAL_Sample_SetMinMaxDistance(samp[fireendsound], 9999.0f, 99999.0f);
@@ -3346,13 +3289,13 @@ void	Game::Tick()
 				flashamount=1;
 				flashdelay=1;
 
-				mainmenu=5;
+				mainmenu = MAIN_MENU_CAMPAIGNS;
 			}
-			if(Button())oldbutton=1;
-			else oldbutton=0;
 		}
-		if(mainmenu==11){
-			if(Button()&&!oldbutton&&selected<numchallengelevels&&selected>=0&&selected<=accountprogress[accountactive]){
+		if (mainmenu == MAIN_MENU_CONGRATS_SCORES)
+        {
+			if (IsButtonPress(SDL_BUTTON_LEFT) && selected < numchallengelevels && selected >=0 && selected <= accountprogress[accountactive])
+            {
 				float gLoc[3]={0,0,0};
 				float vel[3]={0,0,0};
 				OPENAL_Sample_SetMinMaxDistance(samp[firestartsound], 9999.0f, 99999.0f);
@@ -3380,11 +3323,12 @@ void	Game::Tick()
 				}
 				campaign=0;
 
-				mainmenu=0;
-				gameon=1;
+				mainmenu = MAIN_MENU_IN_GAME;
+				gameon = 1;
 				OPENAL_SetPaused(channels[stream_music3], true);
 			}
-			if(Button()&&!oldbutton&&selected==numchallengelevels){
+			if (IsButtonPress(SDL_BUTTON_LEFT) && selected == numchallengelevels)
+            {
 				float gLoc[3]={0,0,0};
 				float vel[3]={0,0,0};
 				OPENAL_Sample_SetMinMaxDistance(samp[fireendsound], 9999.0f, 99999.0f);
@@ -3400,14 +3344,14 @@ void	Game::Tick()
 				flashamount=1;
 				flashdelay=1;
 
-				mainmenu=5;
+				mainmenu = MAIN_MENU_CAMPAIGNS;
 			}
-			if(Button())oldbutton=1;
-			else oldbutton=0;
 		}
-		if(mainmenu==10){
+		if (mainmenu == MAIN_MENU_CONGRATS)
+        {
 			endgame=2;
-			if(Button()&&!oldbutton&&selected==3){
+			if(IsButtonPress(SDL_BUTTON_LEFT) && selected == 3)
+            {
 				float gLoc[3]={0,0,0};
 				float vel[3]={0,0,0};
 				OPENAL_Sample_SetMinMaxDistance(samp[fireendsound], 9999.0f, 99999.0f);
@@ -3423,14 +3367,14 @@ void	Game::Tick()
 				flashamount=1;
 				flashdelay=1;
 
-				mainmenu=5;
+				mainmenu = MAIN_MENU_CAMPAIGNS;
 			}
-			if(Button())oldbutton=1;
-			else oldbutton=0;
 		}
 
-		if(mainmenu==6){
-			if(Button()&&!oldbutton&&selected!=-1){
+		if (mainmenu == MAIN_MENU_DELETE_USER)
+        {
+			if (IsButtonPress(SDL_BUTTON_LEFT) && selected != -1)
+            {
 				float gLoc[3]={0,0,0};
 				float vel[3]={0,0,0};
 				OPENAL_Sample_SetMinMaxDistance(samp[firestartsound], 9999.0f, 99999.0f);
@@ -3440,7 +3384,8 @@ void	Game::Tick()
 				OPENAL_SetPaused(channels[firestartsound], false);
 				OPENAL_Sample_SetMinMaxDistance(samp[firestartsound], 8.0f, 2000.0f);
 			}
-			if(Button()&&!oldbutton&&selected==1){
+			if (IsButtonPress(SDL_BUTTON_LEFT) && selected == 1)
+            {
 				float gLoc[3]={0,0,0};
 				float vel[3]={0,0,0};
 				OPENAL_Sample_SetMinMaxDistance(samp[fireendsound], 9999.0f, 99999.0f);
@@ -3484,9 +3429,10 @@ void	Game::Tick()
 				accountactive=-1;
 
 
-				mainmenu=7;
+				mainmenu = MAIN_MENU_USER_LISTING;
 			}
-			if(Button()&&!oldbutton&&selected==2){
+			if (IsButtonPress(SDL_BUTTON_LEFT) && selected == 2)
+            {
 				float gLoc[3]={0,0,0};
 				float vel[3]={0,0,0};
 				OPENAL_Sample_SetMinMaxDistance(samp[fireendsound], 9999.0f, 99999.0f);
@@ -3502,13 +3448,13 @@ void	Game::Tick()
 				flashamount=1;
 				flashdelay=1;
 
-				mainmenu=5;
+				mainmenu = MAIN_MENU_CAMPAIGNS;
 			}
-			if(Button())oldbutton=1;
-			else oldbutton=0;
 		}
-		if(mainmenu==7){
-			if(Button()&&!oldbutton&&selected!=-1){
+		if (mainmenu == MAIN_MENU_USER_LISTING)
+        {
+			if (IsButtonPress(SDL_BUTTON_LEFT) && selected != -1)
+            {
 				float gLoc[3]={0,0,0};
 				float vel[3]={0,0,0};
 				OPENAL_Sample_SetMinMaxDistance(samp[firestartsound], 9999.0f, 99999.0f);
@@ -3518,19 +3464,22 @@ void	Game::Tick()
 				OPENAL_SetPaused(channels[firestartsound], false);
 				OPENAL_Sample_SetMinMaxDistance(samp[firestartsound], 8.0f, 2000.0f);
 			}
-			if(Button()&&!oldbutton&&selected==0&&numaccounts<8){
+			if (IsButtonPress(SDL_BUTTON_LEFT) && selected == 0 && numaccounts < 8)
+            {
 				entername=1;
 			}
-			if(Button()&&!oldbutton&&selected>0&&selected<numaccounts+1){
+			if (IsButtonPress(SDL_BUTTON_LEFT) && selected > 0 && selected < numaccounts + 1)
+            {
 				accountactive=selected-1;
-				mainmenu=5;
+				mainmenu = MAIN_MENU_CAMPAIGNS;
 				flashr=1;
 				flashg=0;
 				flashb=0;
 				flashamount=1;
 				flashdelay=1;
 			}
-			if(Button()&&!oldbutton&&selected==numaccounts+1){
+			if (IsButtonPress(SDL_BUTTON_LEFT) && selected == numaccounts + 1)
+            {
 				float gLoc[3]={0,0,0};
 				float vel[3]={0,0,0};
 				OPENAL_Sample_SetMinMaxDistance(samp[fireendsound], 9999.0f, 99999.0f);
@@ -3546,7 +3495,7 @@ void	Game::Tick()
 				flashamount=1;
 				flashdelay=1;
 
-				mainmenu=1;
+				mainmenu = MAIN_MENU_MAIN;
 
 				for(j=0;j<255;j++){
 					displaytext[0][j]=' ';
@@ -3555,11 +3504,11 @@ void	Game::Tick()
 				displayselected=0;
 				entername=0;
 			}
-			if(Button())oldbutton=1;
-			else oldbutton=0;
 		}
-		if(mainmenu==8){
-			if(Button()&&!oldbutton&&selected!=-1){
+		if (mainmenu == MAIN_MENU_DIFFICULTY)
+        {
+			if(IsButtonPress(SDL_BUTTON_LEFT) && selected != -1)
+            {
 				float gLoc[3]={0,0,0};
 				float vel[3]={0,0,0};
 				OPENAL_Sample_SetMinMaxDistance(samp[firestartsound], 9999.0f, 99999.0f);
@@ -3573,7 +3522,7 @@ void	Game::Tick()
 				if(selected==1)accountdifficulty[accountactive]=1;
 				if(selected==2)accountdifficulty[accountactive]=2;
 
-				mainmenu=5;
+				mainmenu = MAIN_MENU_CAMPAIGNS;
 
 				flashr=1;
 				flashg=0;
@@ -3582,80 +3531,26 @@ void	Game::Tick()
 				flashdelay=1;
 
 			}
-			if(Button())oldbutton=1;
-			else oldbutton=0;
 		}
 
 
-		if(Button())oldbutton=1;
-		else oldbutton=0;
+		if(IsKeyDown(SDL_SCANCODE_Q) && keysym->mod & KMOD_GUI)
+        {
+            tryquit = 1;
+            if(mainmenu == MAIN_MENU_OPTIONS)
+            {
+                if (newdetail > 2) newdetail = detail;
+                if (newdetail < 0) newdetail = detail;
+                if (newscreenwidth < 0) newscreenwidth = screenwidth;
+                if (newscreenheight < 0) newscreenheight = screenheight;
 
-		if(IsKeyDown(theKeyMap, MAC_Q_KEY)&&IsKeyDown(theKeyMap, MAC_COMMAND_KEY)){
-			tryquit=1;
-			if(mainmenu==3){
-				if(newdetail>2)newdetail=detail;
-				if(newdetail<0)newdetail=detail;
-				if(newscreenwidth<0)newscreenwidth=screenwidth;
-				if(newscreenheight<0)newscreenheight=screenheight;
+                cnf.dump();
+                cnf.save();
+            }
+        }
 
-				Conf &cnf = Conf::getInstance();
-
-                cnf.setGameInt ("game-speed",     oldgamespeed);
-                cnf.setGameInt ("difficulty",     difficulty);
-                cnf.setGameInt ("debug",          debugmode);
-                cnf.setGameBool("floating-jump",  floatjump);
-                cnf.setGameBool("show-text",      texttoggle);
-                cnf.setGameBool("show-points",    showpoints);
-                cnf.setGameBool("immediate-mode", immediate);
-
-                cnf.setDisplayInt ("width",            newscreenwidth);
-                cnf.setDisplayInt ("height",           newscreenheight);
-                cnf.setDisplayInt ("detail",           newdetail);
-                cnf.setDisplayInt ("decals",           decals);
-                cnf.setDisplayInt ("blood",            bloodtoggle);
-                cnf.setDisplayInt ("damage-effects",   damageeffects);
-                cnf.setDisplayInt ("velocity-blur",    velocityblur);
-                cnf.setDisplayBool("auto-slow-motion", autoslomo);
-                cnf.setDisplayBool("trilinear",        trilinear);
-                cnf.setDisplayBool("vsync",            vblsync);
-                cnf.setDisplayBool("show-foliage",     foliage);
-                cnf.setDisplayBool("always-blur",      alwaysblur);
-                cnf.setDisplayBool("motion-blur",      ismotionblur);
-
-                cnf.setSoundInt ("volume",  volume); 
-                cnf.setSoundBool("ambient", ambientsound);
-                cnf.setSoundBool("music",   musictoggle);
-
-                cnf.setMouseInt ("mouse-speed",  usermousesensitivity);
-                cnf.setMouseBool("mouse-invert", invertmouse);
-                cnf.setMouseBool("mouse-jump",   mousejump);
-
-                /*
-				opstream << "\nForward key:\n";
-				opstream << KeyToChar(forwardkey);
-				opstream << "\nBack key:\n";
-				opstream << KeyToChar(backkey);
-				opstream << "\nLeft key:\n";
-				opstream << KeyToChar(leftkey);
-				opstream << "\nRight key:\n";
-				opstream << KeyToChar(rightkey);
-				opstream << "\nJump key:\n";
-				opstream << KeyToChar(jumpkey);
-				opstream << "\nCrouch key:\n";
-				opstream << KeyToChar(crouchkey);
-				opstream << "\nDraw key:\n";
-				opstream << KeyToChar(drawkey);
-				opstream << "\nThrow key:\n";
-				opstream << KeyToChar(throwkey);
-				opstream << "\nAttack key:\n";
-				opstream << KeyToChar(attackkey);
-				opstream << "\nChat key:\n";
-				opstream << KeyToChar(chatkey);
-				opstream.close();*/
-			}
-		}
-
-		if(mainmenu==1||mainmenu==2){
+		if (mainmenu == MAIN_MENU_MAIN || mainmenu == MAIN_MENU_RESUME)
+        {
 			if(loaddistrib>4)transition+=multiplier/8;
 			if(transition>1){
 				transition=0;
@@ -3667,8 +3562,8 @@ void	Game::Tick()
 		OPENAL_SetFrequency(channels[stream_music3], 22050);
 
 		if(entername){
-			for(i=0;i<140;i++){
-				if(IsKeyDown(theKeyMap, i)){
+			/*for(i=0;i<140;i++){
+				if(IsKeyDown(i)){
 					togglekeydelay[i]+=multiplier;
 					if(togglekeydelay[i]>.4){
 						togglekey[i]=0;
@@ -3680,11 +3575,11 @@ void	Game::Tick()
 								displaytext[0][j]=displaytext[0][j-1];
 							}
 							displaytext[0][displayselected]=KeyToSingleChar(i);
-							if(IsKeyDown(theKeyMap, MAC_SHIFT_KEY))displaytext[0][displayselected]=Shift(displaytext[0][displayselected]);
+							if(keysym->mod & KMOD_SHIFT)displaytext[0][displayselected]=Shift(displaytext[0][displayselected]);
 							displayselected++;
 							displaychars[0]++;
 						}
-						if(i==MAC_DELETE_KEY&&displayselected!=0){
+						if(i==SDL_SCANCODE_DELETE&&displayselected!=0){
 							for(j=displayselected-1;j<255;j++){
 								displaytext[0][j]=displaytext[0][j+1];
 							}
@@ -3692,13 +3587,13 @@ void	Game::Tick()
 							displayselected--;
 							displaychars[0]--;
 						}
-						if(i==MAC_ARROW_LEFT_KEY&&displayselected!=0){
+						if(i==SDL_SCANCODE_ARROW_LEFT&&displayselected!=0){
 							displayselected--;
 						}
-						if(i==MAC_ARROW_RIGHT_KEY&&displayselected<displaychars[0]){
+						if(i==SDL_SCANCODE_ARROW_RIGHT&&displayselected<displaychars[0]){
 							displayselected++;
 						}
-						if(i==MAC_RETURN_KEY&&entername){
+						if(i==SDL_SCANCODE_RETURN&&entername){
 							if(displaychars[0]){
 								numaccounts++;
 								strcpy(accountname[numaccounts-1],displaytext[0]);
@@ -3752,7 +3647,7 @@ void	Game::Tick()
 								displayselected=0;
 							}}
 
-						if(i==MAC_RETURN_KEY&&mainmenu==13){
+						if(i==SDL_SCANCODE_RETURN&&mainmenu==13){
 							if(displaychars[0]){
 								sprintf (registrationname, "%s", displaytext[0]);
 								if(displaychars[0]<254)registrationname[displaychars[0]]='\0';
@@ -3788,7 +3683,7 @@ void	Game::Tick()
 					togglekey[i]=0;
 					togglekeydelay[i]=0;
 				}
-			}
+			}*/
 
 			displayblinkdelay-=multiplier;
 			if(displayblinkdelay<=0){
@@ -3798,31 +3693,35 @@ void	Game::Tick()
 		}
 	}
 
-	if(!mainmenu){
-		if(hostile==1)hostiletime+=multiplier;
-		else hostiletime=0;
-		if(!winfreeze)leveltime+=multiplier;
-		if(IsKeyDown(theKeyMap, MAC_ESCAPE_KEY)){
-			chatting=0;
-			console=0;
-			freeze=0;
-			displaychars[0]=0;
+	if (!mainmenu)
+    {
+		if (hostile == 1) hostiletime += multiplier;
+		else hostiletime = 0;
+		if (!winfreeze) leveltime += multiplier;
+		if (IsKeyPress(SDL_SCANCODE_ESCAPE))
+        {
+			chatting        = 0;
+			console         = 0;
+			freeze          = 0;
+			displaychars[0] = 0;
 		}
 
-		if(IsKeyDown(theKeyMap, chatkey)&&!chattogglekeydown&&!console&&!chatting&&debugmode){
-			chatting=1;
-			chattogglekeydown=1;
-			togglekey[chatkey]=1;
-			togglekeydelay[chatkey]=-20;
+		if (IsKeyDown(chatkey) && !chattogglekeydown && !console && !chatting && debugmode)
+        {
+			chatting                = 1;
+			chattogglekeydown       = 1;
+			togglekey[chatkey]      = 1;
+			togglekeydelay[chatkey] = -20;
 		}
 
-		if(!IsKeyDown(theKeyMap, chatkey)){
+		if (!IsKeyDown(chatkey))
+        {
 			chattogglekeydown=0;
 		}
 
 		if(chatting){
-			for(i=0;i<140;i++){
-				if(IsKeyDown(theKeyMap, i)){
+			/*for(i=0;i<140;i++){
+				if(IsKeyDown(i)){
 					togglekeydelay[i]+=multiplier;
 					if(togglekeydelay[i]>.4){
 						togglekey[i]=0;
@@ -3834,11 +3733,11 @@ void	Game::Tick()
 								displaytext[0][j]=displaytext[0][j-1];
 							}
 							displaytext[0][displayselected]=KeyToSingleChar(i);
-							if(IsKeyDown(theKeyMap, MAC_SHIFT_KEY))displaytext[0][displayselected]=Shift(displaytext[0][displayselected]);
+							if(keysym->mod & KMOD_SHIFT)displaytext[0][displayselected]=Shift(displaytext[0][displayselected]);
 							displayselected++;
 							displaychars[0]++;
 						}
-						if(i==MAC_DELETE_KEY&&displayselected!=0){
+						if(i==SDL_SCANCODE_DELETE&&displayselected!=0){
 							for(j=displayselected-1;j<255;j++){
 								displaytext[0][j]=displaytext[0][j+1];
 							}
@@ -3846,13 +3745,13 @@ void	Game::Tick()
 							displayselected--;
 							displaychars[0]--;
 						}
-						if(i==MAC_ARROW_LEFT_KEY&&displayselected!=0){
+						if(i==SDL_SCANCODE_ARROW_LEFT&&displayselected!=0){
 							displayselected--;
 						}
-						if(i==MAC_ARROW_RIGHT_KEY&&displayselected<displaychars[0]){
+						if(i==SDL_SCANCODE_ARROW_RIGHT&&displayselected<displaychars[0]){
 							displayselected++;
 						}
-						if(i==MAC_RETURN_KEY){
+						if(i==SDL_SCANCODE_RETURN){
 							if(displaychars[0]){
 								/*for(j=0;j<displaychars[0];j++){
 								talkname[j]=displaytext[0][j];
@@ -3860,7 +3759,6 @@ void	Game::Tick()
 								talkname[displaychars[0]]='\0';
 								sprintf (chatname, "%s: %s",playerName,talkname);
 								//NetworkSendInformation(chatname);
-								*/
 								for(j=0;j<255;j++){
 									displaytext[0][j]=' ';
 								}
@@ -3876,7 +3774,7 @@ void	Game::Tick()
 					togglekey[i]=0;
 					togglekeydelay[i]=0;
 				}
-			}
+			}*/
 
 			displayblinkdelay-=multiplier;
 			if(displayblinkdelay<=0){
@@ -3887,7 +3785,8 @@ void	Game::Tick()
 
 		if(chatting)keyboardfrozen=1;
 
-		if(IsKeyDown(theKeyMap, MAC_V_KEY)&&!freezetogglekeydown&&debugmode){
+		if (IsKeyDown(SDL_SCANCODE_V) && !freezetogglekeydown && debugmode)
+        {
 			freeze=1-freeze;
 			if(freeze){
 				OPENAL_SetFrequency(OPENAL_ALL, 0);
@@ -3895,11 +3794,13 @@ void	Game::Tick()
 			freezetogglekeydown=1;
 		}
 
-		if(!IsKeyDown(theKeyMap, MAC_V_KEY)&&!IsKeyDown(theKeyMap, MAC_F1_KEY)){
+		if (IsKeyDown(SDL_SCANCODE_V) && IsKeyDown(SDL_SCANCODE_F1))
+        {
 			freezetogglekeydown=0;
 		}
 
-		if(IsKeyDown(theKeyMap, MAC_TILDE_KEY)&&!consoletogglekeydown&&debugmode){
+		if (IsKeyDown(SDL_SCANCODE_GRAVE) && !consoletogglekeydown && debugmode)
+        {
 			console=1-console;
 			if(!console)freeze=0;
 			if(console){
@@ -3908,15 +3809,17 @@ void	Game::Tick()
 			consoletogglekeydown=1;
 		}
 
-		if(!IsKeyDown(theKeyMap, MAC_TILDE_KEY)){
+		if(IsKeyDown(SDL_SCANCODE_GRAVE))
+        {
 			consoletogglekeydown=0;
 		}
 
 		if(console)freeze=1;
 
-		if(console&&!IsKeyDown(theKeyMap,MAC_COMMAND_KEY)){
-			for(i=0;i<140;i++){
-				if(IsKeyDown(theKeyMap, i)){
+		if(console && keysym->mod & KMOD_GUI)
+        {
+			/*for(i=0;i<140;i++){
+				if(IsKeyDown(i)){
 					togglekeydelay[i]+=multiplier;
 					if(togglekeydelay[i]>.4){
 						togglekey[i]=0;
@@ -3928,11 +3831,11 @@ void	Game::Tick()
 								consoletext[0][j]=consoletext[0][j-1];
 							}
 							consoletext[0][consoleselected]=KeyToSingleChar(i);
-							if(IsKeyDown(theKeyMap, MAC_SHIFT_KEY))consoletext[0][consoleselected]=Shift(consoletext[0][consoleselected]);
+							if(keysym->mod & KMOD_SHIFT)consoletext[0][consoleselected]=Shift(consoletext[0][consoleselected]);
 							consoleselected++;
 							consolechars[0]++;
 						}
-						else if(i==MAC_ENTER_KEY){
+						else if(i==SDL_SCANCODE_ENTER){
 							for(j=255;j>=consoleselected+1;j--){
 								consoletext[0][j]=consoletext[0][j-1];
 							}
@@ -3940,7 +3843,7 @@ void	Game::Tick()
 							consoleselected++;
 							consolechars[0]++;
 						}
-						if(i==MAC_DELETE_KEY&&consoleselected!=0){
+						if(i==SDL_SCANCODE_DELETE&&consoleselected!=0){
 							for(j=consoleselected-1;j<255;j++){
 								consoletext[0][j]=consoletext[0][j+1];
 							}
@@ -3948,7 +3851,7 @@ void	Game::Tick()
 							consoleselected--;
 							consolechars[0]--;
 						}
-						if(i==MAC_ARROW_UP_KEY){
+						if(i==SDL_SCANCODE_ARROW_UP){
 							if(archiveselected<14)archiveselected++;
 							for(j=0;j<255;j++){
 								consolechars[0]=consolechars[archiveselected];
@@ -3956,7 +3859,7 @@ void	Game::Tick()
 								consoleselected=consolechars[0];
 							}
 						}
-						if(i==MAC_ARROW_DOWN_KEY){
+						if(i==SDL_SCANCODE_ARROW_DOWN){
 							if(archiveselected>0)archiveselected--;
 							for(j=0;j<255;j++){
 								consolechars[0]=consolechars[archiveselected];
@@ -3964,13 +3867,13 @@ void	Game::Tick()
 								consoleselected=consolechars[0];
 							}
 						}
-						if(i==MAC_ARROW_LEFT_KEY&&consoleselected!=0){
+						if(i==SDL_SCANCODE_ARROW_LEFT&&consoleselected!=0){
 							consoleselected--;
 						}
-						if(i==MAC_ARROW_RIGHT_KEY&&consoleselected<consolechars[0]){
+						if(i==SDL_SCANCODE_ARROW_RIGHT&&consoleselected<consolechars[0]){
 							consoleselected++;
 						}
-						if(i==MAC_RETURN_KEY){
+						if(i==SDL_SCANCODE_RETURN){
 							archiveselected=0;
 							cmd_dispatch(this, consoletext[0]);
 
@@ -3995,7 +3898,7 @@ void	Game::Tick()
 					togglekey[i]=0;
 					togglekeydelay[i]=0;
 				}
-			}
+			}*/
 
 			consoleblinkdelay-=multiplier;
 			if(consoleblinkdelay<=0){
@@ -4004,89 +3907,18 @@ void	Game::Tick()
 			}
 		}
 
-		if(IsKeyDown(theKeyMap, MAC_Q_KEY)&&IsKeyDown(theKeyMap, MAC_COMMAND_KEY)){
+		if (IsKeyDown(SDL_SCANCODE_Q) && keysym->mod & KMOD_GUI)
+        {
 			tryquit=1;
-			if(mainmenu==3){
+			if (mainmenu == MAIN_MENU_OPTIONS)
+            {
 				if(newdetail>2)newdetail=detail;
 				if(newdetail<0)newdetail=detail;
 				if(newscreenwidth<0)newscreenwidth=screenwidth;
 				if(newscreenheight<0)newscreenheight=screenheight;
-
-				ofstream opstream(ConvertFileName("data/config.txt"));
-				opstream << "Screenwidth:\n";
-				opstream << newscreenwidth;
-				opstream << "\nScreenheight:\n";
-				opstream << newscreenheight;
-				opstream << "\nMouse sensitivity:\n";
-				opstream << usermousesensitivity;
-				opstream << "\nBlur(0,1):\n";
-				opstream << ismotionblur;
-				opstream << "\nOverall Detail(0,1,2) higher=better:\n";
-				opstream << newdetail;
-				opstream << "\nFloating jump:\n";
-				opstream << floatjump;
-				opstream << "\nMouse jump:\n";
-				opstream << mousejump;
-				opstream << "\nAmbient sound:\n";
-				opstream << ambientsound;
-				opstream << "\nBlood (0,1,2):\n";
-				opstream << bloodtoggle;
-				opstream << "\nAuto slomo:\n";
-				opstream << autoslomo;
-				opstream << "\nFoliage:\n";
-				opstream << foliage;
-				opstream << "\nMusic:\n";
-				opstream << musictoggle;
-				opstream << "\nTrilinear:\n";
-				opstream << trilinear;
-				opstream << "\nDecals(shadows,blood puddles,etc):\n";
-				opstream << decals;
-				opstream << "\nInvert mouse:\n";
-				opstream << invertmouse;
-				opstream << "\nGamespeed:\n";
-				if(oldgamespeed==0)oldgamespeed=1;
-				opstream << oldgamespeed;
-				opstream << "\nDifficulty(0,1,2) higher=harder:\n";
-				opstream << difficulty;
-				opstream << "\nDamage effects(blackout, doublevision):\n";
-				opstream << damageeffects;
-				opstream << "\nText:\n";
-				opstream << texttoggle;
-				opstream << "\nDebug:\n";
-				opstream << debugmode;
-				opstream << "\nVBL Sync:\n";
-				opstream << vblsync;
-				opstream << "\nShow Points:\n";
-				opstream << showpoints;
-				opstream << "\nAlways Blur:\n";
-				opstream << alwaysblur;
-				opstream << "\nImmediate mode (turn on on G5):\n";
-				opstream << immediate;
-				opstream << "\nVelocity blur:\n";
-				opstream << velocityblur;
-			    opstream << "\nVolume:\n";
-		        opstream << volume;
-				opstream << "\nForward key:\n";
-				opstream << KeyToChar(forwardkey);
-				opstream << "\nBack key:\n";
-				opstream << KeyToChar(backkey);
-				opstream << "\nLeft key:\n";
-				opstream << KeyToChar(leftkey);
-				opstream << "\nRight key:\n";
-				opstream << KeyToChar(rightkey);
-				opstream << "\nJump key:\n";
-				opstream << KeyToChar(jumpkey);
-				opstream << "\nCrouch key:\n";
-				opstream << KeyToChar(crouchkey);
-				opstream << "\nDraw key:\n";
-				opstream << KeyToChar(drawkey);
-				opstream << "\nThrow key:\n";
-				opstream << KeyToChar(throwkey);
-				opstream << "\nAttack key:\n";
-				opstream << KeyToChar(attackkey);
-				opstream << "\nChat key:\n";
-				opstream << KeyToChar(chatkey);
-				opstream.close();
+                
+                cnf.dump();
+                cnf.save();
 			}
 		}
 
@@ -4100,22 +3932,27 @@ void	Game::Tick()
 		if(winfreeze==0)oldwinfreeze=winfreeze;
 		else oldwinfreeze++;
 
-		if((IsKeyDown(theKeyMap, jumpkey)||IsKeyDown(theKeyMap, MAC_SPACE_KEY))&&!oldjumpkeydown&&!campaign){
+		if ((IsKeyDown(jumpkey) || IsKeyDown(SDL_SCANCODE_SPACE)) && !oldjumpkeydown && !campaign)
+        {
 			if(winfreeze)winfreeze=0;
 			oldjumpkeydown=1;
 		}
-		if((IsKeyDown(theKeyMap, MAC_ESCAPE_KEY))&&!campaign&&gameon){
-			if(winfreeze){
-				mainmenu=9;
-				gameon=0;
+		if ((IsKeyPress(SDL_SCANCODE_ESCAPE)) && !campaign && gameon)
+        {
+			if (winfreeze)
+            {
+				mainmenu = MAIN_MENU_LEVEL_LISTING;
+				gameon   = 0;
 			}
 		}
-		if((IsKeyDown(theKeyMap, jumpkey)||IsKeyDown(theKeyMap, MAC_SPACE_KEY))){
+		if(IsKeyDown(jumpkey) || IsKeyDown(SDL_SCANCODE_SPACE))
+        {
 			oldjumpkeydown=1;
 		}
-		if(!IsKeyDown(theKeyMap, jumpkey)&&!IsKeyDown(theKeyMap, MAC_SPACE_KEY))oldjumpkeydown=0;
+		if(IsKeyDown(jumpkey) && IsKeyDown(SDL_SCANCODE_SPACE)) oldjumpkeydown = 0;
 
-		if(!freeze&&!winfreeze&&!(mainmenu&&gameon)&&(gameon||!gamestarted)){
+		if(!freeze&&!winfreeze&&!(mainmenu&&gameon)&&(gameon||!gamestarted))
+        {
 
 			static bool oldbuttondialogue;
 
@@ -4151,7 +3988,7 @@ void	Game::Tick()
 							realdialoguetype=dialoguetype[i];
 							special=0;
 						}
-						if((!hostile||(dialoguetype[i]>40&&dialoguetype[i]<50))&&realdialoguetype<numplayers&&realdialoguetype>0&&(dialoguegonethrough[i]==0||!special)&&(special||(IsKeyDown(theKeyMap, attackkey)&&!oldbuttondialogue))){
+						if((!hostile||(dialoguetype[i]>40&&dialoguetype[i]<50))&&realdialoguetype<numplayers&&realdialoguetype>0&&(dialoguegonethrough[i]==0||!special)&&(special||(IsKeyDown(attackkey)&&!oldbuttondialogue))){
 							if(findDistancefast(&player[0].coords,&player[realdialoguetype].coords)<6||player[realdialoguetype].howactive>=typedead1||(dialoguetype[i]>40&&dialoguetype[i]<50)){
 								whichdialogue=i;
 								for(j=0;j<numdialogueboxes[whichdialogue];j++){
@@ -4206,7 +4043,7 @@ void	Game::Tick()
 									OPENAL_SetVolume(channels[whichsoundplay], 256);
 									OPENAL_SetPaused(channels[whichsoundplay], false);
 								}
-								if(IsKeyDown(theKeyMap, attackkey))oldbuttondialogue=1;
+								if (IsKeyDown(attackkey)) oldbuttondialogue = 1;
 							}
 						}
 					}
@@ -5228,26 +5065,27 @@ void	Game::Tick()
 
 						static XYZ oldviewer;
 
-						if(indialogue==-1){
-							player[0].forwardkeydown=IsKeyDown(theKeyMap, forwardkey);
-							player[0].leftkeydown=IsKeyDown(theKeyMap, leftkey);
-							player[0].backkeydown=IsKeyDown(theKeyMap, backkey);
-							player[0].rightkeydown=IsKeyDown(theKeyMap, rightkey);
-							player[0].jumpkeydown=IsKeyDown(theKeyMap, jumpkey);
-							player[0].crouchkeydown=IsKeyDown(theKeyMap, crouchkey);
-							player[0].drawkeydown=IsKeyDown(theKeyMap, drawkey);
-							player[0].throwkeydown=IsKeyDown(theKeyMap, throwkey);
+						if (indialogue == -1)
+                        {
+							player[0].forwardkeydown = IsKeyDown(forwardkey);
+							player[0].leftkeydown    = IsKeyDown(leftkey);
+							player[0].backkeydown    = IsKeyDown(backkey);
+							player[0].rightkeydown   = IsKeyDown(rightkey);
+							player[0].jumpkeydown    = IsKeyDown(jumpkey);
+							player[0].crouchkeydown  = IsKeyDown(crouchkey);
+							player[0].drawkeydown    = IsKeyDown(drawkey);
+							player[0].throwkeydown   = IsKeyDown(throwkey);
 						}
 						else
 						{
-							player[0].forwardkeydown=0;
-							player[0].leftkeydown=0;
-							player[0].backkeydown=0;
-							player[0].rightkeydown=0;
-							player[0].jumpkeydown=0;
-							player[0].crouchkeydown=0;
-							player[0].drawkeydown=0;
-							player[0].throwkeydown=0;
+							player[0].forwardkeydown = SDL_SCANCODE_0;
+							player[0].leftkeydown    = SDL_SCANCODE_0;
+							player[0].backkeydown    = SDL_SCANCODE_0;
+							player[0].rightkeydown   = SDL_SCANCODE_0;
+							player[0].jumpkeydown    = SDL_SCANCODE_0;
+							player[0].crouchkeydown  = SDL_SCANCODE_0;
+							player[0].drawkeydown    = SDL_SCANCODE_0;
+							player[0].throwkeydown   = SDL_SCANCODE_0;
 						}
 
 						if(!player[0].jumpkeydown)player[0].jumpclimb=0;
@@ -5268,27 +5106,26 @@ void	Game::Tick()
 
 								flatfacing=DoRotation(flatfacing,0,-rotation,0);
 
-								if(IsKeyDown(theKeyMap, forwardkey))viewer+=facing*multiplier*4;
-								if(IsKeyDown(theKeyMap, backkey))viewer-=facing*multiplier*4;
-								if(IsKeyDown(theKeyMap, leftkey))viewer+=DoRotation(flatfacing*multiplier,0,90,0)*4;
-								if(IsKeyDown(theKeyMap, rightkey))viewer+=DoRotation(flatfacing*multiplier,0,-90,0)*4;
-								if(IsKeyDown(theKeyMap, jumpkey))viewer.y+=multiplier*4;
-								if(IsKeyDown(theKeyMap, crouchkey))viewer.y-=multiplier*4;
-								if(!endkeydown&&(IsKeyDown(theKeyMap, MAC_1_KEY)||IsKeyDown(theKeyMap, MAC_2_KEY)||IsKeyDown(theKeyMap, MAC_3_KEY)||IsKeyDown(theKeyMap, MAC_4_KEY)||IsKeyDown(theKeyMap, MAC_5_KEY)
-									||IsKeyDown(theKeyMap, MAC_6_KEY)||IsKeyDown(theKeyMap, MAC_7_KEY)||IsKeyDown(theKeyMap, MAC_8_KEY)||IsKeyDown(theKeyMap, MAC_9_KEY)||IsKeyDown(theKeyMap, MAC_0_KEY)
-									||IsKeyDown(theKeyMap, MAC_MINUS_KEY))){
+								if (IsKeyDown(forwardkey)) viewer+=facing*multiplier*4;
+								if (IsKeyDown(backkey)) viewer-=facing*multiplier*4;
+								if (IsKeyDown(leftkey)) viewer+=DoRotation(flatfacing*multiplier,0,90,0)*4;
+								if (IsKeyDown(rightkey)) viewer+=DoRotation(flatfacing*multiplier,0,-90,0)*4;
+								if (IsKeyDown(jumpkey)) viewer.y+=multiplier*4;
+								if (IsKeyDown(crouchkey)) viewer.y-=multiplier*4;
+								if (!endkeydown && (IsKeyRangeDown(SDL_SCANCODE_0, SDL_SCANCODE_9) || IsKeyDown(SDL_SCANCODE_KP_MINUS)))
+                                {
 										int whichend;
-										if(IsKeyDown(theKeyMap, MAC_1_KEY))whichend=1;
-										if(IsKeyDown(theKeyMap, MAC_2_KEY))whichend=2;
-										if(IsKeyDown(theKeyMap, MAC_3_KEY))whichend=3;
-										if(IsKeyDown(theKeyMap, MAC_4_KEY))whichend=4;
-										if(IsKeyDown(theKeyMap, MAC_5_KEY))whichend=5;
-										if(IsKeyDown(theKeyMap, MAC_6_KEY))whichend=6;
-										if(IsKeyDown(theKeyMap, MAC_7_KEY))whichend=7;
-										if(IsKeyDown(theKeyMap, MAC_8_KEY))whichend=8;
-										if(IsKeyDown(theKeyMap, MAC_9_KEY))whichend=9;
-										if(IsKeyDown(theKeyMap, MAC_0_KEY))whichend=0;
-										if(IsKeyDown(theKeyMap, MAC_MINUS_KEY))whichend=-1;
+										if(IsKeyDown(SDL_SCANCODE_1)) whichend=1;
+										if(IsKeyDown(SDL_SCANCODE_2)) whichend=2;
+										if(IsKeyDown(SDL_SCANCODE_3)) whichend=3;
+										if(IsKeyDown(SDL_SCANCODE_4)) whichend=4;
+										if(IsKeyDown(SDL_SCANCODE_5)) whichend=5;
+										if(IsKeyDown(SDL_SCANCODE_6)) whichend=6;
+										if(IsKeyDown(SDL_SCANCODE_7)) whichend=7;
+										if(IsKeyDown(SDL_SCANCODE_8)) whichend=8;
+										if(IsKeyDown(SDL_SCANCODE_9)) whichend=9;
+										if(IsKeyDown(SDL_SCANCODE_0)) whichend=0;
+										if(IsKeyDown(SDL_SCANCODE_KP_MINUS)) whichend=-1;
 										if(whichend!=-1){
 											participantfocus[whichdialogue][indialogue]=whichend;
 											participantlocation[whichdialogue][whichend]=player[whichend].coords;
@@ -5355,25 +5192,48 @@ void	Game::Tick()
 
 										endkeydown=1;
 									}
-									if((IsKeyDown(theKeyMap, MAC_NUMPAD_1_KEY)||IsKeyDown(theKeyMap, MAC_NUMPAD_2_KEY)||IsKeyDown(theKeyMap, MAC_NUMPAD_3_KEY)||IsKeyDown(theKeyMap, MAC_NUMPAD_4_KEY)||IsKeyDown(theKeyMap, MAC_NUMPAD_5_KEY)
-										||IsKeyDown(theKeyMap, MAC_NUMPAD_6_KEY)||IsKeyDown(theKeyMap, MAC_NUMPAD_7_KEY)||IsKeyDown(theKeyMap, MAC_NUMPAD_8_KEY)||IsKeyDown(theKeyMap, MAC_NUMPAD_9_KEY)||IsKeyDown(theKeyMap, MAC_NUMPAD_0_KEY)
-										)){
+									if(keysym->scancode >= SDL_SCANCODE_KP_0 && keysym->scancode <= SDL_SCANCODE_KP_9)
+                                    {
 											int whichend;
-											if(IsKeyDown(theKeyMap, MAC_NUMPAD_1_KEY))whichend=1;
-											if(IsKeyDown(theKeyMap, MAC_NUMPAD_2_KEY))whichend=2;
-											if(IsKeyDown(theKeyMap, MAC_NUMPAD_3_KEY))whichend=3;
-											if(IsKeyDown(theKeyMap, MAC_NUMPAD_4_KEY))whichend=4;
-											if(IsKeyDown(theKeyMap, MAC_NUMPAD_5_KEY))whichend=5;
-											if(IsKeyDown(theKeyMap, MAC_NUMPAD_6_KEY))whichend=6;
-											if(IsKeyDown(theKeyMap, MAC_NUMPAD_7_KEY))whichend=7;
-											if(IsKeyDown(theKeyMap, MAC_NUMPAD_8_KEY))whichend=8;
-											if(IsKeyDown(theKeyMap, MAC_NUMPAD_9_KEY))whichend=9;
-											if(IsKeyDown(theKeyMap, MAC_NUMPAD_0_KEY))whichend=0;
-											participantfacing[whichdialogue][indialogue][whichend]=facing;
+                                            switch(keysym->scancode)
+                                            {
+											    case SDL_SCANCODE_KP_1:
+                                                    whichend = 1;
+                                                    break;
+											    case SDL_SCANCODE_KP_2:
+                                                    whichend = 2;
+                                                    break;
+                                                case SDL_SCANCODE_KP_3:
+                                                    whichend = 3;
+                                                    break;
+                                                case SDL_SCANCODE_KP_4:
+                                                    whichend = 4;
+                                                    break;
+                                                case SDL_SCANCODE_KP_5:
+                                                    whichend = 5;
+                                                    break;
+                                                case SDL_SCANCODE_KP_6:
+                                                    whichend = 6;
+                                                    break;
+                                                case SDL_SCANCODE_KP_7:
+                                                    whichend = 7;
+                                                    break;
+                                                case SDL_SCANCODE_KP_8:
+                                                    whichend = 8;
+                                                    break;
+                                                case SDL_SCANCODE_KP_9:
+                                                    whichend = 9;
+                                                    break;
+                                                case SDL_SCANCODE_KP_0:
+                                                    whichend = 0;
+                                                    break;
+                                                default:
+                                                    break;
+                                            }
+											participantfacing[whichdialogue][indialogue][whichend] = facing;
 										}
-										if(!IsKeyDown(theKeyMap, MAC_1_KEY)&&!IsKeyDown(theKeyMap, MAC_2_KEY)&&!IsKeyDown(theKeyMap, MAC_3_KEY)&&!IsKeyDown(theKeyMap, MAC_4_KEY)&&!IsKeyDown(theKeyMap, MAC_5_KEY)
-											&&!IsKeyDown(theKeyMap, MAC_6_KEY)&&!IsKeyDown(theKeyMap, MAC_7_KEY)&&!IsKeyDown(theKeyMap, MAC_8_KEY)&&!IsKeyDown(theKeyMap, MAC_9_KEY)&&!IsKeyDown(theKeyMap, MAC_0_KEY)
-											&&!IsKeyDown(theKeyMap, MAC_MINUS_KEY)){
+										if ((keysym->scancode < SDL_SCANCODE_KP_0 && keysym->scancode >= SDL_SCANCODE_KP_9) && IsKeyDown(SDL_SCANCODE_KP_MINUS))
+                                        {
 												endkeydown=0;
 											}
 											if(indialogue>=numdialogueboxes[whichdialogue]){
@@ -5391,9 +5251,9 @@ void	Game::Tick()
 								rotation=dialoguecamerarotation[whichdialogue][indialogue];
 								rotation2=dialoguecamerarotation2[whichdialogue][indialogue];
 								if(dialoguetime>0.5)
-									if((!endkeydown&&(IsKeyDown(theKeyMap, MAC_1_KEY)||IsKeyDown(theKeyMap, MAC_2_KEY)||IsKeyDown(theKeyMap, MAC_3_KEY)||IsKeyDown(theKeyMap, MAC_4_KEY)||IsKeyDown(theKeyMap, MAC_5_KEY)
-										||IsKeyDown(theKeyMap, MAC_6_KEY)||IsKeyDown(theKeyMap, MAC_7_KEY)||IsKeyDown(theKeyMap, MAC_8_KEY)||IsKeyDown(theKeyMap, MAC_9_KEY)||IsKeyDown(theKeyMap, MAC_0_KEY)
-										||IsKeyDown(theKeyMap, MAC_MINUS_KEY)))||(IsKeyDown(theKeyMap, attackkey)&&!oldbuttondialogue)){
+									if((!endkeydown&&(IsKeyDown(SDL_SCANCODE_1)||IsKeyDown(SDL_SCANCODE_2)||IsKeyDown(SDL_SCANCODE_3)||IsKeyDown(SDL_SCANCODE_4)||IsKeyDown(SDL_SCANCODE_5)
+										||IsKeyDown(SDL_SCANCODE_6)||IsKeyDown(SDL_SCANCODE_7)||IsKeyDown(SDL_SCANCODE_8)||IsKeyDown(SDL_SCANCODE_9)||IsKeyDown(SDL_SCANCODE_0)
+										||IsKeyDown(SDL_SCANCODE_MINUS)))||(IsKeyDown(attackkey)&&!oldbuttondialogue)){
 											indialogue++;
 											endkeydown=1;
 											if(indialogue<numdialogueboxes[whichdialogue]){
@@ -5458,9 +5318,9 @@ void	Game::Tick()
 												}
 											}
 										}
-										if(!IsKeyDown(theKeyMap, MAC_1_KEY)&&!IsKeyDown(theKeyMap, MAC_2_KEY)&&!IsKeyDown(theKeyMap, MAC_3_KEY)&&!IsKeyDown(theKeyMap, MAC_4_KEY)&&!IsKeyDown(theKeyMap, MAC_5_KEY)
-											&&!IsKeyDown(theKeyMap, MAC_6_KEY)&&!IsKeyDown(theKeyMap, MAC_7_KEY)&&!IsKeyDown(theKeyMap, MAC_8_KEY)&&!IsKeyDown(theKeyMap, MAC_9_KEY)&&!IsKeyDown(theKeyMap, MAC_0_KEY)
-											&&!IsKeyDown(theKeyMap, MAC_MINUS_KEY)){
+										if(!IsKeyDown(SDL_SCANCODE_1)&&!IsKeyDown(SDL_SCANCODE_2)&&!IsKeyDown(SDL_SCANCODE_3)&&!IsKeyDown(SDL_SCANCODE_4)&&!IsKeyDown(SDL_SCANCODE_5)
+											&&!IsKeyDown(SDL_SCANCODE_6)&&!IsKeyDown(SDL_SCANCODE_7)&&!IsKeyDown(SDL_SCANCODE_8)&&!IsKeyDown(SDL_SCANCODE_9)&&!IsKeyDown(SDL_SCANCODE_0)
+											&&!IsKeyDown(SDL_SCANCODE_MINUS)){
 												endkeydown=0;
 											}
 											if(indialogue>=numdialogueboxes[whichdialogue]){
@@ -5483,7 +5343,7 @@ void	Game::Tick()
 							}
 						}
 
-						if(!IsKeyDown(theKeyMap, attackkey))oldbuttondialogue=0;
+						if(!IsKeyDown(attackkey))oldbuttondialogue=0;
 						else oldbuttondialogue=1;
 
 						static float keyrefreshdelay=0,bigrefreshdelay=0;
@@ -5631,7 +5491,7 @@ void	Game::Tick()
 						static float temptexdetail;
 
 
-						if(IsKeyDown(theKeyMap, MAC_H_KEY)&&debugmode){
+						if(IsKeyDown(SDL_SCANCODE_H)&&debugmode){
 							player[0].damagetolerance=200000;
 							player[0].damage=0;
 							player[0].burnt=0;
@@ -5644,7 +5504,7 @@ void	Game::Tick()
 							*/
 						}
 
-						if(IsKeyDown(theKeyMap, MAC_J_KEY)&&!envtogglekeydown&&debugmode){
+						if(IsKeyDown(SDL_SCANCODE_J)&&!envtogglekeydown&&debugmode){
 							environment++;
 							if(environment>2)environment=0;
 							Setenvironment(environment);
@@ -5653,20 +5513,20 @@ void	Game::Tick()
 						}
 
 
-						if(!IsKeyDown(theKeyMap, MAC_J_KEY)){
+						if(!IsKeyDown(SDL_SCANCODE_J)){
 							envtogglekeydown=0;
 						}
 
-						if(IsKeyDown(theKeyMap, MAC_C_KEY)&&!cameratogglekeydown&&debugmode){
+						if(IsKeyDown(SDL_SCANCODE_C)&&!cameratogglekeydown&&debugmode){
 							cameramode=1-cameramode;
 							cameratogglekeydown=1;
 						}
 
-						if(!IsKeyDown(theKeyMap, MAC_C_KEY)){
+						if(!IsKeyDown(SDL_SCANCODE_C)){
 							cameratogglekeydown=0;
 						}
 
-						if(IsKeyDown(theKeyMap, MAC_X_KEY)&&!IsKeyDown(theKeyMap, MAC_SHIFT_KEY)&&!detailtogglekeydown&&debugmode){
+						if(IsKeyDown(SDL_SCANCODE_X)&&!(keysym->mod & KMOD_SHIFT)&&!detailtogglekeydown&&debugmode){
 							if(player[0].num_weapons>0){
 								if(weapons.type[player[0].weaponids[0]]==sword)weapons.type[player[0].weaponids[0]]=staff;
 								else if(weapons.type[player[0].weaponids[0]]==staff)weapons.type[player[0].weaponids[0]]=knife;
@@ -5701,7 +5561,7 @@ void	Game::Tick()
 							detailtogglekeydown=1;
 						}
 
-						if(IsKeyDown(theKeyMap, MAC_X_KEY)&&IsKeyDown(theKeyMap, MAC_SHIFT_KEY)&&!detailtogglekeydown&&debugmode){
+						if(IsKeyDown(SDL_SCANCODE_X)&&keysym->mod & KMOD_SHIFT&&!detailtogglekeydown&&debugmode){
 							int closest=-1;
 							float closestdist=-1;
 							float distance;
@@ -5758,7 +5618,7 @@ void	Game::Tick()
 								detailtogglekeydown=1;
 						}
 
-						if(IsKeyDown(theKeyMap, MAC_U_KEY)&&debugmode){
+						if(IsKeyDown(SDL_SCANCODE_U)&&debugmode){
 							int closest=-1;
 							float closestdist=-1;
 							float distance;
@@ -5776,7 +5636,8 @@ void	Game::Tick()
 						}
 
 
-						if(IsKeyDown(theKeyMap, MAC_O_KEY)&&!IsKeyDown(theKeyMap, MAC_SHIFT_KEY)&&debugmode){
+						if(IsKeyDown(SDL_SCANCODE_O) && !(keysym->mod & KMOD_SHIFT) && debugmode)
+                        {
 							int closest=-1;
 							float closestdist=-1;
 							float distance;
@@ -5788,7 +5649,7 @@ void	Game::Tick()
 										closest=i;
 									}
 								}
-								if(IsKeyDown(theKeyMap, MAC_CONTROL_KEY))closest=0;
+								if (keysym->mod & KMOD_CTRL) closest = 0;
 
 								if(closest!=-1){
 									player[closest].whichskin++;
@@ -5812,7 +5673,8 @@ void	Game::Tick()
 								detailtogglekeydown=1;
 						}
 
-						if(IsKeyDown(theKeyMap, MAC_O_KEY)&&IsKeyDown(theKeyMap, MAC_SHIFT_KEY)&&debugmode){
+						if(IsKeyDown(SDL_SCANCODE_O) && keysym->mod & KMOD_SHIFT && debugmode)
+                        {
 							int closest=-1;
 							float closestdist=-1;
 							float distance;
@@ -5893,18 +5755,20 @@ void	Game::Tick()
 								detailtogglekeydown=1;
 						}
 
-						if(!IsKeyDown(theKeyMap, MAC_X_KEY)){
+						if(!IsKeyDown(SDL_SCANCODE_X)){
 							detailtogglekeydown=0;
 						}
 
-						if(IsKeyDown(theKeyMap, MAC_B_KEY)&&!slomotogglekeydown&&!IsKeyDown(theKeyMap, MAC_SHIFT_KEY)&&debugmode){
+						if(IsKeyDown(SDL_SCANCODE_B) && !slomotogglekeydown && !(keysym->mod & KMOD_SHIFT) && debugmode)
+                        {
 							slomo=1-slomo;
 							slomodelay=1000;
 							slomotogglekeydown=1;
 						}
 
 
-						if(((IsKeyDown(theKeyMap, MAC_I_KEY)&&!IsKeyDown(theKeyMap, MAC_SHIFT_KEY))/*||buttons[1]*/)&&!explodetogglekeydown&&debugmode){
+						if ((IsKeyDown(SDL_SCANCODE_I) && !(keysym->mod & KMOD_LSHIFT)) && !explodetogglekeydown && debugmode)
+                        {
 							int closest=-1;
 							float closestdist=-1;
 							float distance;
@@ -5970,7 +5834,8 @@ void	Game::Tick()
 								explodetogglekeydown=1;
 						}
 
-						if(((IsKeyDown(theKeyMap, MAC_I_KEY)&&IsKeyDown(theKeyMap, MAC_SHIFT_KEY))/*||buttons[2]*/)&&!explodetogglekeydown&&debugmode){
+						if((IsKeyDown(SDL_SCANCODE_I) && keysym->mod & KMOD_SHIFT) && !explodetogglekeydown && debugmode)
+                        {
 							int closest=-1;
 							float closestdist=-1;
 							float distance;
@@ -6089,12 +5954,12 @@ void	Game::Tick()
 								explodetogglekeydown=1;
 						}
 
-						if(!IsKeyDown(theKeyMap, MAC_I_KEY)){
+						if(!IsKeyDown(SDL_SCANCODE_I)){
 							explodetogglekeydown=0;
 						}
 
 						/*
-						if(IsKeyDown(theKeyMap, MAC_S_KEY)&&IsKeyDown(theKeyMap, MAC_COMMAND_KEY)&&!slomotogglekeydown){
+						if(IsKeyDown(SDL_SCANCODE_S)&&IsKeyDown(SDL_SCANCODE_COMMAND)&&!slomotogglekeydown){
 						FILE			*tfile;
 						//tfile=fopen( "data/maps/mapsave", "wb" );
 						if(whichlevel==0)tfile=fopen( "data/maps/map1", "wb" );
@@ -6147,12 +6012,12 @@ void	Game::Tick()
 						slomotogglekeydown=1;
 						}*/
 
-						if(!IsKeyDown(theKeyMap, MAC_B_KEY)&&!IsKeyDown(theKeyMap, MAC_F_KEY)&&!IsKeyDown(theKeyMap, MAC_K_KEY)&&!IsKeyDown(theKeyMap, MAC_S_KEY)){
+						if(!IsKeyDown(SDL_SCANCODE_B)&&!IsKeyDown(SDL_SCANCODE_F)&&!IsKeyDown(SDL_SCANCODE_K)&&!IsKeyDown(SDL_SCANCODE_S)){
 							slomotogglekeydown=0;
 						}
 
 
-						if(IsKeyDown(theKeyMap, MAC_F_KEY)&&!slomotogglekeydown&&debugmode){
+						if(IsKeyDown(SDL_SCANCODE_F)&&!slomotogglekeydown&&debugmode){
 							player[0].onfire=1-player[0].onfire;
 							if(player[0].onfire){
 								player[0].CatchFire();
@@ -6175,13 +6040,13 @@ void	Game::Tick()
 							slomotogglekeydown=1;
 						}
 						/*
-						if(IsKeyDown(theKeyMap, MAC_L_KEY)){
+						if(IsKeyDown(SDL_SCANCODE_L)){
 						if(player[0].bleeding<=0)
 						player[0].DoBlood(1,255);
 						}*/
 
 
-						if(IsKeyDown(theKeyMap, MAC_DELETE_KEY)&&editorenabled&&!drawmodetogglekeydown&&IsKeyDown(theKeyMap, MAC_SHIFT_KEY)){
+						if(IsKeyDown(SDL_SCANCODE_DELETE)&&editorenabled&&!drawmodetogglekeydown&&keysym->mod & KMOD_SHIFT){
 							int closest=-1;
 							float closestdist=-1;
 							float distance;
@@ -6201,7 +6066,8 @@ void	Game::Tick()
 								drawmodetogglekeydown=1;
 						}
 
-						if(IsKeyDown(theKeyMap, MAC_DELETE_KEY)&&editorenabled&&!drawmodetogglekeydown&&IsKeyDown(theKeyMap, MAC_CONTROL_KEY)){
+						if(IsKeyDown(SDL_SCANCODE_DELETE) && editorenabled && !drawmodetogglekeydown && keysym->mod & KMOD_CTRL)
+                        {
 							int closest=-1;
 							float closestdist=-1;
 							float distance;
@@ -6219,7 +6085,8 @@ void	Game::Tick()
 								drawmodetogglekeydown=1;
 						}
 
-						if(IsKeyDown(theKeyMap, MAC_M_KEY)&&!drawmodetogglekeydown&&!IsKeyDown(theKeyMap, MAC_SHIFT_KEY)&&editorenabled&&debugmode){
+						if(IsKeyDown(SDL_SCANCODE_M) && !drawmodetogglekeydown && !(keysym->mod & KMOD_SHIFT) && editorenabled && debugmode)
+                        {
 							//drawmode++;
 							//if(drawmode>2)drawmode=0;
 							if(objects.numobjects<max_objects-1){
@@ -6244,13 +6111,26 @@ void	Game::Tick()
 							drawmodetogglekeydown=1;
 						}
 
-						if(IsKeyDown(theKeyMap, MAC_P_KEY)&&!drawmodetogglekeydown&&!IsKeyDown(theKeyMap, MAC_SHIFT_KEY)&&!IsKeyDown(theKeyMap, MAC_CONTROL_KEY)&&editorenabled){
+						if(IsKeyDown(SDL_SCANCODE_P) && !drawmodetogglekeydown && !(keysym->mod & KMOD_SHIFT) && !(keysym->mod & KMOD_CTRL) && editorenabled)
+                        {
 							if(numplayers<maxplayers-1){
 								player[numplayers].scale=.2*5*player[0].scale;
 								player[numplayers].creature=rabbittype;
 								player[numplayers].howactive=editoractive;
 								player[numplayers].skeleton.id=numplayers;
-								player[numplayers].skeleton.Load((char *)"data/Skeleton:Basic Figure",(char *)"data/Skeleton:Basic Figurelow",(char *)"data/Skeleton:Rabbitbelt",(char *)"data/Models:Body.solid",(char *)"data/Models:Body2.solid",(char *)"data/Models:Body3.solid",(char *)"data/Models:Body4.solid",(char *)"data/Models:Body5.solid",(char *)"data/Models:Body6.solid",(char *)"data/Models:Body7.solid",(char *)"data/Models:Bodylow.solid",(char *)"data/Models:Belt.solid",1);
+								player[numplayers].skeleton.Load(
+                                                                 "data/skeleton/basic_figure",
+                                                                 "data/skeleton/basic_figurelow",
+                                                                 "data/skeleton/rabbitbelt",
+                                                                 "data/models/body.solid",
+                                                                 "data/models/body2.solid",
+                                                                 "data/models/body3.solid",
+                                                                 "data/models/body4.solid",
+                                                                 "data/models/body5.solid",
+                                                                 "data/models/body6.solid",
+                                                                 "data/models/body7.solid",
+                                                                 "data/models/bodylow.solid",
+                                                                 "data/models/belt.solid", true);
 
 								//texsize=512*512*3/texdetail/texdetail;
 								//if(!player[numplayers].loaded)player[numplayers].skeleton.skinText = new GLubyte[texsize];
@@ -6258,19 +6138,19 @@ void	Game::Tick()
 
 								k=abs(Random()%2)+1;
 								if(k==0){
-									LoadTextureSave("data/textures/Fur3.png",&player[numplayers].skeleton.drawmodel.textureptr,1,&player[numplayers].skeleton.skinText[0],&player[numplayers].skeleton.skinsize);
+									LoadTextureSave("data/textures/fur3.png",&player[numplayers].skeleton.drawmodel.textureptr,1,&player[numplayers].skeleton.skinText[0],&player[numplayers].skeleton.skinsize);
 									player[numplayers].whichskin=0;
 								}
 								else if(k==1){
-									LoadTextureSave("data/textures/Fur.png",&player[numplayers].skeleton.drawmodel.textureptr,1,&player[numplayers].skeleton.skinText[0],&player[numplayers].skeleton.skinsize);
+									LoadTextureSave("data/textures/fur.png",&player[numplayers].skeleton.drawmodel.textureptr,1,&player[numplayers].skeleton.skinText[0],&player[numplayers].skeleton.skinsize);
 									player[numplayers].whichskin=1;
 								}
 								else {
-									LoadTextureSave("data/textures/Fur2.png",&player[numplayers].skeleton.drawmodel.textureptr,1,&player[numplayers].skeleton.skinText[0],&player[numplayers].skeleton.skinsize);
+									LoadTextureSave("data/textures/fur2.png",&player[numplayers].skeleton.drawmodel.textureptr,1,&player[numplayers].skeleton.skinText[0],&player[numplayers].skeleton.skinsize);
 									player[numplayers].whichskin=2;
 								}
 
-								LoadTexture("data/textures/Belt.png",&player[numplayers].skeleton.drawmodelclothes.textureptr,1,1);
+								LoadTexture("data/textures/belt.png",&player[numplayers].skeleton.drawmodelclothes.textureptr,1,1);
 								player[numplayers].power=1;
 								player[numplayers].speedmult=1;
 								player[numplayers].currentanimation=bounceidleanim;
@@ -6336,7 +6216,7 @@ void	Game::Tick()
 									player[numplayers].proportionlegs.z=0;
 								}
 
-								player[numplayers].tempanimation.Load((char *)"data/Animations:Tempanim",0,0);
+								player[numplayers].tempanimation.Load((char *)"data/animations/tempanim",0,0);
 
 								player[numplayers].damagetolerance=200;
 
@@ -6392,7 +6272,7 @@ void	Game::Tick()
 							drawmodetogglekeydown=1;
 						}
 
-						if(IsKeyDown(theKeyMap, MAC_P_KEY)&&!drawmodetogglekeydown&&IsKeyDown(theKeyMap, MAC_SHIFT_KEY)&&editorenabled){
+						if(IsKeyDown(SDL_SCANCODE_P)&&!drawmodetogglekeydown&&keysym->mod & KMOD_SHIFT&&editorenabled){
 							if(player[numplayers-1].numwaypoints<90){
 								player[numplayers-1].waypoints[player[numplayers-1].numwaypoints]=player[0].coords;
 								player[numplayers-1].waypointtype[player[numplayers-1].numwaypoints]=editorpathtype;
@@ -6401,7 +6281,8 @@ void	Game::Tick()
 							drawmodetogglekeydown=1;
 						}
 
-						if(IsKeyDown(theKeyMap, MAC_P_KEY)&&!drawmodetogglekeydown&&IsKeyDown(theKeyMap, MAC_CONTROL_KEY)&&editorenabled){
+						if(IsKeyDown(SDL_SCANCODE_P) && !drawmodetogglekeydown && keysym->mod & KMOD_CTRL && editorenabled)
+                        {
 							if(numpathpoints<30){
 								bool connected,alreadyconnected;
 								connected=0;
@@ -6433,17 +6314,20 @@ void	Game::Tick()
 							drawmodetogglekeydown=1;
 						}
 
-						if(IsKeyDown(theKeyMap, MAC_PERIOD_KEY)&&!drawmodetogglekeydown&&editorenabled){
+						if(IsKeyDown(SDL_SCANCODE_PERIOD) && !drawmodetogglekeydown && editorenabled)
+                        {
 							pathpointselected++;
 							if(pathpointselected>=numpathpoints)pathpointselected=-1;
 							drawmodetogglekeydown=1;
 						}
-						if(IsKeyDown(theKeyMap, MAC_COMMA_KEY)&&!IsKeyDown(theKeyMap, MAC_SHIFT_KEY)&&!drawmodetogglekeydown&&editorenabled){
+						if(IsKeyDown(SDL_SCANCODE_COMMA) && !(keysym->mod & KMOD_SHIFT) && !drawmodetogglekeydown && editorenabled)
+                        {
 							pathpointselected--;
 							if(pathpointselected<=-2)pathpointselected=numpathpoints-1;
 							drawmodetogglekeydown=1;
 						}
-						if(IsKeyDown(theKeyMap, MAC_COMMA_KEY)&&IsKeyDown(theKeyMap, MAC_SHIFT_KEY)&&!drawmodetogglekeydown&&editorenabled){
+						if(IsKeyDown(SDL_SCANCODE_COMMA) && keysym->mod & KMOD_SHIFT && !drawmodetogglekeydown && editorenabled)
+                        {
 							if(pathpointselected!=-1){
 								numpathpoints--;
 								pathpoint[pathpointselected]=pathpoint[numpathpoints];
@@ -6467,7 +6351,8 @@ void	Game::Tick()
 							drawmodetogglekeydown=1;
 						}
 
-						if(IsKeyDown(theKeyMap, MAC_M_KEY)&&!drawmodetogglekeydown&&IsKeyDown(theKeyMap, MAC_SHIFT_KEY)&&debugmode){
+						if(IsKeyDown(SDL_SCANCODE_M) && !drawmodetogglekeydown && keysym->mod & KMOD_SHIFT && debugmode)
+                        {
 							editorenabled=1-editorenabled;
 							if(editorenabled){
 								player[0].damagetolerance=100000;
@@ -6487,76 +6372,82 @@ void	Game::Tick()
 							drawmodetogglekeydown=1;
 						}
 
-						if(IsKeyDown(theKeyMap, MAC_ARROW_LEFT_KEY)&&!drawmodetogglekeydown&&editorenabled&&IsKeyDown(theKeyMap, MAC_SHIFT_KEY)&&!IsKeyDown(theKeyMap, MAC_CONTROL_KEY)){
+						if(IsKeyDown(SDL_SCANCODE_LEFT)&&!drawmodetogglekeydown&&editorenabled && keysym->mod & KMOD_SHIFT && !(keysym->mod & KMOD_CTRL))
+                        {
 							editortype--;
 							if(editortype==treeleavestype||editortype==10)editortype--;
 							if(editortype<0)editortype=firetype;
 							drawmodetogglekeydown=1;
 						}
 
-						if(IsKeyDown(theKeyMap, MAC_ARROW_RIGHT_KEY)&&!drawmodetogglekeydown&&editorenabled&&IsKeyDown(theKeyMap, MAC_SHIFT_KEY)&&!IsKeyDown(theKeyMap, MAC_CONTROL_KEY)){
+						if(IsKeyDown(SDL_SCANCODE_RIGHT)&&!drawmodetogglekeydown&&editorenabled&& keysym->mod & KMOD_SHIFT && !(keysym->mod & KMOD_CTRL))
+                        {
 							editortype++;
 							if(editortype==treeleavestype||editortype==10)editortype++;
 							if(editortype>firetype)editortype=0;
 							drawmodetogglekeydown=1;
 						}
 
-						if(IsKeyDown(theKeyMap, MAC_ARROW_LEFT_KEY)&&editorenabled&&!IsKeyDown(theKeyMap, MAC_SHIFT_KEY)&&!IsKeyDown(theKeyMap, MAC_CONTROL_KEY)){
+						if(IsKeyDown(SDL_SCANCODE_LEFT)&&editorenabled&& !(keysym->mod & KMOD_SHIFT) && !(keysym->mod & KMOD_CTRL))
+                        {
 							editorrotation-=multiplier*100;
 							if(editorrotation<-.01)editorrotation=-.01;
 							drawmodetogglekeydown=1;
 						}
 
-						if(IsKeyDown(theKeyMap, MAC_ARROW_RIGHT_KEY)&&editorenabled&&!IsKeyDown(theKeyMap, MAC_SHIFT_KEY)&&!IsKeyDown(theKeyMap, MAC_CONTROL_KEY)){
+						if(IsKeyDown(SDL_SCANCODE_RIGHT)&&editorenabled && !(keysym->mod & KMOD_SHIFT) && !(keysym->mod & KMOD_CTRL))
+                        {
 							editorrotation+=multiplier*100;
 							drawmodetogglekeydown=1;
 						}
 
-						if(IsKeyDown(theKeyMap, MAC_ARROW_UP_KEY)&&editorenabled&&!IsKeyDown(theKeyMap, MAC_CONTROL_KEY)){
+						if(IsKeyDown(SDL_SCANCODE_UP)&&editorenabled&&!(keysym->mod & KMOD_CTRL))
+                        {
 							editorsize+=multiplier;
 							drawmodetogglekeydown=1;
 						}
 
-						if(IsKeyDown(theKeyMap, MAC_ARROW_DOWN_KEY)&&editorenabled&&!IsKeyDown(theKeyMap, MAC_CONTROL_KEY)){
+						if(IsKeyDown(SDL_SCANCODE_DOWN)&&editorenabled&&!(keysym->mod & KMOD_CTRL))
+                        {
 							editorsize-=multiplier;
 							if(editorsize<.1)editorsize=.1;
 							drawmodetogglekeydown=1;
 						}
 
 
-						if(IsKeyDown(theKeyMap, MAC_ARROW_LEFT_KEY)&&!drawmodetogglekeydown&&editorenabled&&IsKeyDown(theKeyMap, MAC_SHIFT_KEY)&&IsKeyDown(theKeyMap, MAC_CONTROL_KEY)){
+						if(IsKeyDown(SDL_SCANCODE_LEFT)&&!drawmodetogglekeydown&&editorenabled&&keysym->mod & KMOD_SHIFT&&keysym->mod & KMOD_CTRL){
 							mapradius-=multiplier*10;
 						}
 
-						if(IsKeyDown(theKeyMap, MAC_ARROW_RIGHT_KEY)&&!drawmodetogglekeydown&&editorenabled&&IsKeyDown(theKeyMap, MAC_SHIFT_KEY)&&IsKeyDown(theKeyMap, MAC_CONTROL_KEY)){
+						if(IsKeyDown(SDL_SCANCODE_RIGHT)&&!drawmodetogglekeydown&&editorenabled&&keysym->mod & KMOD_SHIFT&&keysym->mod & KMOD_CTRL){
 							mapradius+=multiplier*10;
 						}
 						/*
-						if(IsKeyDown(theKeyMap, MAC_ARROW_LEFT_KEY)&&editorenabled&&!IsKeyDown(theKeyMap, MAC_SHIFT_KEY)&&IsKeyDown(theKeyMap, MAC_CONTROL_KEY)){
+						if(IsKeyDown(SDL_SCANCODE_LEFT)&&editorenabled&&!(keysym->mod & KMOD_SHIFT)&&keysym->mod & KMOD_CTRL){
 						mapcenter.x+=multiplier*20;
 						}
 
-						if(IsKeyDown(theKeyMap, MAC_ARROW_RIGHT_KEY)&&editorenabled&&!IsKeyDown(theKeyMap, MAC_SHIFT_KEY)&&IsKeyDown(theKeyMap, MAC_CONTROL_KEY)){
+						if(IsKeyDown(SDL_SCANCODE_RIGHT)&&editorenabled&&!(keysym->mod & KMOD_SHIFT)&&keysym->mod & KMOD_CTRL){
 						mapcenter.x-=multiplier*20;
 						}
 
-						if(IsKeyDown(theKeyMap, MAC_ARROW_UP_KEY)&&editorenabled&&IsKeyDown(theKeyMap, MAC_CONTROL_KEY)){
+						if(IsKeyDown(SDL_SCANCODE_UP)&&editorenabled&&keysym->mod & KMOD_CTRL){
 						mapcenter.z+=multiplier*20;
 						}
 
-						if(IsKeyDown(theKeyMap, MAC_ARROW_DOWN_KEY)&&editorenabled&&IsKeyDown(theKeyMap, MAC_CONTROL_KEY)){
+						if(IsKeyDown(SDL_SCANCODE_DOWN)&&editorenabled&&keysym->mod & KMOD_CTRL){
 						mapcenter.z-=multiplier*20;
 						}
 						*/
-						if(IsKeyDown(theKeyMap, MAC_ARROW_UP_KEY)&&editorenabled&&IsKeyDown(theKeyMap, MAC_CONTROL_KEY)){
+						if(IsKeyDown(SDL_SCANCODE_UP)&&editorenabled&&keysym->mod & KMOD_CTRL){
 							editorrotation2+=multiplier*100;
 						}
 
-						if(IsKeyDown(theKeyMap, MAC_ARROW_DOWN_KEY)&&editorenabled&&IsKeyDown(theKeyMap, MAC_CONTROL_KEY)){
+						if(IsKeyDown(SDL_SCANCODE_DOWN)&&editorenabled&&keysym->mod & KMOD_CTRL){
 							editorrotation2-=multiplier*100;
 							if(editorrotation2<-.01)editorrotation2=-.01;
 						}
-						if(IsKeyDown(theKeyMap, MAC_DELETE_KEY)&&editorenabled&&objects.numobjects&&!drawmodetogglekeydown&&!IsKeyDown(theKeyMap, MAC_SHIFT_KEY)){
+						if(IsKeyDown(SDL_SCANCODE_DELETE)&&editorenabled&&objects.numobjects&&!drawmodetogglekeydown&&!(keysym->mod & KMOD_SHIFT)){
 							int closest=-1;
 							float closestdist=-1;
 							float distance;
@@ -6572,11 +6463,11 @@ void	Game::Tick()
 						}
 
 
-						if(!IsKeyDown(theKeyMap, MAC_M_KEY)&&!IsKeyDown(theKeyMap, MAC_ARROW_LEFT_KEY)&&!IsKeyDown(theKeyMap, MAC_COMMA_KEY)&&!IsKeyDown(theKeyMap, MAC_PERIOD_KEY)&&!IsKeyDown(theKeyMap, MAC_ARROW_RIGHT_KEY)&&!IsKeyDown(theKeyMap, MAC_DELETE_KEY)&&!IsKeyDown(theKeyMap, MAC_P_KEY)){
+						if(!IsKeyDown(SDL_SCANCODE_M)&&!IsKeyDown(SDL_SCANCODE_LEFT)&&!IsKeyDown(SDL_SCANCODE_COMMA)&&!IsKeyDown(SDL_SCANCODE_PERIOD)&&!IsKeyDown(SDL_SCANCODE_RIGHT)&&!IsKeyDown(SDL_SCANCODE_DELETE)&&!IsKeyDown(SDL_SCANCODE_P)){
 							drawmodetogglekeydown=0;
 						}
 
-						if(IsKeyDown(theKeyMap, MAC_N_KEY)&&!IsKeyDown(theKeyMap, MAC_CONTROL_KEY)&&!texturesizetogglekeydown&&debugmode){
+						if(IsKeyDown(SDL_SCANCODE_N)&&!(keysym->mod & KMOD_CTRL)&&!texturesizetogglekeydown&&debugmode){
 							//if(!player[0].skeleton.free)player[0].damage+=500;
 							player[0].RagDoll(0);
 							//player[0].spurt=1;
@@ -6599,7 +6490,7 @@ void	Game::Tick()
 							texturesizetogglekeydown=1;
 						}
 
-						if(IsKeyDown(theKeyMap, MAC_N_KEY)&&IsKeyDown(theKeyMap, MAC_CONTROL_KEY)&&!texturesizetogglekeydown&&debugmode){
+						if(IsKeyDown(SDL_SCANCODE_N)&&keysym->mod & KMOD_CTRL&&!texturesizetogglekeydown&&debugmode){
 
 							int closest=-1;
 							float closestdist=-1;
@@ -6617,13 +6508,12 @@ void	Game::Tick()
 						//Attack
 						static bool playerrealattackkeydown=0;
 
-						if(!buttons[0])oldbutton=0;
-						if(!IsKeyDown(theKeyMap, attackkey))oldattackkey=0;
+						if(!IsKeyDown(attackkey))oldattackkey=0;
 						if(oldattackkey)player[0].attackkeydown=0;
 						if(oldattackkey)playerrealattackkeydown=0;
-						if(!oldattackkey)playerrealattackkeydown=IsKeyDown(theKeyMap, attackkey);
-						if((player[0].parriedrecently<=0||player[0].weaponactive==-1)&&(!oldattackkey||(realthreat&&player[0].lastattack!=swordslashanim&&player[0].lastattack!=knifeslashstartanim&&player[0].lastattack!=staffhitanim&&player[0].lastattack!=staffspinhitanim)))player[0].attackkeydown=IsKeyDown(theKeyMap, attackkey);
-						if(IsKeyDown(theKeyMap, attackkey)&&!oldattackkey&&!player[0].backkeydown){
+						if(!oldattackkey)playerrealattackkeydown=IsKeyDown(attackkey);
+						if((player[0].parriedrecently<=0||player[0].weaponactive==-1)&&(!oldattackkey||(realthreat&&player[0].lastattack!=swordslashanim&&player[0].lastattack!=knifeslashstartanim&&player[0].lastattack!=staffhitanim&&player[0].lastattack!=staffspinhitanim)))player[0].attackkeydown=IsKeyDown(attackkey);
+						if(IsKeyDown(attackkey)&&!oldattackkey&&!player[0].backkeydown){
 							for(k=0;k<numplayers;k++){
 								if((player[k].targetanimation==swordslashanim||player[k].targetanimation==staffhitanim||player[k].targetanimation==staffspinhitanim)&&player[0].currentanimation!=dodgebackanim&&!player[k].skeleton.free)
 									player[k].Reverse();
@@ -7280,7 +7170,7 @@ void	Game::Tick()
 
 							*/
 
-							if(!IsKeyDown(theKeyMap, MAC_N_KEY)){
+							if(!IsKeyDown(SDL_SCANCODE_N)){
 								texturesizetogglekeydown=0;
 							}
 
@@ -7293,18 +7183,18 @@ void	Game::Tick()
 							}
 
 							static bool respawnkeydown;
-							if(!editorenabled&&(whichlevel!=-2&&(IsKeyDown(theKeyMap, MAC_Z_KEY)&&IsKeyDown(theKeyMap, MAC_COMMAND_KEY)&&debugmode&&!editorenabled)||(IsKeyDown(theKeyMap, jumpkey)&&!respawnkeydown&&!oldattackkey&&player[0].dead))){
+							if(!editorenabled&&(whichlevel!=-2&&(IsKeyDown(SDL_SCANCODE_Z) && keysym->mod & KMOD_GUI &&debugmode&&!editorenabled)||(IsKeyDown(jumpkey)&&!respawnkeydown&&!oldattackkey&&player[0].dead))){
 								targetlevel=whichlevel;
 								loading=1;
 								leveltime=5;
 							}
-							if(!IsKeyDown(theKeyMap, jumpkey))respawnkeydown=0;
-							if(IsKeyDown(theKeyMap, jumpkey))respawnkeydown=1;
+							if(!IsKeyDown(jumpkey))respawnkeydown=0;
+							if(IsKeyDown(jumpkey))respawnkeydown=1;
 
 
 
 
-							if(whichlevel!=-2&&IsKeyDown(theKeyMap, MAC_K_KEY)&&IsKeyDown(theKeyMap, MAC_SHIFT_KEY)&&!slomotogglekeydown&&debugmode&&!editorenabled){
+							if(whichlevel!=-2&&IsKeyDown(SDL_SCANCODE_K)&&keysym->mod & KMOD_SHIFT&&!slomotogglekeydown&&debugmode&&!editorenabled){
 								targetlevel++;
 								if(targetlevel>numchallengelevels-1)targetlevel=0;
 								loading=1;
@@ -7313,7 +7203,7 @@ void	Game::Tick()
 							}
 
 							/*
-							if(IsKeyDown(theKeyMap, MAC_Z_KEY)){
+							if(IsKeyDown(SDL_SCANCODE_Z)){
 							//Respawn
 							OPENAL_SetPaused(channels[whooshsound], true);
 							changedelay=0;
@@ -7330,14 +7220,14 @@ void	Game::Tick()
 
 							static bool movekey;
 							static bool connected;
-							/*player[0].forwardkeydown=IsKeyDown(theKeyMap, MAC_W_KEY);
-							player[0].leftkeydown=IsKeyDown(theKeyMap, MAC_A_KEY);
-							player[0].backkeydown=IsKeyDown(theKeyMap, MAC_S_KEY);
-							player[0].rightkeydown=IsKeyDown(theKeyMap, MAC_D_KEY);
-							player[0].jumpkeydown=IsKeyDown(theKeyMap, MAC_SPACE_KEY);
-							player[0].crouchkeydown=IsKeyDown(theKeyMap, MAC_SHIFT_KEY);*/
+							/*player[0].forwardkeydown=IsKeyDown(SDL_SCANCODE_W);
+							player[0].leftkeydown=IsKeyDown(SDL_SCANCODE_A);
+							player[0].backkeydown=IsKeyDown(SDL_SCANCODE_S);
+							player[0].rightkeydown=IsKeyDown(SDL_SCANCODE_D);
+							player[0].jumpkeydown=IsKeyDown(SDL_SCANCODE_SPACE);
+							player[0].crouchkeydown=keysym->mod & KMOD_SHIFT;*/
 
-							//if(!player[0].crouchkeydown)player[0].crouchkeydown=IsKeyDown(theKeyMap, MAC_CONTROL_KEY);
+							//if(!player[0].crouchkeydown)player[0].crouchkeydown=keysym->mod & KMOD_CTRL;
 
 		for(int i=0;i<numplayers;i++){
 								if(!player[i].skeleton.free){
@@ -8535,7 +8425,7 @@ void	Game::Tick()
 																				footpoint=weapons.position[k];
 																				if(player[i].victim->weaponstuck!=-1){
 																					if(player[i].victim->weaponids[player[i].victim->weaponstuck]==k){
-																						if(bloodtoggle)sprites.MakeSprite(cloudimpactsprite, footpoint,footvel, 1,0,0, .8, .3);
+																						if (blooddetail) sprites.MakeSprite(cloudimpactsprite, footpoint,footvel, 1,0,0, .8, .3);
 																						weapons.bloody[k]=2;
 																						weapons.blooddrip[k]=5;
 																						player[i].victim->weaponstuck=-1;
@@ -8675,8 +8565,8 @@ void	Game::Tick()
 												}
 											}
 										}
-										if(player[i].isCrouch()&&weapons.bloody[player[i].weaponids[player[i].weaponactive]]&&bloodtoggle&&player[i].onterrain&&player[i].num_weapons&&player[i].weaponactive!=-1&&player[i].attackkeydown){
-											if(weapons.bloody[player[i].weaponids[player[i].weaponactive]]&&player[i].onterrain&&bloodtoggle&&musictype!=stream_music2){
+										if(player[i].isCrouch()&&weapons.bloody[player[i].weaponids[player[i].weaponactive]]&&blooddetail&&player[i].onterrain&&player[i].num_weapons&&player[i].weaponactive!=-1&&player[i].attackkeydown){
+											if(weapons.bloody[player[i].weaponids[player[i].weaponactive]]&&player[i].onterrain&&blooddetail&&musictype!=stream_music2){
 												if(weapons.type[player[i].weaponids[player[i].weaponactive]]==knife)player[i].targetanimation=crouchstabanim;
 												if(weapons.type[player[i].weaponids[player[i].weaponactive]]==sword)player[i].targetanimation=swordgroundstabanim;
 												player[i].targetframe=0;
@@ -9049,7 +8939,7 @@ void	Game::Tick()
 							player[0].headmorphend=2;*/
 
 							/*
-							if(IsKeyDown( theKeyMap, MAC_P_KEY )){
+							if(IsKeyDown( SDL_SCANCODE_P )){
 							if(player[0].righthandmorphend!=1)player[0].righthandmorphness=0;
 							player[0].righthandmorphend=1;
 							player[0].targetrighthandmorphness=1;
@@ -9062,7 +8952,7 @@ void	Game::Tick()
 							player[0].headmorphend=2;
 							player[0].targetheadmorphness=1;
 							}
-							if(IsKeyDown( theKeyMap, MAC_L_KEY )){
+							if(IsKeyDown( SDL_SCANCODE_L )){
 							if(player[0].righthandmorphend!=0)player[0].righthandmorphness=0;
 							player[0].righthandmorphend=0;
 							player[0].targetrighthandmorphness=1;
@@ -9115,7 +9005,7 @@ void	Game::Tick()
 											OPENAL_SetVolume(channels[stream_music3], 256);
 
 											gameon=0;
-											mainmenu=5;
+											mainmenu = MAIN_MENU_CAMPAIGNS;
 
 											float gLoc[3]={0,0,0};
 											float vel[3]={0,0,0};
@@ -9235,7 +9125,7 @@ void	Game::Tick()
 		}
 	}
 
-	if(IsKeyDown(theKeyMap, MAC_F1_KEY)&&!freezetogglekeydown){
+	if(IsKeyDown(SDL_SCANCODE_F1)&&!freezetogglekeydown){
 		Screenshot();
 		freezetogglekeydown=1;
 	}
@@ -9550,18 +9440,17 @@ void	Game::TickOnceAfter(){
 								for(i=0;i<255;i++){
 									mapname[i]='\0';
 								}
-								mapname[0]=':';
-								mapname[1]='D';
-								mapname[2]='a';
-								mapname[3]='t';
-								mapname[4]='a';
-								mapname[5]=':';
-								mapname[6]='M';
-								mapname[7]='a';
-								mapname[8]='p';
-								mapname[9]='s';
-								mapname[10]=':';
-								strcat(mapname,campaignmapname[levelorder[accountcampaignchoicesmade[accountactive]]]);//[campaignchoicewhich[whichchoice]]);
+								mapname[0]='d';
+								mapname[1]='a';
+								mapname[2]='t';
+								mapname[3]='a';
+								mapname[4]='/';
+								mapname[5]='m';
+								mapname[6]='a';
+								mapname[7]='p';
+								mapname[8]='s';
+								mapname[9]='/';
+								strcat(mapname, campaignmapname[levelorder[accountcampaignchoicesmade[accountactive]]]);//[campaignchoicewhich[whichchoice]]);
 								Loadlevel(mapname);
 
 								OPENAL_Sample_SetMinMaxDistance(samp[fireendsound], 9999.0f, 99999.0f);
@@ -9587,17 +9476,21 @@ void	Game::TickOnceAfter(){
 
 						if(campaign)
                         {
-							if(mainmenu==0&&winfreeze&&(campaignchoosenext[campaignchoicewhich[whichchoice]])==1){
-								if(campaignnumnext[campaignchoicewhich[whichchoice]]==0){
-									endgame=1;
+							if (mainmenu == MAIN_MENU_IN_GAME && winfreeze && (campaignchoosenext[campaignchoicewhich[whichchoice]]) == 1)
+                            {
+								if (campaignnumnext[campaignchoicewhich[whichchoice]] == 0)
+                                {
+									endgame = 1;
 								}
 							}
-							else if(mainmenu==0&&winfreeze){
-								if(campaignchoosenext[campaignchoicewhich[whichchoice]]==2)
-									stealthloading=1;
-								else stealthloading=0;
+							else if (mainmenu == MAIN_MENU_IN_GAME && winfreeze)
+                            {
+								if (campaignchoosenext[campaignchoicewhich[whichchoice]] == 2)
+									stealthloading  = 1;
+								else stealthloading = 0;
 
-								if(!stealthloading){
+								if (!stealthloading)
+                                {
 									float gLoc[3]={0,0,0};
 									float vel[3]={0,0,0};
 									OPENAL_Sample_SetMinMaxDistance(samp[firestartsound], 9999.0f, 99999.0f);
@@ -9714,7 +9607,7 @@ void	Game::TickOnceAfter(){
 									stillloading=1;
 									Loadlevel(mapname);
 									campaign=1;
-									mainmenu=0;
+									mainmenu = MAIN_MENU_IN_GAME;
 									gameon=1;
 									OPENAL_SetPaused(channels[stream_music3], true);
 

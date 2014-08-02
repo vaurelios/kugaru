@@ -22,30 +22,10 @@
 #ifndef _GAME_H_
 #define _GAME_H_
 
-#include "SDL.h"
-
-#if (defined(__APPLE__) && defined(__MACH__))
-#  ifdef PLATFORM_MACOSX
-#    error Do not define PLATFORM_MACOSX for new builds. It is for the old Carbonized build.
-#  endif
-#endif
-
-#ifdef PLATFORM_MACOSX
-#include <Carbon.h>
-#include "Quicktime.h"
-#endif
-
-//Jordan included glut.h
-//#include <glut.h>
+#include <SDL.h>
 
 #include "TGALoader.h"
-
-#if !PLATFORM_MACOSX
-#include "WinInput.h"
-#else
-#include "Macinput.h"
-#endif
-
+#include "Input.h"
 #include "Terrain.h"
 #include "Skybox.h"
 #include "Skeleton.h"
@@ -54,16 +34,13 @@
 #include "Person.h"
 #include "Constants.h"
 #include "Sprites.h"
-//#include <agl.h>
 #include "Text.h"
 #include "Objects.h"
-//#include <DrawSprocket.h>
 #include "Weapons.h"
 #include "binio.h"
 #include <fstream>
 #include "gamegl.h"
 
-extern GLuint rabbittexture;
 
 class Game
 {
@@ -117,10 +94,13 @@ public:
 	int newscreenheight;
 
 	bool gameon;
-	float deltah,deltav;
-	int mousecoordh,mousecoordv;
-	int oldmousecoordh,oldmousecoordv;
-	float rotation,rotation2;
+	float deltah, deltav;
+	int mousecoordh;
+    int mousecoordv;
+	int oldmousecoordh;
+    int oldmousecoordv;
+	float rotation;
+    float rotation2;
 	SkyBox skybox;
 	bool cameramode;
 	bool cameratogglekeydown;
@@ -131,7 +111,6 @@ public:
 	bool explodetogglekeydown;
 	bool detailtogglekeydown;
 	bool firstload;
-	bool oldbutton;
 
 	float leveltime;
 	float loadtime;
@@ -170,7 +149,9 @@ public:
 
 	bool minimap;
 
-	int musictype,oldmusictype,oldoldmusictype;
+	int musictype;
+    int oldmusictype;
+    int oldoldmusictype;
 	bool realthreat;
 
 	Model rabbit;
@@ -233,7 +214,16 @@ public:
 	bool registernow;
 	bool autocam;
 
-	unsigned short crouchkey,jumpkey,forwardkey,chatkey,backkey,leftkey,rightkey,drawkey,throwkey,attackkey;
+	SDL_Scancode crouchkey;
+    SDL_Scancode jumpkey;
+    SDL_Scancode forwardkey;
+    SDL_Scancode chatkey;
+    SDL_Scancode backkey;
+    SDL_Scancode leftkey;
+    SDL_Scancode rightkey;
+    SDL_Scancode drawkey;
+    SDL_Scancode throwkey;
+    SDL_Scancode attackkey;
 	bool oldattackkey;
 
 	long long MD5_string (char *string);
@@ -277,9 +267,9 @@ public:
 	Game();
 	~Game() {
 		for(int i=0;i<10;i++){
-			if(Mainmenuitems[i])glDeleteTextures( 1, &Mainmenuitems[i] );
+			if(Mainmenuitems[i]) glDeleteTextures(1, &Mainmenuitems[i]);
 		}
-		glDeleteTextures( 1, &cursortexture );
+		/*glDeleteTextures( 1, &cursortexture );
 		glDeleteTextures( 1, &Maparrowtexture );
 		glDeleteTextures( 1, &Mapboxtexture );
 		glDeleteTextures( 1, &Mapcircletexture );
@@ -289,31 +279,12 @@ public:
 		if(screentexture2>0)glDeleteTextures( 1, &screentexture2 );
 		glDeleteTextures( 1, &hawktexture );
 		glDeleteTextures( 1, &logotexture );
-		glDeleteTextures( 1, &loadscreentexture );
+		glDeleteTextures( 1, &loadscreentexture );*/
 
 		Dispose();
 	}
 
 };
-
-#ifndef __forceinline
-#  ifdef __GNUC__
-#    define __forceinline inline __attribute__((always_inline))
-#  endif
-#endif
-
-static __forceinline void swap_gl_buffers(void)
-{
-
-    SDL_GL_SwapBuffers();
-
-}
-
-#ifdef __GNUC__
-#define LONGLONGCONST(x) (x##ll)
-#else
-#define LONGLONGCONST(x) (x)
-#endif
 
 extern "C" { void UndefinedSymbolToExposeStubbedCode(void); }
 //#define STUBBED(x) UndefinedSymbolToExposeStubbedCode();

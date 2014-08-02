@@ -18,19 +18,37 @@
  */
 
 
-#ifndef FILEIO_H
-#define FILEIO_H
-
-
-#include <glib.h>
+#ifndef KUGARU_TYPES_H
+#define KUGARU_TYPES_H
 
 
 namespace Kugaru
 {
-    const char *ConvertFileName  (const char* name);
-    gchar      *GetConfigDir     (void);
-    gchar      *GetConfigFilePath(void);
-    FILE       *LoadConfigFile   (void);
+    typedef struct
+    {
+        short v;
+        short h;
+    } Point;
+
+    typedef enum
+    {
+        MAIN_MENU_IN_GAME,
+        MAIN_MENU_MAIN,
+        MAIN_MENU_RESUME,
+        MAIN_MENU_OPTIONS,
+        MAIN_MENU_KEYS,
+        MAIN_MENU_CAMPAIGNS,
+        MAIN_MENU_DELETE_USER,
+        MAIN_MENU_USER_LISTING,
+        MAIN_MENU_DIFFICULTY,
+        MAIN_MENU_LEVEL_LISTING,
+        MAIN_MENU_CONGRATS,
+        MAIN_MENU_CONGRATS_SCORES,
+        MAIN_MENU_12,
+        MAIN_MENU_CONGRATS_ENTER_NAME,
+        MAIN_MENU_LAST,
+        MAIN_MENU_17
+    } MainMenu;
 }
 
-#endif /* FILEIO_H */
+#endif /* KUGARU_TYPES_H */

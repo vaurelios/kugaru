@@ -32,12 +32,9 @@ namespace Kugaru
     class Conf
     {
         public:
-            static Conf& getInstance()
-            {
-                static Conf instance;
-                return instance;
-            }
+            Conf();
 
+            void dump();
             void save();
 
             gint     getGameInt (const gchar *key);
@@ -59,13 +56,11 @@ namespace Kugaru
             void     setMouseInt (const gchar *key, gint value);
             gboolean getMouseBool(const gchar *key);
             void     setMouseBool(const gchar *key, gboolean value);
+
+            gchar *  getKeysStr(const gchar *key);
+            void     setKeysStr(const gchar *key, gchar *value);
         protected:
             GKeyFile *keys;
-        private:
-            Conf();
-            Conf(Conf const&);
-
-            void operator=(Conf const&);
     };
 }
 

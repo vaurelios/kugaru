@@ -30,28 +30,20 @@
 #include <map>
 #include <string>
 
-#ifdef WIN32
-  #define WIN32_LEAN_AND_MEAN
-  #define Polygon WinPolygon
-  #include <windows.h>
-  #undef Polygon
-#endif
-
 #define GL_GLEXT_PROTOTYPES 1
 #include "GL/gl.h"
 #include "GL/glu.h"
 #include "GL/glext.h"
 
-#if !PLATFORM_MACOSX
-struct RGBColor
+
+typedef struct 
 {
 	unsigned short red;
 	unsigned short green;
 	unsigned short blue;
-};
-typedef struct RGBColor RGBColor;
+} RGBColor;
 typedef RGBColor * RGBColorPtr;
-#endif
+
 
 using namespace std;
 

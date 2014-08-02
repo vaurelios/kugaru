@@ -20,6 +20,7 @@
 
 
 #include "Game.h"
+#include "Types.h"
 #include "Random.h"
 #include "Globals.h"
 #include "Utility.h"
@@ -50,17 +51,17 @@ long long Game::MD5_string (char *string){
 	num = llabs(num);
 	if(num==0)num+=1452;
 
-	while(num<LONGLONGCONST(5000000000000000)){
-		num*=1.85421521;
+	while (num < 5000000000000000ll)
+    {
+		num *= 1.85421521;
 	}
 
-	while(num>LONGLONGCONST(9900000000000000)){
-		num/=1.235421521;
+	while (num > 9900000000000000ll)
+    {
+		num /= 1.235421521;
 	}
 
 	return num;
-
-	//return 1111111111111111;
 }
 
 int Game::DrawGLScene(void)
@@ -588,22 +589,22 @@ int Game::DrawGLScene(void)
 						sprintf (string3, " ");
 					}
 					if(tutorialstage==4){
-						sprintf (string, "Try using the %s, %s, %s and %s keys to move around.",KeyToChar(forwardkey),KeyToChar(leftkey),KeyToChar(backkey),KeyToChar(rightkey));
+						sprintf (string, "Try using the %s, %s, %s and %s keys to move around.", SDL_GetKeyName(forwardkey), SDL_GetKeyName(leftkey), SDL_GetKeyName(backkey), SDL_GetKeyName(rightkey));
 						sprintf (string2, "All movement is relative to the camera.");
 						sprintf (string3, " ");
 					}
 					if(tutorialstage==5){
-						sprintf (string, "Please press %s to jump.",KeyToChar(jumpkey));
+						sprintf (string, "Please press %s to jump.", SDL_GetKeyName(jumpkey));
 						sprintf (string2, "You can hold it longer to jump higher.");
 						sprintf (string3, " ");
 					}
 					if(tutorialstage==6){
-						sprintf (string, "You can press %s to crouch.",KeyToChar(crouchkey));
+						sprintf (string, "You can press %s to crouch.", SDL_GetKeyName(crouchkey));
 						sprintf (string2, "You can jump higher from a crouching position.");
 						sprintf (string3, " ");
 					}
 					if(tutorialstage==7){
-						sprintf (string, "While running, you can press %s to roll.",KeyToChar(crouchkey));
+						sprintf (string, "While running, you can press %s to roll.", SDL_GetKeyName(crouchkey));
 						sprintf (string2, " ");
 						sprintf (string3, " ");
 					}
@@ -624,7 +625,7 @@ int Game::DrawGLScene(void)
 					}
 					if (tutorialstage == 11)
                     {
-						sprintf (string, "When you jump at a wall, you can hold %s again", KeyToChar(jumpkey));
+						sprintf (string, "When you jump at a wall, you can hold %s again", SDL_GetKeyName(jumpkey));
 						sprintf (string2, "during impact to perform a walljump.");
 						sprintf (string3, "Be sure to use the movement keys to press against the wall");
 					}
@@ -645,10 +646,10 @@ int Game::DrawGLScene(void)
 						sprintf (string3, " ");
 					}
 					if(tutorialstage==15){
-						if(attackkey==MAC_MOUSEBUTTON1)sprintf (string, "Click to attack when you are near an enemy.");
-						else sprintf (string, "Press %s to attack when you are near an enemy.",KeyToChar(attackkey));
-						sprintf (string2, "You can punch by standing still near an enemy and attacking.");
-						sprintf (string3, " ");
+						if (attackkey == SDL_BUTTON_LEFT) sprintf(string, "Click to attack when you are near an enemy.");
+						else sprintf(string, "Press %s to attack when you are near an enemy.", SDL_GetKeyName(attackkey));
+						sprintf(string2, "You can punch by standing still near an enemy and attacking.");
+						sprintf(string3, " ");
 					}
 					if(tutorialstage==16){
 						sprintf (string, "If you are close, you will perform a weak punch.");
@@ -666,15 +667,15 @@ int Game::DrawGLScene(void)
 						sprintf (string3, " ");
 					}
 					if(tutorialstage==19){
-						sprintf (string, "When an enemy is on the ground, you can deal some extra");
-						sprintf (string2, "damage by running up and drop-kicking him.");
-						sprintf (string3, "(Try knocking them down with a sweep first)");
+						sprintf(string, "When an enemy is on the ground, you can deal some extra");
+						sprintf(string2, "damage by running up and drop-kicking him.");
+						sprintf(string3, "(Try knocking them down with a sweep first)");
 					}
 					if(tutorialstage==20){
 						sprintf (string, "Your most powerful individual attack is the rabbit kick.");
-						if(attackkey==MAC_MOUSEBUTTON1)sprintf (string2, "Run at the enemy while holding the mouse button, and press");
-						else sprintf (string2, "Run at the enemy while holding %s, and press", KeyToChar(attackkey));
-						sprintf (string3, "the jump key (%s) to attack.",KeyToChar(jumpkey));
+						if (attackkey == SDL_BUTTON_LEFT) sprintf(string2, "Run at the enemy while holding the mouse button, and press");
+						else sprintf(string2, "Run at the enemy while holding %s, and press", SDL_GetKeyName(attackkey));
+						sprintf(string3, "the jump key (%s) to attack.", SDL_GetKeyName(jumpkey));
 					}
 					if(tutorialstage==21){
 						sprintf (string, "This attack is devastating if timed correctly.");
@@ -694,9 +695,9 @@ int Game::DrawGLScene(void)
 					}
 					if(tutorialstage==24){
 						sprintf (string, "You can tackle enemies by running at them animal-style");
-						if(attackkey==MAC_MOUSEBUTTON1)sprintf (string2, "and pressing jump (%s) or attack(mouse button).",KeyToChar(jumpkey));
-						else sprintf (string2, "and pressing jump (%s) or attack(%s).",KeyToChar(jumpkey),KeyToChar(attackkey));
-						sprintf (string3, "This is especially useful when they are running away.");
+						if (attackkey == SDL_BUTTON_LEFT) sprintf(string2, "and pressing jump (%s) or attack(mouse button).", SDL_GetKeyName(jumpkey));
+						else sprintf(string2, "and pressing jump (%s) or attack(%s).", SDL_GetKeyName(jumpkey), SDL_GetKeyName(attackkey));
+						sprintf(string3, "This is especially useful when they are running away.");
 					}
 					if(tutorialstage==25){
 						sprintf (string, "Dodge by pressing back and attack. Dodging is essential");
@@ -716,7 +717,7 @@ int Game::DrawGLScene(void)
 					if(tutorialstage==28){
 						sprintf (string, "If you attack, you will notice that the enemy now sometimes");
 						sprintf (string2, "catches your attack and uses it against you. Hold");
-						sprintf (string3, "crouch (%s) after attacking to escape from reversals.",KeyToChar(crouchkey));
+						sprintf (string3, "crouch (%s) after attacking to escape from reversals.", SDL_GetKeyName(crouchkey));
 					}
 					if(tutorialstage==29){
 						sprintf (string, "Try escaping from two more reversals in a row.");
@@ -729,12 +730,12 @@ int Game::DrawGLScene(void)
 						sprintf (string3, " ");
 					}
 					if(tutorialstage==31){
-						sprintf (string, "To reverse an attack, you must tap crouch (%s) during the",KeyToChar(crouchkey));
+						sprintf (string, "To reverse an attack, you must tap crouch (%s) during the", SDL_GetKeyName(crouchkey));
 						sprintf (string2, "enemy's attack. You must also be close to the enemy;");
 						sprintf (string3, "this is especially important against armed opponents.");
 					}
 					if(tutorialstage==32){
-						sprintf (string, "The enemy can attack in %d seconds.", (int)(tutorialmaxtime-tutorialstagetime));
+						sprintf (string, "The enemy can attack in %d seconds.", (int) (tutorialmaxtime - tutorialstagetime));
 						sprintf (string2, "This imaginary opponents attacks will be highlighted");
 						sprintf (string3, "to make this easier.");
 					}
@@ -759,9 +760,9 @@ int Game::DrawGLScene(void)
 						sprintf (string3, " ");
 					}
 					if(tutorialstage==37){
-						sprintf (string, "Now spar with the enemy for %d more seconds.", (int)(tutorialmaxtime-tutorialstagetime));
-						sprintf (string2, "Damage dealt: %d",(int)damagedealt);
-						sprintf (string3, "Damage taken: %d.",(int)damagetaken);
+						sprintf (string, "Now spar with the enemy for %d more seconds.", (int) (tutorialmaxtime - tutorialstagetime));
+						sprintf (string2, "Damage dealt: %d", (int) damagedealt);
+						sprintf (string3, "Damage taken: %d.", (int) damagetaken);
 					}
 					if(tutorialstage==38){
 						sprintf (string, "WEAPONS:");
@@ -775,11 +776,11 @@ int Game::DrawGLScene(void)
 					}
 					if(tutorialstage==40){
 						sprintf (string, "Stand, roll or handspring over the knife");
-						sprintf (string2, "while pressing %s to pick it up.",KeyToChar(throwkey));
+						sprintf (string2, "while pressing %s to pick it up.", SDL_GetKeyName(throwkey));
 						sprintf (string3, "You can crouch and press the same key to drop it again.");
 					}
 					if(tutorialstage==41){
-						sprintf (string, "You can equip and unequip weapons using the %s key.",KeyToChar(drawkey));
+						sprintf (string, "You can equip and unequip weapons using the %s key.", SDL_GetKeyName(drawkey));
 						sprintf (string2, "Sometimes it is best to keep them unequipped to");
 						sprintf (string3, "prevent enemies from taking them. ");
 					}
@@ -819,7 +820,7 @@ int Game::DrawGLScene(void)
 						sprintf (string3, "spin smash is slower and more powerful.");
 					}
 					if(tutorialstage==49){
-						sprintf (string, "When facing an enemy, you can throw the knife with %s.",KeyToChar(throwkey));
+						sprintf (string, "When facing an enemy, you can throw the knife with %s.", SDL_GetKeyName(throwkey));
 						sprintf (string2, "It is possible to throw the knife while flipping,");
 						sprintf (string3, "but it is very inaccurate.");
 					}
@@ -2105,11 +2106,13 @@ int Game::DrawGLScene(void)
 
 		int temptexdetail;
 		temptexdetail=texdetail;
-		if(texdetail>2)texdetail=2;
-		if(mainmenu!=oldmainmenu&&oldmainmenu!=0){
-			if(mainmenu==1){
-				LoadTexture("data/textures/newgame.png",&Mainmenuitems[1],0,0);
-				LoadTexture("data/textures/quit.png",&Mainmenuitems[3],0,0);
+		if (texdetail > 2) texdetail = 2;
+		if (mainmenu != oldmainmenu && oldmainmenu != 0)
+        {
+			if(mainmenu == MAIN_MENU_MAIN)
+            {
+				LoadTexture("data/textures/newgame.png", &Mainmenuitems[1], 0, 0);
+				LoadTexture("data/textures/quit.png", &Mainmenuitems[3], 0, 0);
 				/*if(oldmainmenu==1||oldmainmenu==0){
 				LoadTexture("data/textures/world.png",&Mainmenuitems[7],0,0);
 				LoadTexture("data/textures/options.png",&Mainmenuitems[2],0,0);
@@ -2117,10 +2120,11 @@ int Game::DrawGLScene(void)
 				loaddistrib=0;
 				}*/
 			}
-			if(mainmenu==2){
+			if(mainmenu == MAIN_MENU_RESUME)
+            {
 				LoadTexture("data/textures/resume.png",&Mainmenuitems[1],0,0);
 				LoadTexture("data/textures/endgame.png",&Mainmenuitems[3],0,0);
-				/*if(oldmainmenu==2||oldmainmenu==0){
+				/*if(oldmainmenu == MAIN_MENU_RESUME||oldmainmenu==0){
 				LoadTexture("data/textures/World.png",&Mainmenuitems[7],0,0);
 				LoadTexture("data/textures/Options.png",&Mainmenuitems[2],0,0);
 				LoadTexture("data/textures/Lugaru.png",&Mainmenuitems[0],0,0);
@@ -2128,8 +2132,10 @@ int Game::DrawGLScene(void)
 				}*/
 			}
 		}
-		if(lastcheck>.5||oldmainmenu!=mainmenu){
-			if(mainmenu==5){
+		if (lastcheck > 0.5 || oldmainmenu != mainmenu)
+        {
+			if (mainmenu == MAIN_MENU_CAMPAIGNS)
+            {
 				ifstream ipstream(ConvertFileName("data/campaigns/main.txt"));
 				//campaignnumlevels=0;
 				//accountcampaignchoicesmade[accountactive]=0;
@@ -2204,15 +2210,17 @@ int Game::DrawGLScene(void)
 					levelorder[3]=3;*/
 			}
 		}
-		if(mainmenu==5){
-			lastcheck=0;
+		if (mainmenu == MAIN_MENU_CAMPAIGNS)
+        {
+			lastcheck = 0;
 		}
 
 		texdetail=temptexdetail;
 
 		/*if(mainmenu!=0)*/oldmainmenu=mainmenu;
 
-		if(mainmenu==3||mainmenu==4||mainmenu==5||mainmenu==6||mainmenu==7||mainmenu==8||mainmenu==9||mainmenu==10||mainmenu==119||mainmenu==13||mainmenu==17){
+		if(mainmenu >= MAIN_MENU_OPTIONS)
+        {
 			glClear(GL_DEPTH_BUFFER_BIT);
 			glEnable(GL_ALPHA_TEST);
 			glAlphaFunc(GL_GREATER, 0.001f);
@@ -2275,291 +2283,298 @@ int Game::DrawGLScene(void)
 			glPopMatrix();
 			glMatrixMode(GL_MODELVIEW);							// Select The Modelview Matrix
 
-			if(mainmenu==3){			
-				nummenuitems=12;
-				if((float)newscreenwidth>(float)newscreenheight*1.61||(float)newscreenwidth<(float)newscreenheight*1.59)sprintf (menustring[0], "Resolution: %d*%d",(int)newscreenwidth,(int)newscreenheight);
-				else sprintf (menustring[0], "Resolution: %d*%d (widescreen)",(int)newscreenwidth,(int)newscreenheight);
-				startx[0]=10+20;
-				starty[0]=440;
-				endx[0]=startx[0]+strlen(menustring[0])*10;
-				endy[0]=starty[0]+20;
-				movex[0]=0;
-				movey[0]=0;
+			if (mainmenu == MAIN_MENU_OPTIONS)
+            {			
+				nummenuitems = 12;
+				if ((float) newscreenwidth > (float) newscreenheight * 1.61 || (float) newscreenwidth < (float) newscreenheight * 1.59)
+                    sprintf(menustring[0], "Resolution: %dx%d", newscreenwidth, newscreenheight);
+				else
+                    sprintf(menustring[0], "Resolution: %dx%d (widescreen)", newscreenwidth, newscreenheight);
+				startx[0] = 10 + 20;
+				starty[0] = 440;
+				endx[0]   = startx[0] + strlen(menustring[0]) * 10;
+				endy[0]   = starty[0] + 20;
+				movex[0]  = 0;
+				movey[0]  = 0;
 
-				if(newdetail==2)sprintf (menustring[1], "Detail: High");
-				else if(newdetail==1)sprintf (menustring[1], "Detail: Medium");
-				else sprintf (menustring[1], "Detail: Low");
-				startx[1]=10+60;
-				starty[1]=405;
-				endx[1]=startx[1]+strlen(menustring[1])*10;
-				endy[1]=starty[1]+20;
-				movex[1]=0;
-				movey[1]=0;
+				if (newdetail == 2) sprintf(menustring[1], "Detail: High");
+				if (newdetail == 1) sprintf(menustring[1], "Detail: Medium");
+				if (newdetail == 0) sprintf(menustring[1], "Detail: Low");
+				startx[1] = 10 + 60;
+				starty[1] = 405;
+				endx[1]   = startx[1] + strlen(menustring[1]) * 10;
+				endy[1]   = starty[1] + 20;
+				movex[1]  = 0;
+				movey[1]  = 0;
 
-				if(bloodtoggle==2)sprintf (menustring[2], "Blood: On, high detail (slower)");
-				if(bloodtoggle==1)sprintf (menustring[2], "Blood: On, low detail");
-				if(bloodtoggle==0)sprintf (menustring[2], "Blood: Off");
-				startx[2]=10+70;
-				starty[2]=370;
-				endx[2]=startx[2]+strlen(menustring[2])*10;
-				endy[2]=starty[2]+20;
-				movex[2]=0;
-				movey[2]=0;
+				if (blooddetail == 2) sprintf(menustring[2], "Blood: On, high detail (slower)");
+				if (blooddetail == 1) sprintf(menustring[2], "Blood: On, low detail");
+				if (blooddetail == 0) sprintf(menustring[2], "Blood: Off");
+				startx[2] = 10 + 70;
+				starty[2] = 370;
+				endx[2]   = startx[2] + strlen(menustring[2]) * 10;
+				endy[2]   = starty[2] + 20;
+				movex[2]  = 0;
+				movey[2]  = 0;
 
-				if(difficulty==2)sprintf (menustring[3], "Difficulty: Insane");
-				if(difficulty==1)sprintf (menustring[3], "Difficulty: Difficult");
-				if(difficulty==0)sprintf (menustring[3], "Difficulty: Easier");
-				startx[3]=10+20-1000;
-				starty[3]=335-1000;
-				endx[3]=startx[3]+strlen(menustring[3])*10;
-				endy[3]=starty[3]+20;
-				movex[3]=0;
-				movey[3]=0;
+				if (difficulty == 2) sprintf(menustring[3], "Difficulty: Insane");
+				if (difficulty == 1) sprintf(menustring[3], "Difficulty: Difficult");
+				if (difficulty == 0) sprintf(menustring[3], "Difficulty: Easier");
+				startx[3] = 10 + 20 - 1000;
+				starty[3] = 335 - 1000;
+				endx[3]   = startx[3] + strlen(menustring[3]) * 10;
+				endy[3]   = starty[3] + 20;
+				movex[3]  = 0;
+				movey[3]  = 0;
 
-				if(ismotionblur==1)sprintf (menustring[4], "Blur Effects: Enabled (less compatible)");
-				if(ismotionblur==0)sprintf (menustring[4], "Blur Effects: Disabled (more compatible)");
-				startx[4]=10;
-				starty[4]=335;
-				endx[4]=startx[4]+strlen(menustring[4])*10;
-				endy[4]=starty[4]+20;
-				movex[4]=0;
-				movey[4]=0;
+				if (ismotionblur == 1) sprintf(menustring[4], "Blur Effects: Enabled (less compatible)");
+				if (ismotionblur == 0) sprintf(menustring[4], "Blur Effects: Disabled (more compatible)");
+				startx[4] = 10;
+				starty[4] = 335;
+				endx[4]   = startx[4] + strlen(menustring[4]) * 10;
+				endy[4]   = starty[4] + 20;
+				movex[4]  = 0;
+				movey[4]  = 0;
 
-				if(decals==1)sprintf (menustring[5], "Decals: Enabled (slower)");
-				if(decals==0)sprintf (menustring[5], "Decals: Disabled");
-				startx[5]=10+60;
-				starty[5]=300;
-				endx[5]=startx[5]+strlen(menustring[5])*10;
-				endy[5]=starty[5]+20;
-				movex[5]=0;
-				movey[5]=0;
+				if (decals == 1) sprintf(menustring[5], "Decals: Enabled (slower)");
+				if (decals == 0) sprintf(menustring[5], "Decals: Disabled");
+				startx[5] = 10 + 60;
+				starty[5] = 300;
+				endx[5]   = startx[5] + strlen(menustring[5]) * 10;
+				endy[5]   = starty[5] + 20;
+				movex[5]  = 0;
+				movey[5]  = 0;
 
-				if(musictoggle==1)sprintf (menustring[6], "Music: Enabled");
-				if(musictoggle==0)sprintf (menustring[6], "Music: Disabled");
-				startx[6]=10+70;
-				starty[6]=265;
-				endx[6]=startx[6]+strlen(menustring[6])*10;
-				endy[6]=starty[6]+20;
-				movex[6]=0;
-				movey[6]=0;
+				if (musictoggle == 1) sprintf(menustring[6], "Music: Enabled");
+				if (musictoggle == 0) sprintf(menustring[6], "Music: Disabled");
+				startx[6] = 10 + 70;
+				starty[6] = 265;
+				endx[6]   = startx[6] + strlen(menustring[6]) * 10;
+				endy[6]   = starty[6] + 20;
+				movex[6]  = 0;
+				movey[6]  = 0;
 
-				if(invertmouse==1)sprintf (menustring[9], "Invert mouse: Yes");
-				if(invertmouse==0)sprintf (menustring[9], "Invert mouse: No");
-				startx[9]=10;
-				starty[9]=230;
-				endx[9]=startx[9]+strlen(menustring[9])*10;
-				endy[9]=starty[9]+20;
-				movex[9]=0;
-				movey[9]=0;
+				if (invertmouse == 1) sprintf(menustring[9], "Invert mouse: Yes");
+				if (invertmouse == 0) sprintf(menustring[9], "Invert mouse: No");
+				startx[9] = 10;
+				starty[9] = 230;
+				endx[9]   = startx[9] + strlen(menustring[9]) * 10;
+				endy[9]   = starty[9] + 20;
+				movex[9]  = 0;
+				movey[9]  = 0;
 
-				sprintf (menustring[10], "Mouse Speed: %d", (int)(usermousesensitivity*5));
-				startx[10]=20;
-				starty[10]=195;
-				endx[10]=startx[10]+strlen(menustring[10])*10;
-				endy[10]=starty[10]+20;
-				movex[10]=0;
-				movey[10]=0;
+				sprintf(menustring[10], "Mouse Speed: %d", usermousesensitivity);
+				startx[10] = 20;
+				starty[10] = 195;
+				endx[10]   = startx[10] + strlen(menustring[10]) * 10;
+				endy[10]   = starty[10] + 20;
+				movex[10]  = 0;
+				movey[10]  = 0;
 				
-				sprintf (menustring[11], "Volume: %d%%", volume);
-				startx[11]=10+60;
-				starty[11]=155;
-				endx[11]=startx[11]+strlen(menustring[11])*10;
-				endy[11]=starty[11]+20;
-				movex[11]=0;
-				movey[11]=0;
-				
+				sprintf(menustring[11], "Volume: %d%%", volume);
+				startx[11] = 10 + 60;
+				starty[11] = 155;
+				endx[11]   = startx[11] + strlen(menustring[11]) * 10;
+				endy[11]   = starty[11] + 20;
+				movex[11]  = 0;
+				movey[11]  = 0;
+
 				sprintf (menustring[7], "-Configure Controls-");
-				startx[7]=10+15;
-				starty[7]=100;
-				endx[7]=startx[7]+strlen(menustring[7])*10;
-				endy[7]=starty[7]+20;
-				movex[7]=0;
-				movey[7]=0;
+				startx[7] = 10 + 15;
+				starty[7] = 100;
+				endx[7]   = startx[7] + strlen(menustring[7]) * 10;
+				endy[7]   = starty[7] + 20;
+				movex[7]  = 0;
+				movey[7]  = 0;
 
-				if(newdetail==detail&&newscreenheight==(int)screenheight&&newscreenwidth==(int)screenwidth)sprintf (menustring[8], "Back");
-				else sprintf (menustring[8], "Back (some changes take effect next time Lugaru is opened)");
-				startx[8]=10;
-				endx[8]=startx[8]+strlen(menustring[8])*10;
-				starty[8]=10;
-				endy[8]=starty[8]+20;
-				movex[8]=0;
-				movey[8]=0;
+				if (newdetail == detail && newscreenheight == (int) screenheight && newscreenwidth == (int) screenwidth)
+                    sprintf(menustring[8], "Back");
+				else
+                    sprintf(menustring[8], "Back (some changes take effect next time Lugaru is opened)");
+				startx[8] = 10;
+				endx[8]   = startx[8] + strlen(menustring[8]) * 10;
+				starty[8] = 10;
+				endy[8]   = starty[8] + 20;
+				movex[8]  = 0;
+				movey[8]  = 0;
 			}
 
-			if(mainmenu==4){			
-				nummenuitems=10;
-				if(keyselect!=0)sprintf (menustring[0], "Forwards: %s",KeyToChar(forwardkey));
-				else sprintf (menustring[0], "Forwards: _");
-				startx[0]=10;
-				starty[0]=400;
-				endx[0]=startx[0]+strlen(menustring[0])*10;
-				endy[0]=starty[0]+20;
-				movex[0]=0;
-				movey[0]=0;
+			if (mainmenu == MAIN_MENU_KEYS)
+            {			
+				nummenuitems = 10;
+				if (keyselect != 0) sprintf(menustring[0], "Forwards: %s", SDL_GetKeyName(forwardkey));
+				else sprintf(menustring[0], "Forwards: _");
+				startx[0] = 10;
+				starty[0] = 400;
+				endx[0]   = startx[0] + strlen(menustring[0]) * 10;
+				endy[0]   = starty[0] + 20;
+				movex[0]  = 0;
+				movey[0]  = 0;
 
-				if(keyselect!=1)sprintf (menustring[1], "Back: %s",KeyToChar(backkey));
-				else sprintf (menustring[1], "Back: _");
-				startx[1]=10+40;
-				starty[1]=360;
-				endx[1]=startx[1]+strlen(menustring[1])*10;
-				endy[1]=starty[1]+20;
-				movex[1]=0;
-				movey[1]=0;
+				if (keyselect != 1) sprintf(menustring[1], "Back: %s", SDL_GetKeyName(backkey));
+				else sprintf(menustring[1], "Back: _");
+				startx[1] = 10 + 40;
+				starty[1] = 360;
+				endx[1]   = startx[1] + strlen(menustring[1]) * 10;
+				endy[1]   = starty[1] + 20;
+				movex[1]  = 0;
+				movey[1]  = 0;
 
-				if(keyselect!=2)sprintf (menustring[2], "Left: %s",KeyToChar(leftkey));
-				else sprintf (menustring[2], "Left: _");
-				startx[2]=10+40;
-				starty[2]=320;
-				endx[2]=startx[2]+strlen(menustring[2])*10;
-				endy[2]=starty[2]+20;
-				movex[2]=0;
-				movey[2]=0;
+				if (keyselect != 2) sprintf(menustring[2], "Left: %s", SDL_GetKeyName(leftkey));
+				else sprintf(menustring[2], "Left: _");
+				startx[2] = 10 + 40;
+				starty[2] = 320;
+				endx[2]   = startx[2] + strlen(menustring[2]) * 10;
+				endy[2]   = starty[2] + 20;
+				movex[2]  = 0;
+				movey[2]  = 0;
 
-				if(keyselect!=3)sprintf (menustring[3], "Right: %s",KeyToChar(rightkey));
-				else sprintf (menustring[3], "Right: _");
-				startx[3]=10+30;
-				starty[3]=280;
-				endx[3]=startx[3]+strlen(menustring[3])*10;
-				endy[3]=starty[3]+20;
-				movex[3]=0;
-				movey[3]=0;
+				if (keyselect != 3) sprintf(menustring[3], "Right: %s", SDL_GetKeyName(rightkey));
+				else sprintf(menustring[3], "Right: _");
+				startx[3] = 10 + 30;
+				starty[3] = 280;
+				endx[3]   = startx[3] + strlen(menustring[3]) * 10;
+				endy[3]   = starty[3] + 20;
+				movex[3]  = 0;
+				movey[3]  = 0;
 
-				if(keyselect!=4)sprintf (menustring[4], "Crouch: %s",KeyToChar(crouchkey));
-				else sprintf (menustring[4], "Crouch: _");
-				startx[4]=10+20;
-				starty[4]=240;
-				endx[4]=startx[4]+strlen(menustring[4])*10;
-				endy[4]=starty[4]+20;
-				movex[4]=0;
-				movey[4]=0;
+				if (keyselect != 4) sprintf(menustring[4], "Crouch: %s", SDL_GetKeyName(crouchkey));
+				else sprintf(menustring[4], "Crouch: _");
+				startx[4] = 10 + 20;
+				starty[4] = 240;
+				endx[4]   = startx[4] + strlen(menustring[4]) * 10;
+				endy[4]   = starty[4] + 20;
+				movex[4]  = 0;
+				movey[4]  = 0;
 
-				if(keyselect!=5)sprintf (menustring[5], "Jump: %s",KeyToChar(jumpkey));
-				else sprintf (menustring[5], "Jump: _");
-				startx[5]=10+40;
-				starty[5]=200;
-				endx[5]=startx[5]+strlen(menustring[5])*10;
-				endy[5]=starty[5]+20;
-				movex[5]=0;
-				movey[5]=0;
+				if (keyselect != 5) sprintf(menustring[5], "Jump: %s", SDL_GetKeyName(jumpkey));
+				else sprintf(menustring[5], "Jump: _");
+				startx[5] = 10 + 40;
+				starty[5] = 200;
+				endx[5]   = startx[5] + strlen(menustring[5]) * 10;
+				endy[5]   = starty[5] + 20;
+				movex[5]  = 0;
+				movey[5]  = 0;
 
-				if(keyselect!=6)sprintf (menustring[6], "Draw: %s",KeyToChar(drawkey));
+				if (keyselect != 6) sprintf(menustring[6], "Draw: %s", SDL_GetKeyName(drawkey));
 				else sprintf (menustring[6], "Draw: _");
-				startx[6]=10+40;
-				starty[6]=160;
-				endx[6]=startx[6]+strlen(menustring[6])*10;
-				endy[6]=starty[6]+20;
-				movex[6]=0;
-				movey[6]=0;
+				startx[6] = 10 + 40;
+				starty[6] = 160;
+				endx[6]   = startx[6] + strlen(menustring[6]) * 10;
+				endy[6]   = starty[6] + 20;
+				movex[6]  = 0;
+				movey[6]  = 0;
 
-				if(keyselect!=7)sprintf (menustring[7], "Throw: %s",KeyToChar(throwkey));
-				else sprintf (menustring[7], "Throw: _");
-				startx[7]=10+30;
-				starty[7]=120;
-				endx[7]=startx[7]+strlen(menustring[7])*10;
-				endy[7]=starty[7]+20;
-				movex[7]=0;
-				movey[7]=0;
+				if (keyselect != 7) sprintf(menustring[7], "Throw: %s", SDL_GetKeyName(throwkey));
+				else sprintf(menustring[7], "Throw: _");
+				startx[7] = 10 + 30;
+				starty[7] = 120;
+				endx[7]   = startx[7] + strlen(menustring[7]) * 10;
+				endy[7]   = starty[7] + 20;
+				movex[7]  = 0;
+				movey[7]  = 0;
 
-				if(keyselect!=8)sprintf (menustring[8], "Attack: %s",KeyToChar(attackkey));
-				else sprintf (menustring[8], "Attack: _");
-				startx[8]=10+20;
-				starty[8]=80;
-				endx[8]=startx[8]+strlen(menustring[8])*10;
-				endy[8]=starty[8]+20;
-				movex[8]=0;
-				movey[8]=0;
-
-
+				if (keyselect != 8) sprintf(menustring[8], "Attack: %s", SDL_GetKeyName(attackkey));
+				else sprintf(menustring[8], "Attack: _");
+				startx[8] = 10 + 20;
+				starty[8] = 80;
+				endx[8]   = startx[8] + strlen(menustring[8]) * 10;
+				endy[8]   = starty[8]+20;
+				movex[8]  = 0;
+				movey[8]  = 0;
 
 				sprintf (menustring[9], "Back");
-				startx[9]=10;
-				endx[9]=startx[9]+strlen(menustring[9])*10;
-				starty[9]=10;
-				endy[9]=starty[9]+20;
-				movex[9]=0;
-				movey[9]=0;
+				startx[9] = 10;
+				endx[9]   = startx[9] + strlen(menustring[9]) * 10;
+				starty[9] = 10;
+				endy[9]   = starty[9] + 20;
+				movex[9]  = 0;
+				movey[9]  = 0;
 			}
-			if(mainmenu==5){			
-				nummenuitems=7+accountcampaignchoicesmade[accountactive]+campaignchoicenum;
+			if (mainmenu == MAIN_MENU_CAMPAIGNS)
+            {			
+				nummenuitems = 7 + accountcampaignchoicesmade[accountactive] + campaignchoicenum;
 
-				sprintf (menustring[0], "%s",accountname[accountactive]);
-				startx[0]=5;
-				starty[0]=400;
-				endx[0]=startx[0]+strlen(menustring[0])*10;
-				endy[0]=starty[0]+20;
-				movex[0]=0;
-				movey[0]=0;
+				sprintf(menustring[0], "%s", accountname[accountactive]);
+				startx[0] = 5;
+				starty[0] = 400;
+				endx[0]   = startx[0] + strlen(menustring[0]) * 10;
+				endy[0]   = starty[0] + 20;
+				movex[0]  = 0;
+				movey[0]  = 0;
 
-				sprintf (menustring[1], "Tutorial");
-				startx[1]=5;
-				starty[1]=300;
-				endx[1]=startx[1]+strlen(menustring[1])*10;
-				endy[1]=starty[1]+20;
-				movex[1]=0;
-				movey[1]=0;
+				sprintf(menustring[1], "Tutorial");
+				startx[1] = 5;
+				starty[1] = 300;
+				endx[1]   = startx[1] + strlen(menustring[1]) * 10;
+				endy[1]   = starty[1] + 20;
+				movex[1]  = 0;
+				movey[1]  = 0;
 
-				sprintf (menustring[2], "Challenge");
-				startx[2]=5;
-				starty[2]=240;
-				endx[2]=startx[2]+strlen(menustring[2])*10;
-				endy[2]=starty[2]+20;
-				movex[2]=0;
-				movey[2]=0;
+				sprintf(menustring[2], "Challenge");
+				startx[2] = 5;
+				starty[2] = 240;
+				endx[2]   = startx[2] + strlen(menustring[2]) * 10;
+				endy[2]   = starty[2] + 20;
+				movex[2]  = 0;
+				movey[2]  = 0;
 
-				sprintf (menustring[3], "Delete User");
-				startx[3]=400;
-				starty[3]=10;
-				endx[3]=startx[3]+strlen(menustring[3])*10;
-				endy[3]=starty[3]+20;
-				movex[3]=0;
-				movey[3]=0;
+				sprintf(menustring[3], "Delete User");
+				startx[3] = 400;
+				starty[3] = 10;
+				endx[3]   = startx[3] + strlen(menustring[3]) * 10;
+				endy[3]   = starty[3] + 20;
+				movex[3]  = 0;
+				movey[3]  = 0;
 
-				sprintf (menustring[4], "Main Menu");
-				startx[4]=5;
-				starty[4]=10;
-				endx[4]=startx[4]+strlen(menustring[4])*10;
-				endy[4]=starty[4]+20;
-				movex[4]=0;
-				movey[4]=0;
+				sprintf(menustring[4], "Main Menu");
+				startx[4] = 5;
+				starty[4] = 10;
+				endx[4]   = startx[4] + strlen(menustring[4]) * 10;
+				endy[4]   = starty[4] + 20;
+				movex[4]  = 0;
+				movey[4]  = 0;
 
-				sprintf (menustring[5], "Change User");
-				startx[5]=5;
-				endx[5]=startx[5]+strlen(menustring[5])*10;
-				starty[5]=180;
-				endy[5]=starty[5]+20;
-				movex[5]=0;
-				movey[5]=0;
+				sprintf(menustring[5], "Change User");
+				startx[5] = 5;
+				endx[5]   = startx[5] + strlen(menustring[5]) * 10;
+				starty[5] = 180;
+				endy[5]   = starty[5] + 20;
+				movex[5]  = 0;
+				movey[5]  = 0;
 
 				//World
 
-				sprintf (menustring[6], "World");
-				startx[6]=30+120;
-				starty[6]=30+480-400-50;
-				endx[6]=startx[6]+400;
-				endy[6]=30+480-50;
-				movex[6]=0;
-				movey[6]=0;
+				sprintf(menustring[6], "World");
+				startx[6] = 30 + 120;
+				starty[6] = 30 + 480 - 400 - 50;
+				endx[6]   = startx[6] + 400;
+				endy[6]   = 30 + 480 - 50;
+				movex[6]  = 0;
+				movey[6]  = 0;
 
-				if(accountcampaignchoicesmade[accountactive])
-					for(i=0;i<accountcampaignchoicesmade[accountactive];i++){
+				if (accountcampaignchoicesmade[accountactive])
+					for (i = 0; i < accountcampaignchoicesmade[accountactive]; i++)
+                    {
 						sprintf (menustring[7+i], "%s", campaigndescription[levelorder[i]]);
-						startx[7+i]=30+120+campaignlocationx[levelorder[i]]*400/512;
-						starty[7+i]=30+30+(512-campaignlocationy[levelorder[i]])*400/512;
-						endx[7+i]=startx[7+i]+10;
-						endy[7+i]=starty[7+i]+10;
-						movex[7+i]=0;
-						movey[7+i]=0;
+						startx[7+i] = 30 + 120 + campaignlocationx[levelorder[i]] * 400 / 512;
+						starty[7+i] = 30 + 30 + (512 - campaignlocationy[levelorder[i]]) * 400 / 512;
+						endx[7+i]   = startx[7 + i] + 10;
+						endy[7+i]   = starty[7 + i] + 10;
+						movex[7+i]  = 0;
+						movey[7+i]  = 0;
 					}
 
-					if(campaignchoicenum>0)
-						for(i=accountcampaignchoicesmade[accountactive];i<accountcampaignchoicesmade[accountactive]+campaignchoicenum;i++){
+					if(campaignchoicenum > 0)
+						for (i = accountcampaignchoicesmade[accountactive]; i < accountcampaignchoicesmade[accountactive] + campaignchoicenum; i++)
+                        {
 							sprintf (menustring[7+i], "%s", campaigndescription[levelorder[i]]);
-							startx[7+i]=30+120+campaignlocationx[campaignchoicewhich[i-(accountcampaignchoicesmade[accountactive])]]*400/512;
-							starty[7+i]=30+30+(512-campaignlocationy[campaignchoicewhich[i-(accountcampaignchoicesmade[accountactive])]])*400/512;
-							endx[7+i]=startx[7+i]+10;
-							endy[7+i]=starty[7+i]+10;
-							movex[7+i]=0;
-							movey[7+i]=0;
+							startx[7 + i] = 30 + 120 + campaignlocationx[campaignchoicewhich[i - (accountcampaignchoicesmade[accountactive])]] * 400 / 512;
+							starty[7 + i] = 30 + 30 + (512 - campaignlocationy[campaignchoicewhich[i - (accountcampaignchoicesmade[accountactive])]]) * 400 / 512;
+							endx[7 + i]   = startx[7 + i] + 10;
+							endy[7 + i]   = starty[7 + i] + 10;
+							movex[7 + i]  = 0;
+							movey[7 + i]  = 0;
 						}
 
 						/*sprintf (menustring[7], "Dot");
@@ -2603,270 +2618,281 @@ int Game::DrawGLScene(void)
 						movey[11]=0;*/
 			}
 
-			if(mainmenu==6){			
-				nummenuitems=3;
+			if (mainmenu == MAIN_MENU_DELETE_USER)
+            {			
+				nummenuitems = 3;
 
-				sprintf (menustring[0], "Are you sure you want to delete this user?");
-				startx[0]=10;
-				starty[0]=400;
-				endx[0]=startx[0]+strlen(menustring[0])*10;
-				endy[0]=starty[0]+20;
-				movex[0]=0;
-				movey[0]=0;
+				sprintf(menustring[0], "Are you sure you want to delete this user?");
+				startx[0] = 10;
+				starty[0] = 400;
+				endx[0]   = startx[0] + strlen(menustring[0]) * 10;
+				endy[0]   = starty[0] + 20;
+				movex[0]  = 0;
+				movey[0]  = 0;
 
-				sprintf (menustring[1], "Yes");
-				startx[1]=10;
-				starty[1]=360;
-				endx[1]=startx[1]+strlen(menustring[1])*10;
-				endy[1]=starty[1]+20;
-				movex[1]=0;
-				movey[1]=0;
+				sprintf(menustring[1], "Yes");
+				startx[1] = 10;
+				starty[1] = 360;
+				endx[1]   = startx[1] + strlen(menustring[1]) * 10;
+				endy[1]   = starty[1] + 20;
+				movex[1]  = 0;
+				movey[1]  = 0;
 
-				sprintf (menustring[2], "No");
-				startx[2]=10;
-				starty[2]=320;
-				endx[2]=startx[2]+strlen(menustring[2])*10;
-				endy[2]=starty[2]+20;
-				movex[2]=0;
-				movey[2]=0;
+				sprintf(menustring[2], "No");
+				startx[2] = 10;
+				starty[2] = 320;
+				endx[2]   = startx[2] + strlen(menustring[2]) * 10;
+				endy[2]   = starty[2] + 20;
+				movex[2]  = 0;
+				movey[2]  = 0;
 
-				sprintf (menustring[3], "Extra 4");
-				startx[3]=10;
-				starty[3]=280;
-				endx[3]=startx[3]+strlen(menustring[3])*10;
-				endy[3]=starty[3]+20;
-				movex[3]=0;
-				movey[3]=0;
+				sprintf(menustring[3], "Extra 4");
+				startx[3] = 10;
+				starty[3] = 280;
+				endx[3]   = startx[3] + strlen(menustring[3]) * 10;
+				endy[3]   = starty[3] + 20;
+				movex[3]  = 0;
+				movey[3]  = 0;
 
-				sprintf (menustring[4], "Extra 5");
-				startx[4]=10;
-				starty[4]=240;
-				endx[4]=startx[4]+strlen(menustring[4])*10;
-				endy[4]=starty[4]+20;
-				movex[4]=0;
-				movey[4]=0;
+				sprintf(menustring[4], "Extra 5");
+				startx[4] = 10;
+				starty[4] = 240;
+				endx[4]   = startx[4] + strlen(menustring[4]) * 10;
+				endy[4]   = starty[4] + 20;
+				movex[4]  = 0;
+				movey[4]  = 0;
 
-				sprintf (menustring[5], "Back");
-				startx[5]=10;
-				endx[5]=startx[5]+strlen(menustring[5])*10;
-				starty[5]=10;
-				endy[5]=starty[5]+20;
-				movex[5]=0;
-				movey[5]=0;
+				sprintf(menustring[5], "Back");
+				startx[5] = 10;
+				endx[5]   = startx[5] + strlen(menustring[5]) * 10;
+				starty[5] = 10;
+				endy[5]   = starty[5] + 20;
+				movex[5]  = 0;
+				movey[5]  = 0;
 			}
 
-			if(mainmenu==7){			
-				nummenuitems=numaccounts+2;
+			if (mainmenu == MAIN_MENU_USER_LISTING)
+            {			
+				nummenuitems = numaccounts + 2;
 
 				int num;
 
-				if(numaccounts<8)
-					sprintf (menustring[0], "New User");
+				if (numaccounts < 8)
+					sprintf(menustring[0], "New User");
 				else
-					sprintf (menustring[0], "No More Users");
-				startx[0]=10;
-				starty[0]=400;
-				endx[0]=startx[0]+strlen(menustring[0])*10;
-				endy[0]=starty[0]+20;
-				movex[0]=0;
-				movey[0]=0;
+					sprintf(menustring[0], "No More Users");
+				startx[0] = 10;
+				starty[0] = 400;
+				endx[0]   = startx[0] + strlen(menustring[0]) * 10;
+				endy[0]   = starty[0] + 20;
+				movex[0]  = 0;
+				movey[0]  = 0;
 
-				if(entername)startx[0]+=10;
+				if (entername) startx[0] += 10;
 
-
-				num=1;
-				if(numaccounts)
-					for(i=0;i<numaccounts;i++){
-						sprintf (menustring[num], "%s",accountname[i]);
-						startx[num]=10;
-						starty[num]=360-20-20*num;
-						endx[num]=startx[num]+strlen(menustring[num])*10;
-						endy[num]=starty[num]+20;
-						movex[num]=0;
-						movey[num]=0;
+				num = 1;
+				if (numaccounts)
+					for(i = 0; i <numaccounts; i++)
+                    {
+						sprintf(menustring[num], "%s", accountname[i]);
+						startx[num] = 10;
+						starty[num] = 360 - 20 - 20 * num;
+						endx[num]   = startx[num] + strlen(menustring[num]) * 10;
+						endy[num]   = starty[num] + 20;
+						movex[num]  = 0;
+						movey[num]  = 0;
 
 						num++;
 					}
 
-					sprintf (menustring[num], "Back");
-					startx[num]=10;
-					endx[num]=startx[num]+strlen(menustring[num])*10;
-					starty[num]=10;
-					endy[num]=starty[num]+20;
-					movex[num]=0;
-					movey[num]=0;
+					sprintf(menustring[num], "Back");
+					startx[num] = 10;
+					endx[num]   = startx[num] + strlen(menustring[num]) * 10;
+					starty[num] = 10;
+					endy[num]   = starty[num] + 20;
+					movex[num]  = 0;
+					movey[num]  = 0;
 			}
-			if(mainmenu==8){			
-				nummenuitems=3;
+			if (mainmenu == MAIN_MENU_DIFFICULTY)
+            {			
+				nummenuitems = 3;
 
-				sprintf (menustring[0], "Easier");
-				startx[0]=10;
-				starty[0]=400;
-				endx[0]=startx[0]+strlen(menustring[0])*10;
-				endy[0]=starty[0]+20;
-				movex[0]=0;
-				movey[0]=0;
+				sprintf(menustring[0], "Easier");
+				startx[0] = 10;
+				starty[0] = 400;
+				endx[0]   = startx[0] + strlen(menustring[0]) * 10;
+				endy[0]   = starty[0] + 20;
+				movex[0]  = 0;
+				movey[0]  = 0;
 
-				sprintf (menustring[1], "Difficult");
-				startx[1]=10;
-				starty[1]=360;
-				endx[1]=startx[1]+strlen(menustring[1])*10;
-				endy[1]=starty[1]+20;
-				movex[1]=0;
-				movey[1]=0;
+				sprintf(menustring[1], "Difficult");
+				startx[1] = 10;
+				starty[1] = 360;
+				endx[1]   = startx[1] + strlen(menustring[1]) * 10;
+				endy[1]   = starty[1] + 20;
+				movex[1]  = 0;
+				movey[1]  = 0;
 
-				sprintf (menustring[2], "Insane");
-				startx[2]=10;
-				starty[2]=320;
-				endx[2]=startx[2]+strlen(menustring[2])*10;
-				endy[2]=starty[2]+20;
-				movex[2]=0;
-				movey[2]=0;
+				sprintf(menustring[2], "Insane");
+				startx[2] = 10;
+				starty[2] = 320;
+				endx[2]   = startx[2] + strlen(menustring[2]) * 10;
+				endy[2]   = starty[2] + 20;
+				movex[2]  = 0;
+				movey[2]  = 0;
 			}
-			if(mainmenu==9){			
+			if (mainmenu == MAIN_MENU_LEVEL_LISTING){			
 				int tempncl;
 				//tempncl=numchallengelevels;
 				//numchallengelevels=9;
-				nummenuitems=2+numchallengelevels;
+				nummenuitems = 2 + numchallengelevels;
 				char temp[255];
 
-				for(j=0;j<numchallengelevels;j++){
-					for(i=0;i<255;i++)menustring[j][i]='\0';
-					sprintf (temp, "Level %d",j+1);
+				for (j = 0; j < numchallengelevels; j++)
+                {
+					for (i = 0; i < 255; i++) menustring[j][i] = '\0';
+					sprintf(temp, "Level %d", j + 1);
 					strcpy(menustring[j],temp);
-					for(i=0;i<17;i++)if(menustring[j][i]=='\0')menustring[j][i]=' ';
-					menustring[j][17]='\0';
-					sprintf (temp, "%d",(int)accounthighscore[accountactive][j]);
-					strcat(menustring[j],temp);
-					for(i=18;i<32;i++)if(menustring[j][i]=='\0')menustring[j][i]=' ';
-					menustring[j][32]='\0';
-					sprintf (temp, "%d:",(int)(((int)accountfasttime[accountactive][j]-(int)(accountfasttime[accountactive][j])%60)/60));
-					strcat(menustring[j],temp);
-					if((int)(accountfasttime[accountactive][j])%60<10)strcat(menustring[j],"0");
-					sprintf (temp, "%d",(int)(accountfasttime[accountactive][j])%60);
-					strcat(menustring[j],temp);
 
-					startx[j]=10;
-					starty[j]=400-j*25;
-					endx[j]=startx[j]+strlen(menustring[j])*10;
-					endy[j]=starty[j]+20;
-					movex[j]=0;
-					movey[j]=0;
+					for (i = 0; i < 17; i++) if (menustring[j][i] == '\0') menustring[j][i] = ' ';
+					menustring[j][17] = '\0';
+					sprintf (temp, "%d", (int) accounthighscore[accountactive][j]);
+					strcat(menustring[j], temp);
+
+					for (i = 18; i < 32; i++) if (menustring[j][i] == '\0') menustring[j][i] = ' ';
+					menustring[j][32] = '\0';
+					sprintf (temp, "%d:", (int) (((int)accountfasttime[accountactive][j] - (int) (accountfasttime[accountactive][j]) % 60) / 60));
+					strcat(menustring[j], temp);
+
+					if ((int) (accountfasttime[accountactive][j]) % 60 < 10) strcat(menustring[j], "0");
+					sprintf (temp, "%d", (int) (accountfasttime[accountactive][j]) % 60);
+					strcat(menustring[j], temp);
+
+					startx[j] = 10;
+					starty[j] = 400 - j * 25;
+					endx[j]   = startx[j] + strlen(menustring[j]) * 10;
+					endy[j]   = starty[j] + 20;
+					movex[j]  = 0;
+					movey[j]  = 0;
 				}
 
-				sprintf (menustring[numchallengelevels], "Back");
-				startx[numchallengelevels]=10;
-				endx[numchallengelevels]=startx[numchallengelevels]+strlen(menustring[numchallengelevels])*10;
-				starty[numchallengelevels]=10;
-				endy[numchallengelevels]=starty[numchallengelevels]+20;
-				movex[numchallengelevels]=0;
-				movey[numchallengelevels]=0;
+				sprintf(menustring[numchallengelevels], "Back");
+				startx[numchallengelevels] = 10;
+				endx[numchallengelevels]   = startx[numchallengelevels] + strlen(menustring[numchallengelevels]) * 10;
+				starty[numchallengelevels] = 10;
+				endy[numchallengelevels]   = starty[numchallengelevels] + 20;
+				movex[numchallengelevels]  = 0;
+				movey[numchallengelevels]  = 0;
 
-				sprintf (menustring[numchallengelevels+1], "             High Score      Best Time");
-				startx[numchallengelevels+1]=10;
-				starty[numchallengelevels+1]=440;
-				endx[numchallengelevels+1]=startx[numchallengelevels+1]+strlen(menustring[numchallengelevels+1])*10;
-				endy[numchallengelevels+1]=starty[numchallengelevels+1]+20;
-				movex[numchallengelevels+1]=0;
-				movey[numchallengelevels+1]=0;
+				sprintf(menustring[numchallengelevels+1], "             High Score      Best Time");
+				startx[numchallengelevels + 1] = 10;
+				starty[numchallengelevels + 1] = 440;
+				endx[numchallengelevels + 1]   = startx[numchallengelevels + 1] + strlen(menustring[numchallengelevels + 1]) * 10;
+				endy[numchallengelevels + 1]   = starty[numchallengelevels + 1] + 20;
+				movex[numchallengelevels + 1]  = 0;
+				movey[numchallengelevels + 1]  = 0;
 
 				//numchallengelevels=tempncl;
 
 			}
-			if(mainmenu==11){			
-				nummenuitems=2+numchallengelevels;
+			if (mainmenu == MAIN_MENU_CONGRATS_SCORES)
+            {			
+				nummenuitems = 2 + numchallengelevels;
 				char temp[255];
 
-				for(j=0;j<numchallengelevels;j++){
-					for(i=0;i<255;i++)menustring[j][i]='\0';
-					sprintf (temp, "Level %d",j+1);
-					strcpy(menustring[j],temp);
-					for(i=0;i<17;i++)if(menustring[j][i]=='\0')menustring[j][i]=' ';
-					menustring[j][17]='\0';
-					sprintf (temp, "%d",(int)accounthighscore[accountactive][j]);
-					strcat(menustring[j],temp);
-					for(i=18;i<32;i++)if(menustring[j][i]=='\0')menustring[j][i]=' ';
-					menustring[j][32]='\0';
-					sprintf (temp, "%d:",(int)(((int)accountfasttime[accountactive][j]-(int)(accountfasttime[accountactive][j])%60)/60));
-					strcat(menustring[j],temp);
-					if((int)(accountfasttime[accountactive][j])%60<10)strcat(menustring[j],"0");
-					sprintf (temp, "%d",(int)(accountfasttime[accountactive][j])%60);
-					strcat(menustring[j],temp);
+				for (j = 0; j < numchallengelevels; j++)
+                {
+					for (i = 0; i < 255; i++) menustring[j][i] = '\0';
+					sprintf(temp, "Level %d", j + 1);
+					strcpy(menustring[j], temp);
+					for (i = 0; i < 17; i++) if (menustring[j][i] == '\0') menustring[j][i] = ' ';
+					menustring[j][17] = '\0';
+					sprintf(temp, "%d", (int) accounthighscore[accountactive][j]);
+					strcat(menustring[j], temp);
+					for (i = 18;i < 32; i++) if(menustring[j][i] == '\0') menustring[j][i] = ' ';
+					menustring[j][32] = '\0';
+					sprintf(temp, "%d:", (int)(((int) accountfasttime[accountactive][j] - (int)(accountfasttime[accountactive][j]) % 60) / 60));
+					strcat(menustring[j], temp);
+					if ((int)(accountfasttime[accountactive][j]) % 60 < 10) strcat(menustring[j], "0");
+					sprintf (temp, "%d", (int)(accountfasttime[accountactive][j]) % 60);
+					strcat(menustring[j], temp);
 
-					startx[j]=10;
-					starty[j]=360-j*40;
-					endx[j]=startx[j]+strlen(menustring[j])*10;
-					endy[j]=starty[j]+20;
-					movex[j]=0;
-					movey[j]=0;
+					startx[j] = 10;
+					starty[j] = 360 - j * 40;
+					endx[j]   = startx[j] + strlen(menustring[j]) * 10;
+					endy[j]   = starty[j] + 20;
+					movex[j]  = 0;
+					movey[j]  =0 ;
 				}
 
-				sprintf (menustring[numchallengelevels], "Back");
-				startx[numchallengelevels]=10;
-				endx[numchallengelevels]=startx[numchallengelevels]+strlen(menustring[numchallengelevels])*10;
-				starty[numchallengelevels]=10;
-				endy[numchallengelevels]=starty[numchallengelevels]+20;
-				movex[numchallengelevels]=0;
-				movey[numchallengelevels]=0;
+				sprintf(menustring[numchallengelevels], "Back");
+				startx[numchallengelevels] = 10;
+				endx[numchallengelevels]   = startx[numchallengelevels] + strlen(menustring[numchallengelevels]) * 10;
+				starty[numchallengelevels] = 10;
+				endy[numchallengelevels]   = starty[numchallengelevels] + 20;
+				movex[numchallengelevels]  = 0;
+				movey[numchallengelevels]  = 0;
 
-				sprintf (menustring[numchallengelevels+1], "             High Score      Best Time");
-				startx[numchallengelevels+1]=10;
-				starty[numchallengelevels+1]=400;
-				endx[numchallengelevels+1]=startx[numchallengelevels+1]+strlen(menustring[numchallengelevels+1])*10;
-				endy[numchallengelevels+1]=starty[numchallengelevels+1]+20;
-				movex[numchallengelevels+1]=0;
-				movey[numchallengelevels+1]=0;
+				sprintf(menustring[numchallengelevels+1], "             High Score      Best Time");
+				startx[numchallengelevels + 1] = 10;
+				starty[numchallengelevels + 1] = 400;
+				endx[numchallengelevels + 1]   = startx[numchallengelevels + 1] + strlen(menustring[numchallengelevels + 1]) * 10;
+				endy[numchallengelevels + 1]   = starty[numchallengelevels + 1] + 20;
+				movex[numchallengelevels + 1]  = 0;
+				movey[numchallengelevels + 1]  = 0;
 
 			}
-			if(mainmenu==10){			
-				nummenuitems=6;
+			if (mainmenu == MAIN_MENU_CONGRATS)
+            {			
+				nummenuitems = 6;
 				char temp[255];
 
-				sprintf (menustring[0], "Congratulations!");
-				startx[0]=220;
-				starty[0]=330;
-				endx[0]=startx[0]+strlen(menustring[0])*10;
-				endy[0]=starty[0]+20;
-				movex[0]=0;
-				movey[0]=0;
+				sprintf(menustring[0], "Congratulations!");
+				startx[0] = 220;
+				starty[0] = 330;
+				endx[0]   = startx[0] + strlen(menustring[0]) * 10;
+				endy[0]   = starty[0] + 20;
+				movex[0]  = 0;
+				movey[0]  = 0;
 
-				sprintf (menustring[1], "You have avenged your family and");
-				startx[1]=140;
-				starty[1]=300;
-				endx[1]=startx[1]+strlen(menustring[1])*10;
-				endy[1]=starty[1]+20;
-				movex[1]=0;
-				movey[1]=0;
+				sprintf(menustring[1], "You have avenged your family and");
+				startx[1] = 140;
+				starty[1] = 300;
+				endx[1]   = startx[1] + strlen(menustring[1]) * 10;
+				endy[1]   = starty[1] + 20;
+				movex[1]  = 0;
+				movey[1]  = 0;
 
-				sprintf (menustring[2], "restored peace to the island of Lugaru.");
-				startx[2]=110;
-				starty[2]=270;
-				endx[2]=startx[2]+strlen(menustring[2])*10;
-				endy[2]=starty[2]+20;
-				movex[2]=0;
-				movey[2]=0;
+				sprintf(menustring[2], "restored peace to the island of Kugaru.");
+				startx[2] = 110;
+				starty[2] = 270;
+				endx[2]   = startx[2] + strlen(menustring[2]) * 10;
+				endy[2]   = starty[2] + 20;
+				movex[2]  = 0;
+				movey[2]  = 0;
 
-				sprintf (menustring[3], "Back");
-				startx[3]=10;
-				endx[3]=startx[3]+strlen(menustring[3])*10;
-				starty[3]=10;
-				endy[3]=starty[3]+20;
-				movex[3]=0;
-				movey[3]=0;
+				sprintf(menustring[3], "Back");
+				startx[3] = 10;
+				endx[3]   = startx[3] + strlen(menustring[3]) * 10;
+				starty[3] = 10;
+				endy[3]   = starty[3] + 20;
+				movex[3]  = 0;
+				movey[3]  = 0;
 
-				for(i=0;i<255;i++)menustring[4][i]='\0';
-				sprintf (temp, "Your score:");
-				strcpy(menustring[4],temp);
-				for(i=0;i<20;i++)if(menustring[4][i]=='\0')menustring[4][i]=' ';
-				menustring[4][20]='\0';
-				sprintf (temp, "%d",(int)accountcampaignscore[accountactive]);
-				strcat(menustring[4],temp);
-				startx[4]=190;
-				endx[4]=startx[4]+strlen(menustring[4])*10;
-				starty[4]=200;
-				endy[4]=starty[4]+20;
-				movex[4]=0;
-				movey[4]=0;
+				for (i = 0; i < 255; i++) menustring[4][i] = '\0';
+				sprintf(temp, "Your score:");
+				strcpy(menustring[4], temp);
+
+				for (i = 0; i < 20; i++) if (menustring[4][i] == '\0') menustring[4][i] = ' ';
+				menustring[4][20] = '\0';
+				sprintf(temp, "%d", (int) accountcampaignscore[accountactive]);
+				strcat(menustring[4], temp);
+				startx[4] = 190;
+				endx[4]   = startx[4] + strlen(menustring[4]) * 10;
+				starty[4] = 200;
+				endy[4]   = starty[4] + 20;
+				movex[4]  = 0;
+				movey[4]  = 0;
 				/*
 				for(i=0;i<255;i++)menustring[5][i]='\0';
 				sprintf (temp, "Your time:");
@@ -2882,19 +2908,19 @@ int Game::DrawGLScene(void)
 				movex[5]=0;
 				movey[5]=0;
 				*/
-				for(i=0;i<255;i++)menustring[5][i]='\0';
-				sprintf (temp, "Highest score:");
-				strcpy(menustring[5],temp);
-				for(i=0;i<20;i++)if(menustring[5][i]=='\0')menustring[5][i]=' ';
-				menustring[5][20]='\0';
-				sprintf (temp, "%d",(int)accountcampaignhighscore[accountactive]);
-				strcat(menustring[5],temp);
-				startx[5]=190;
-				endx[5]=startx[5]+strlen(menustring[5])*10;
-				starty[5]=180;
-				endy[5]=starty[5]+20;
-				movex[5]=0;
-				movey[5]=0;
+				for (i = 0; i < 255; i++) menustring[5][i] = '\0';
+				sprintf(temp, "Highest score:");
+				strcpy(menustring[5], temp);
+				for (i = 0; i < 20; i++) if (menustring[5][i] == '\0') menustring[5][i] = ' ';
+				menustring[5][20] = '\0';
+				sprintf(temp, "%d", (int) accountcampaignhighscore[accountactive]);
+				strcat(menustring[5], temp);
+				startx[5] = 190;
+				endx[5]   = startx[5] + strlen(menustring[5]) * 10;
+				starty[5] = 180;
+				endy[5]   = starty[5] + 20;
+				movex[5]  = 0;
+				movey[5]  = 0;
 				/*
 				for(i=0;i<255;i++)menustring[7][i]='\0';
 				sprintf (temp, "Lowest time:");
@@ -2912,65 +2938,70 @@ int Game::DrawGLScene(void)
 			}
 		}
 
-		if(mainmenu==13){	
-			nummenuitems=2;
+		if (mainmenu == MAIN_MENU_CONGRATS_ENTER_NAME)
+        {	
+			nummenuitems = 2;
 			char temp[255];
 
-			sprintf (menustring[0], "Please enter your name:");
-			startx[0]=50;
-			starty[0]=250;
-			endx[0]=startx[0]+strlen(menustring[0])*10;
-			endy[0]=starty[0]+20;
-			movex[0]=0;
-			movey[0]=0;
+			sprintf(menustring[0], "Please enter your name:");
+			startx[0] = 50;
+			starty[0] = 250;
+			endx[0]   = startx[0] + strlen(menustring[0]) * 10;
+			endy[0]   = starty[0] + 20;
+			movex[0]  = 0;
+			movey[0]  = 0;
 
-			sprintf (menustring[1], "Please enter your name:");
-			startx[1]=290;
-			starty[1]=250;
-			endx[1]=startx[1]+strlen(menustring[1])*10;
-			endy[1]=starty[1]+20;
-			movex[1]=0;
-			movey[1]=0;
+			sprintf(menustring[1], "Please enter your name:");
+			startx[1] = 290;
+			starty[1] = 250;
+			endx[1]   = startx[1] + strlen(menustring[1]) * 10;
+			endy[1]   = starty[1] + 20;
+			movex[1]  = 0;
+			movey[1]  = 0;
 		}
-		if(mainmenu==1||mainmenu==2){
-			nummenuitems=7;
-			startx[0]=150;
-			starty[0]=480-128;
-			endx[0]=150+256;
-			endy[0]=480;
-			movex[0]=0;
-			movey[0]=0;
+		if (mainmenu == MAIN_MENU_MAIN || mainmenu == MAIN_MENU_RESUME)
+        {
+			nummenuitems = 7;
 
-			startx[1]=18;
-			starty[1]=480-152-32;
-			endx[1]=18+128;
-			endy[1]=480-152;
-			movex[1]=0;
-			movey[1]=0;
+			startx[0]   = 150;
+			starty[0]   = 480 - 128;
+			endx[0]     = 150 + 256;
+			endy[0]     = 480;
+			movex[0]    = 0;
+			movey[0]    = 0;
 
-			startx[2]=18;
-			starty[2]=480-228-32;
-			endx[2]=2+128;
-			endy[2]=480-228;
-			movex[2]=0;
-			movey[2]=0;
+			startx[1] = 18;
+			starty[1] = 480 - 152 - 32;
+			endx[1]   = 18 + 128;
+			endy[1]   = 480 - 152;
+			movex[1]  = 0;
+			movey[1]  = 0;
 
-			if(mainmenu==1){
-				startx[3]=18;
-				starty[3]=480-306-32;
-				endx[3]=22+64;
-				endy[3]=480-306;
-				movex[3]=0;
-				movey[3]=0;
+			startx[2] = 18;
+			starty[2] = 480 - 228 - 32;
+			endx[2]   = 2 + 128;
+			endy[2]   = 480 - 228;
+			movex[2]  = 0;
+			movey[2]  = 0;
+
+			if (mainmenu == MAIN_MENU_MAIN)
+            {
+				startx[3] = 18;
+				starty[3] = 480 - 306 - 32;
+				endx[3]   = 22 + 64;
+				endy[3]   = 480 - 306;
+				movex[3]  = 0;
+				movey[3]  = 0;
 			}
 
-			if(mainmenu==2){
-				startx[3]=18;
-				starty[3]=480-306-32;
-				endx[3]=22+128;
-				endy[3]=480-306;
-				movex[3]=0;
-				movey[3]=0;
+			if (mainmenu == MAIN_MENU_RESUME)
+            {
+				startx[3] = 18;
+				starty[3] = 480 - 306 - 32;
+				endx[3]   = 22 + 128;
+				endy[3]   = 480 - 306;
+				movex[3]  = 0;
+				movey[3]  = 0;
 			}
 
 			/*startx[4]=150;
@@ -2978,101 +3009,106 @@ int Game::DrawGLScene(void)
 			endx[4]=150+256;
 			endy[4]=480;
 			*/
-			if(anim==0){
-				startx[4]=380;
-				starty[4]=480-140-256;
-				endx[4]=380+256;
-				endy[4]=480-140;
-				movex[4]=80;
-				movey[4]=0;
+			if (anim == 0)
+            {
+				startx[4] = 380;
+				starty[4] = 480 - 140 - 256;
+				endx[4]   = 380 + 256;
+				endy[4]   = 480 - 140;
+				movex[4]  = 80;
+				movey[4]  = 0;
 
-				startx[5]=145;
-				starty[5]=480-138-256;
-				endx[5]=145+256;
-				endy[5]=480-138;
-				movex[5]=40;
-				movey[5]=0;
+				startx[5] = 145;
+				starty[5] = 480 - 138 - 256;
+				endx[5]   = 145 + 256;
+				endy[5]   = 480 - 138;
+				movex[5]  = 40;
+				movey[5]  = 0;
 
-				startx[6]=254;
-				starty[6]=480-144-256;
-				endx[6]=254+256;
-				endy[6]=480-144;
-				movex[6]=20;
-				movey[6]=0;
+				startx[6] = 254;
+				starty[6] = 480 - 144 - 256;
+				endx[6]   = 254 + 256;
+				endy[6]   = 480 - 144;
+				movex[6]  = 20;
+				movey[6]  = 0;
 			}
-			if(anim==1){
-				startx[4]=180;
-				starty[4]=480-140-256;
-				endx[4]=180+256;
-				endy[4]=480-140;
-				movex[4]=80;
-				movey[4]=0;
+			if (anim == 1)
+            {
+				startx[4] = 180;
+				starty[4] = 480 - 140 - 256;
+				endx[4]   = 180 + 256;
+				endy[4]   = 480 - 140;
+				movex[4]  = 80;
+				movey[4]  = 0;
 
-				startx[5]=500;
-				starty[5]=480-138-256;
-				endx[5]=500+256;
-				endy[5]=480-138;
-				movex[5]=40;
-				movey[5]=0;
+				startx[5] = 500;
+				starty[5] = 480 - 138 - 256;
+				endx[5]   = 500 + 256;
+				endy[5]   = 480 - 138;
+				movex[5]  = 40;
+				movey[5]  = 0;
 
-				startx[6]=340;
-				starty[6]=480-144-256;
-				endx[6]=340+256;
-				endy[6]=480-144;
-				movex[6]=20;
-				movey[6]=0;
+				startx[6] = 340;
+				starty[6] = 480 - 144 - 256;
+				endx[6]   = 340 + 256;
+				endy[6]   = 480 - 144;
+				movex[6]  = 20;
+				movey[6]  = 0;
 			}
-			if(anim==2){
-				startx[4]=460;
-				starty[4]=480-140-256;
-				endx[4]=460+256;
-				endy[4]=480-140;
-				movex[4]=50;
-				movey[4]=0;
+			if (anim == 2)
+            {
+				startx[4] = 460;
+				starty[4] = 480 - 140 - 256;
+				endx[4]   = 460 + 256;
+				endy[4]   = 480 - 140;
+				movex[4]  = 50;
+				movey[4]  = 0;
 
-				startx[5]=295;
-				starty[5]=480-150-256;
-				endx[5]=295+256;
-				endy[5]=480-138;
-				movex[5]=-10;
-				movey[5]=0;
+				startx[5] = 295;
+				starty[5] = 480 - 150 - 256;
+				endx[5]   = 295 + 256;
+				endy[5]   = 480 - 138;
+				movex[5]  = -10;
+				movey[5]  = 0;
 
-				startx[6]=204;
-				starty[6]=480-144-256;
-				endx[6]=204+256;
-				endy[6]=480-144;
-				movex[6]=-30;
-				movey[6]=0;
+				startx[6] = 204;
+				starty[6] = 480 - 144 - 256;
+				endx[6]   = 204 + 256;
+				endy[6]   = 480 - 144;
+				movex[6]  = -30;
+				movey[6]  = 0;
 			}
-			if(anim==3){
-				startx[4]=150;
-				starty[4]=480-140-256;
-				endx[4]=200+256;
-				endy[4]=480-140;
-				movex[4]=80;
-				movey[4]=0;
+			if (anim == 3)
+            {
+				startx[4] = 150;
+				starty[4] = 480 - 140 - 256;
+				endx[4]   = 200 + 256;
+				endy[4]   = 480 - 140;
+				movex[4]  = 80;
+				movey[4]  = 0;
 
-				startx[5]=350;
-				starty[5]=480-150-256;
-				endx[5]=350+256;
-				endy[5]=480-138;
-				movex[5]=5;
-				movey[5]=0;
+				startx[5] = 350;
+				starty[5] = 480 - 150 - 256;
+				endx[5]   = 350 + 256;
+				endy[5]   = 480 - 138;
+				movex[5]  = 5;
+				movey[5]  = 0;
 
-				startx[6]=500;
-				starty[6]=480-144-256;
-				endx[6]=500+256;
-				endy[6]=480-144;
-				movex[6]=-10;
-				movey[6]=0;
+				startx[6] = 500;
+				starty[6] = 480 - 144 - 256;
+				endx[6]   = 500 + 256;
+				endy[6]   = 480 - 144;
+				movex[6]  = -10;
+				movey[6]  = 0;
 			}
-			if(anim==4){
-				startx[4]=190;
-				starty[4]=480-100-256;
-				endx[4]=190+256;
-				endy[4]=480-100;
-				movex[4]=-30;
-				movey[4]=0;
+			if (anim == 4)
+            {
+				startx[4] = 190;
+				starty[4] = 480 - 100 - 256;
+				endx[4]   = 190 + 256;
+				endy[4]   = 480 - 100;
+				movex[4]  = -30;
+				movey[4]  = 0;
 
 				startx[5]=185;
 				starty[5]=480-120-256;
@@ -3090,52 +3126,58 @@ int Game::DrawGLScene(void)
 			}
 		}
 
-		selected=-1;
+		selected = -1;
 
-		if(mainmenu==1||mainmenu==2)
-			for(i=1;i<4;i++){
-				if((mousecoordh/screenwidth*640)>startx[i]&&(mousecoordh/screenwidth*640)<endx[i]&&480-(mousecoordv/screenheight*480)>starty[i]&&480-(mousecoordv/screenheight*480)<endy[i]){
+		if (mainmenu == MAIN_MENU_MAIN || mainmenu == MAIN_MENU_RESUME)
+			for (i = 1; i < 4; i++)
+            {
+				if ((mousecoordh / screenwidth * 640) > startx[i] && (mousecoordh / screenwidth * 640) < endx[i] && 480 - (mousecoordv / screenheight * 480) > starty[i] && 480 - (mousecoordv / screenheight * 480) < endy[i])
 					selected=i;
-				}
 			}
 
-			if(mainmenu==3||mainmenu==4||mainmenu==5||mainmenu==6||mainmenu==7||mainmenu==8||mainmenu==9||mainmenu==10||mainmenu==11||mainmenu==13||mainmenu==17)
-				for(i=0;i<nummenuitems;i++){
-					if((mousecoordh/screenwidth*640)>startx[i]&&(mousecoordh/screenwidth*640)<endx[i]&&480-(mousecoordv/screenheight*480)>starty[i]&&480-(mousecoordv/screenheight*480)<endy[i]){
-						if(mainmenu!=5)selected=i;
-						if(mainmenu==5&&(i!=0&&i!=6))selected=i;
-						if(mainmenu==9&&(i!=numchallengelevels+1))selected=i;
-						if(mainmenu==11&&(i!=numchallengelevels+1))selected=i;
+			if (mainmenu >= MAIN_MENU_OPTIONS || mainmenu == MAIN_MENU_17)
+				for (i = 0; i < nummenuitems; i++)
+                {
+					if ((mousecoordh / screenwidth * 640) > startx[i] && (mousecoordh / screenwidth * 640) < endx[i] && 480 - (mousecoordv / screenheight * 480) > starty[i] && 480 - (mousecoordv / screenheight * 480) < endy[i])
+                    {
+						if(mainmenu != MAIN_MENU_CAMPAIGNS) selected = i;
+						if(mainmenu == MAIN_MENU_CAMPAIGNS && (i != 0 && i != 6 )) selected=i;
+						if(mainmenu == MAIN_MENU_LEVEL_LISTING && (i != numchallengelevels + 1)) selected=i;
+						if(mainmenu == MAIN_MENU_CONGRATS_SCORES && (i != numchallengelevels + 1)) selected=i;
 					}
 				}
 
-				if(nummenuitems>0)
-					for(i=0;i<nummenuitems;i++){
-						if(selected==i)selectedlong[i]+=multiplier*5;
-						if(selectedlong[i]>1)selectedlong[i]=1;
-						if(selected!=i)selectedlong[i]-=multiplier*5;
-						if(selectedlong[i]<0)selectedlong[i]=0;	
-						//if(i>=4)selectedlong[i]=.3;		
-						if(i>=4&&(mainmenu==1||mainmenu==2))selectedlong[i]=0;	
+				if (nummenuitems > 0)
+					for(i = 0; i < nummenuitems; i++)
+                    {
+						if (selected == i) selectedlong[i] += multiplier * 5;
+						if (selectedlong[i] > 1) selectedlong[i] = 1;
+						if (selected != i) selectedlong[i] -= multiplier * 5;
+						if (selectedlong[i] < 0) selectedlong[i] = 0;	
+						//if(i>=4)selectedlong[i]=.3;
+						if (i >= 4 && (mainmenu == MAIN_MENU_MAIN || mainmenu == MAIN_MENU_RESUME)) selectedlong[i] = 0;	
 					}
 
-					if(nummenuitems>0)
-						for(i=0;i<nummenuitems;i++){
-							offsetx[i]=(startx[i]+endx[i])/2-(mousecoordh/screenwidth*640);
-							offsety[i]=(starty[i]+endy[i])/2-(480-(mousecoordv/screenheight*480));
-							offsetx[i]*=.06f;
-							offsety[i]*=.06f;
-							offsetx[i]=0;
-							offsety[i]=0;
-							if(i>=4&&(mainmenu==1||mainmenu==2)){
-								offsetx[i]=(startx[i]+endx[i]+movex[i]*transition)/2-(640+190)/2;
-								offsety[i]=(starty[i]+endy[i]+movey[i]*transition)/2-(336+150)/2;
-								offsetx[i]*=.06f;
-								offsety[i]*=.06f;
+					if (nummenuitems > 0)
+						for (i = 0; i < nummenuitems; i++)
+                        {
+							offsetx[i] = (startx[i]+endx[i])/2-(mousecoordh/screenwidth*640);
+							offsety[i] = (starty[i]+endy[i])/2-(480-(mousecoordv/screenheight*480));
+							offsetx[i] *= 0.06f;
+							offsety[i] *= 0.06f;
+							offsetx[i] = 0;
+							offsety[i] = 0;
+							if (i >= 4 && (mainmenu == MAIN_MENU_MAIN || mainmenu == MAIN_MENU_RESUME))
+                            {
+								offsetx[i] = (startx[i] + endx[i] + movex[i] * transition) / 2 - (640 + 190) / 2;
+								offsety[i] = (starty[i] + endy[i] + movey[i] * transition) / 2 - (336 + 150) / 2;
+								offsetx[i] *= 0.06f;
+								offsety[i] *= 0.06f;
 							}
 						}
 
-						if(mainmenu==1||mainmenu==2){
+						if (mainmenu == MAIN_MENU_MAIN || mainmenu == MAIN_MENU_RESUME)
+                        {
 							glClear(GL_DEPTH_BUFFER_BIT);
 							glEnable(GL_ALPHA_TEST);
 							glAlphaFunc(GL_GREATER, 0.001f);
@@ -3248,7 +3290,7 @@ int Game::DrawGLScene(void)
 									glEnable(GL_BLEND);
 									//glDisable(GL_ALPHA_TEST);
 									glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
-									if(mainmenu==1||mainmenu==2)
+									if(mainmenu==1||mainmenu == MAIN_MENU_RESUME)
 									{
 										glColor4f(1,1,1,1);
 										glBlendFunc(GL_SRC_ALPHA,GL_ONE);
@@ -3292,17 +3334,17 @@ int Game::DrawGLScene(void)
 											}
 										}
 									}
-									if(mainmenu==3||mainmenu==4||mainmenu==5||mainmenu==6||mainmenu==7||mainmenu==8||mainmenu==9||mainmenu==10||mainmenu==11||mainmenu==13||mainmenu==17)
+									if (mainmenu >= MAIN_MENU_OPTIONS || mainmenu == MAIN_MENU_17)
 									{
-										if(mainmenu!=5||j<6)
+										if (mainmenu != MAIN_MENU_KEYS || j < 6)
 										{
 											glColor4f(1,0,0,1);
-											if(mainmenu==9&&j>accountprogress[accountactive]&&j<numchallengelevels)glColor4f(0.5,0,0,1);
-											if(mainmenu==11&&j>accountprogress[accountactive]&&j<numchallengelevels)glColor4f(0.5,0,0,1);
+											if (mainmenu == MAIN_MENU_LEVEL_LISTING && j > accountprogress[accountactive] && j < numchallengelevels) glColor4f(0.5,0,0,1);
+											if (mainmenu == MAIN_MENU_CONGRATS_SCORES && j > accountprogress[accountactive] && j < numchallengelevels) glColor4f(0.5,0,0,1);
 											//if(1-((float)i)/10-(1-selectedlong[j])>0){
 											glMatrixMode(GL_MODELVIEW);							// Select The Modelview Matrix
 											glPushMatrix();
-												if(mainmenu!=7||j!=0||!entername)text.glPrint(startx[j],starty[j],menustring[j],0,1,640,480);
+												if (mainmenu != MAIN_MENU_USER_LISTING || j != 0|| !entername) text.glPrint(startx[j],starty[j],menustring[j],0,1,640,480);
 												else
 												{
 													if(displayblink){
@@ -3332,19 +3374,19 @@ int Game::DrawGLScene(void)
 												if(1-((float)i)/15-(1-selectedlong[j])>0)
 												{
 													glColor4f(1,0,0,(1-((float)i)/10-(1-selectedlong[j]))*.25);
-													if(mainmenu==9&&j>accountprogress[accountactive]&&j<numchallengelevels)glColor4f(0.5,0,0,(1-((float)i)/10-(1-selectedlong[j]))*.25);
-													if(mainmenu==11&&j>accountprogress[accountactive]&&j<numchallengelevels)glColor4f(0.5,0,0,(1-((float)i)/10-(1-selectedlong[j]))*.25);
-													if(mainmenu==3)text.glPrint(startx[j]-((float)i)+offsetx[j]*((float)i)/4-((/*1*/+((float)i)/70)*strlen(menustring[j]))*3,starty[j]/*-i*1/2*/+offsety[j]*((float)i)/4,menustring[j],0,1+((float)i)/70,640,480);
-													if(mainmenu==4)text.glPrint(startx[j]-((float)i)+offsetx[j]*((float)i)/4/*-((((float)i)/70)*strlen(menustring[j]))*3*/,starty[j]/*-i*1/2*/+offsety[j]*((float)i)/4,menustring[j],0,1+((float)i)/70,640,480);
-													if(mainmenu==5)text.glPrint(startx[j]-((float)i)+offsetx[j]*((float)i)/4/*-((((float)i)/70)*strlen(menustring[j]))*3*/,starty[j]/*-i*1/2*/+offsety[j]*((float)i)/4,menustring[j],0,1+((float)i)/70,640,480);
-													if(mainmenu==6)text.glPrint(startx[j]-((float)i)+offsetx[j]*((float)i)/4/*-((((float)i)/70)*strlen(menustring[j]))*3*/,starty[j]/*-i*1/2*/+offsety[j]*((float)i)/4,menustring[j],0,1+((float)i)/70,640,480);
-													if(mainmenu==7&&(j!=0||!entername))text.glPrint(startx[j]-((float)i)+offsetx[j]*((float)i)/4/*-((((float)i)/70)*strlen(menustring[j]))*3*/,starty[j]/*-i*1/2*/+offsety[j]*((float)i)/4,menustring[j],0,1+((float)i)/70,640,480);
-													if(mainmenu==8)text.glPrint(startx[j]-((float)i)+offsetx[j]*((float)i)/4/*-((((float)i)/70)*strlen(menustring[j]))*3*/,starty[j]/*-i*1/2*/+offsety[j]*((float)i)/4,menustring[j],0,1+((float)i)/70,640,480);
-													if(mainmenu==9)text.glPrint(startx[j]-((float)i)+offsetx[j]*((float)i)/4/*-((((float)i)/70)*strlen(menustring[j]))*3*/,starty[j]/*-i*1/2*/+offsety[j]*((float)i)/4,menustring[j],0,1+((float)i)/70,640,480);
-													if(mainmenu==11)text.glPrint(startx[j]-((float)i)+offsetx[j]*((float)i)/4/*-((((float)i)/70)*strlen(menustring[j]))*3*/,starty[j]/*-i*1/2*/+offsety[j]*((float)i)/4,menustring[j],0,1+((float)i)/70,640,480);
-													if(mainmenu==10)text.glPrint(startx[j]-((float)i)+offsetx[j]*((float)i)/4/*-((((float)i)/70)*strlen(menustring[j]))*3*/,starty[j]/*-i*1/2*/+offsety[j]*((float)i)/4,menustring[j],0,1+((float)i)/70,640,480);
-													if(mainmenu==17)text.glPrint(startx[j]-((float)i)+offsetx[j]*((float)i)/4/*-((((float)i)/70)*strlen(menustring[j]))*3*/,starty[j]/*-i*1/2*/+offsety[j]*((float)i)/4,menustring[j],0,1+((float)i)/70,640,480);
-													if(mainmenu==13&&j!=1)text.glPrint(startx[j]-((float)i)+offsetx[j]*((float)i)/4/*-((((float)i)/70)*strlen(menustring[j]))*3*/,starty[j]/*-i*1/2*/+offsety[j]*((float)i)/4,menustring[j],0,1+((float)i)/70,640,480);
+													if(mainmenu == MAIN_MENU_LEVEL_LISTING &&j>accountprogress[accountactive]&&j<numchallengelevels)glColor4f(0.5,0,0,(1-((float)i)/10-(1-selectedlong[j]))*.25);
+													if(mainmenu == MAIN_MENU_CONGRATS_SCORES &&j>accountprogress[accountactive]&&j<numchallengelevels)glColor4f(0.5,0,0,(1-((float)i)/10-(1-selectedlong[j]))*.25);
+													if(mainmenu == MAIN_MENU_OPTIONS)text.glPrint(startx[j]-((float)i)+offsetx[j]*((float)i)/4-((/*1*/+((float)i)/70)*strlen(menustring[j]))*3,starty[j]/*-i*1/2*/+offsety[j]*((float)i)/4,menustring[j],0,1+((float)i)/70,640,480);
+													if(mainmenu == MAIN_MENU_KEYS) text.glPrint(startx[j]-((float)i)+offsetx[j]*((float)i)/4/*-((((float)i)/70)*strlen(menustring[j]))*3*/,starty[j]/*-i*1/2*/+offsety[j]*((float)i)/4,menustring[j],0,1+((float)i)/70,640,480);
+													if(mainmenu == MAIN_MENU_CAMPAIGNS)text.glPrint(startx[j]-((float)i)+offsetx[j]*((float)i)/4/*-((((float)i)/70)*strlen(menustring[j]))*3*/,starty[j]/*-i*1/2*/+offsety[j]*((float)i)/4,menustring[j],0,1+((float)i)/70,640,480);
+													if(mainmenu == MAIN_MENU_DELETE_USER)text.glPrint(startx[j]-((float)i)+offsetx[j]*((float)i)/4/*-((((float)i)/70)*strlen(menustring[j]))*3*/,starty[j]/*-i*1/2*/+offsety[j]*((float)i)/4,menustring[j],0,1+((float)i)/70,640,480);
+													if(mainmenu == MAIN_MENU_USER_LISTING &&(j!=0||!entername))text.glPrint(startx[j]-((float)i)+offsetx[j]*((float)i)/4/*-((((float)i)/70)*strlen(menustring[j]))*3*/,starty[j]/*-i*1/2*/+offsety[j]*((float)i)/4,menustring[j],0,1+((float)i)/70,640,480);
+													if(mainmenu == MAIN_MENU_DIFFICULTY)text.glPrint(startx[j]-((float)i)+offsetx[j]*((float)i)/4/*-((((float)i)/70)*strlen(menustring[j]))*3*/,starty[j]/*-i*1/2*/+offsety[j]*((float)i)/4,menustring[j],0,1+((float)i)/70,640,480);
+													if(mainmenu == MAIN_MENU_LEVEL_LISTING)text.glPrint(startx[j]-((float)i)+offsetx[j]*((float)i)/4/*-((((float)i)/70)*strlen(menustring[j]))*3*/,starty[j]/*-i*1/2*/+offsety[j]*((float)i)/4,menustring[j],0,1+((float)i)/70,640,480);
+													if(mainmenu == MAIN_MENU_CONGRATS_SCORES)text.glPrint(startx[j]-((float)i)+offsetx[j]*((float)i)/4/*-((((float)i)/70)*strlen(menustring[j]))*3*/,starty[j]/*-i*1/2*/+offsety[j]*((float)i)/4,menustring[j],0,1+((float)i)/70,640,480);
+													if(mainmenu == MAIN_MENU_CONGRATS)text.glPrint(startx[j]-((float)i)+offsetx[j]*((float)i)/4/*-((((float)i)/70)*strlen(menustring[j]))*3*/,starty[j]/*-i*1/2*/+offsety[j]*((float)i)/4,menustring[j],0,1+((float)i)/70,640,480);
+													if(mainmenu == 17) text.glPrint(startx[j]-((float)i)+offsetx[j]*((float)i)/4/*-((((float)i)/70)*strlen(menustring[j]))*3*/,starty[j]/*-i*1/2*/+offsety[j]*((float)i)/4,menustring[j],0,1+((float)i)/70,640,480);
+													if(mainmenu == MAIN_MENU_CONGRATS_ENTER_NAME&&j!=1)text.glPrint(startx[j]-((float)i)+offsetx[j]*((float)i)/4/*-((((float)i)/70)*strlen(menustring[j]))*3*/,starty[j]/*-i*1/2*/+offsety[j]*((float)i)/4,menustring[j],0,1+((float)i)/70,640,480);
 													/*else{
 													if(displayblink){
 													sprintf (string, "_");
@@ -3520,7 +3562,7 @@ int Game::DrawGLScene(void)
 						glMatrixMode(GL_MODELVIEW);							// Select The Modelview Matrix
 						glPopMatrix();
 
-							if(mainmenu==1||mainmenu==2)
+							if(mainmenu==1||mainmenu == MAIN_MENU_RESUME)
 								if(transition<.1||transition>.9){
 									glClear(GL_DEPTH_BUFFER_BIT);
 									glEnable(GL_ALPHA_TEST);
@@ -3648,10 +3690,10 @@ int Game::DrawGLScene(void)
 
 
 	//glFlush();
-	if(drawmode!=motionblurmode||mainmenu){
-
-		swap_gl_buffers();
-  }
+	if (drawmode != motionblurmode || mainmenu)
+    {
+	    SDL_GL_SwapWindow(screen);
+    }
 
 	//myassert(glGetError() == GL_NO_ERROR);
 	glDrawBuffer(GL_BACK);

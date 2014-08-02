@@ -88,14 +88,21 @@ namespace Kugaru
         return path->str;
     }
 
+    gchar *GetConfigDir()
+    {
+        gchar *config_dir = g_build_filename(g_get_user_config_dir(), "kugaru");
+
+        return config_dir;
+    }
+
     gchar *GetConfigFilePath()
     {
-        gchar *config_path = g_build_filename(g_get_user_config_dir(), "kugaru", NULL);
-        gchar *config_file = g_build_filename(g_get_user_config_dir(), "kugaru", "config.ini", NULL);
+        gchar *config_dir = GetConfigDir();
+        gchar *config_file = g_build_filename(config_dir, "config.ini", NULL);
 
-        if (!g_file_test(config_path, G_FILE_TEST_IS_DIR))
-            mkdir(config_path, 0700);
-        g_free(config_path);
+        if (!g_file_test(config_dir, G_FILE_TEST_IS_DIR))
+            mkdir(config_dir, 0700);
+        g_free(config_dir);
 
         if (!g_file_test(config_file, G_FILE_TEST_IS_REGULAR))
         {

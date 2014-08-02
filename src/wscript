@@ -7,13 +7,13 @@ def configure(cnf):
     cnf.write_config_header('config.h')
 
 def build(bld):
-    srcs = 'binio.c Main.cpp Conf.cpp Frustum.cpp GameDraw.cpp GameInitDispose.cpp GameTick.cpp Globals.cpp Lights.cpp Models.cpp Objects.cpp Person.cpp Quaternions.cpp Random.c Skeleton.cpp Skybox.cpp Sprites.cpp Terrain.cpp Text.cpp TGALoader.cpp Weapons.cpp openal_wrapper.cpp WinInput.cpp FileIO.cpp Utility.cpp'
+    srcs = 'binio.c Main.cpp Conf.cpp Frustum.cpp GameDraw.cpp GameInitDispose.cpp GameTick.cpp Globals.cpp Lights.cpp Models.cpp Objects.cpp Person.cpp Quaternions.cpp Random.c Skeleton.cpp Skybox.cpp Sprites.cpp Terrain.cpp Text.cpp TGALoader.cpp Weapons.cpp openal_wrapper.cpp Input.cpp FileIO.cpp Utility.cpp'
     bld.program(
             source=srcs,
             target='kugaru',
             features='c cxx cxxprogram',
 
-            use=['GLIB', 'GL', 'GLU', 'OPENAL', 'SDL', 'LIBPNG', 'ZLIB', 'VORBIS', 'VORBISFILE'],
+            use=['GLIB', 'GL', 'GLU', 'OPENAL', 'SDL2', 'LIBPNG', 'ZLIB', 'VORBIS', 'VORBISFILE'],
             includes='.')
 
     # map related programs

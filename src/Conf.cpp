@@ -20,9 +20,12 @@
 
 #include <stdio.h>
 #include <string.h>
+#include <SDL.h>
 
 #include "Conf.h"
+#include "Input.h"
 #include "FileIO.h"
+#include "Globals.h"
 
 
 namespace Kugaru
@@ -43,6 +46,7 @@ namespace Kugaru
 
         /* set defualt values */
         #define GK_SET_DEFAULT_INT(g, k, d) if (!g_key_file_has_key(keys, g, k, NULL)) g_key_file_set_integer(keys, g, k, d)
+        #define GK_SET_DEFAULT_STR(g, k, d) if (!g_key_file_has_key(keys, g, k, NULL)) g_key_file_set_string(keys, g, k, d)
         #define GK_SET_DEFAULT_BOOL(g, k, d) if (!g_key_file_has_key(keys, g, k, NULL)) g_key_file_set_boolean(keys, g, k, d)
         
         GK_SET_DEFAULT_INT("Game", "game-speed", 1);
@@ -78,6 +82,50 @@ namespace Kugaru
         
         GK_SET_DEFAULT_BOOL("Mouse", "mouse-invert", false);
         GK_SET_DEFAULT_BOOL("Mouse", "mouse-jump",   false);
+
+        GK_SET_DEFAULT_STR("Keys", "key-forward", SDL_GetScancodeName(SDL_SCANCODE_W)     );
+        GK_SET_DEFAULT_STR("Keys", "key-back",    SDL_GetScancodeName(SDL_SCANCODE_S)     );
+        GK_SET_DEFAULT_STR("Keys", "key-left",    SDL_GetScancodeName(SDL_SCANCODE_A)     );
+        GK_SET_DEFAULT_STR("Keys", "key-right",   SDL_GetScancodeName(SDL_SCANCODE_D)     );
+        GK_SET_DEFAULT_STR("Keys", "key-jump",    SDL_GetScancodeName(SDL_SCANCODE_SPACE ));
+        GK_SET_DEFAULT_STR("Keys", "key-crouch",  SDL_GetScancodeName(SDL_SCANCODE_LSHIFT));
+        GK_SET_DEFAULT_STR("Keys", "key-draw",    SDL_GetScancodeName(SDL_SCANCODE_E)     );
+        GK_SET_DEFAULT_STR("Keys", "key-throw",   SDL_GetScancodeName(SDL_SCANCODE_Q)     );
+        GK_SET_DEFAULT_STR("Keys", "key-attack",  GetButtonName(SDL_BUTTON_LEFT)          );
+        GK_SET_DEFAULT_STR("Keys", "key-chat",    SDL_GetScancodeName(SDL_SCANCODE_T)     );
+    }
+
+    void Conf::dump()
+    {
+        setGameInt ("game-speed",     oldgamespeed);
+        setGameInt ("difficulty",     difficulty);
+        setGameInt ("debug",          debugmode);
+        setGameBool("floating-jump",  floatjump);
+        setGameBool("show-text",      texttoggle);
+        setGameBool("show-points",    showpoints);
+        setGameBool("immediate-mode", immediate);
+
+        setDisplayInt ("width",            screenwidth);
+        setDisplayInt ("height",           screenheight);
+        setDisplayInt ("detail",           detail);
+        setDisplayInt ("decals",           decals);
+        setDisplayInt ("blood",            blooddetail);
+        setDisplayInt ("damage-effects",   damageeffects);
+        setDisplayInt ("velocity-blur",    velocityblur);
+        setDisplayBool("auto-slow-motion", autoslomo);
+        setDisplayBool("trilinear",        trilinear);
+        setDisplayBool("vsync",            vsync);
+        setDisplayBool("show-foliage",     foliage);
+        setDisplayBool("always-blur",      alwaysblur);
+        setDisplayBool("motion-blur",      ismotionblur);
+
+        setSoundInt ("volume",  volume); 
+        setSoundBool("ambient", ambientsound);
+        setSoundBool("music",   musictoggle);
+
+        setMouseInt ("mouse-speed",  usermousesensitivity);
+        setMouseBool("mouse-invert", invertmouse);
+        setMouseBool("mouse-jump",   mousejump); 
     }
 
     void Conf::save()
@@ -171,6 +219,16 @@ namespace Kugaru
     void Conf::setMouseBool(const gchar *key, gboolean value)
     {
         g_key_file_set_boolean(keys, "Mouse", key, value);
+    }
+
+    gchar *Conf::getKeysStr(const gchar *key)
+    {
+        return g_key_file_get_string(keys, "Keys", key, NULL);
+    }
+
+    void Conf::setKeysStr(const gchar *key, gchar *value)
+    {
+        g_key_file_set_string(keys, "Keys", key, value);
     }
 }
 

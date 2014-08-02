@@ -22,97 +22,13 @@
 
 #include "Person.h"
 #include "Random.h"
+#include "Globals.h"
 #include "openal_wrapper.h"
 
-extern float multiplier;
-extern Animation animation[animation_count];
-extern OPENAL_SAMPLE	*samp[100];
-extern int channels[100];
-extern Terrain terrain;
-extern float gravity;
-extern int environment;
-extern Sprites sprites;
-extern int detail;
-extern FRUSTUM frustum;
-extern XYZ viewer;
-extern float realmultiplier;
-extern int slomo;
-extern float slomodelay;
-extern bool cellophane;
-extern float texdetail;
-extern float realtexdetail;
-extern GLubyte bloodText[512*512*3];
-extern GLubyte wolfbloodText[512*512*3];
-extern int bloodtoggle;
-extern Objects objects;
-extern bool osx;
-extern bool autoslomo;
-extern float camerashake;
-extern float woozy;
-extern float terraindetail;
-extern float viewdistance;
-extern float blackout;
-extern int difficulty;
-extern Weapons weapons;
-extern bool decals;
-extern float fadestart;
-extern Person player[maxplayers];
-extern int numplayers;
-extern bool freeze;
-extern bool winfreeze;
-extern float flashamount,flashr,flashg,flashb;
-extern int flashdelay;
-extern bool showpoints;
-extern bool immediate;
-extern int test;
-extern bool tilt2weird;
-extern bool tiltweird;
-extern bool midweird;
-extern bool proportionweird;
-extern bool vertexweird[6];
-extern GLubyte texturearray[512*512*3];
-extern XYZ envsound[30];
-extern float envsoundvol[30];
-extern float envsoundlife[30];
-extern int numenvsounds;
-extern int bonus;
-extern float bonusvalue;
-extern float bonustotal;
-extern float bonustime;
-extern int tutoriallevel;
-extern float smoketex;
-extern int tutorialstage;
-extern bool reversaltrain;
-extern bool canattack;
-extern bool cananger;
-extern float damagedealt;
-extern float damagetaken;
-extern int hostile;
-extern float hostiletime;
 
-extern int mainmenu;
-
-extern int numfalls;
-extern int numflipfail;
-extern int numseen;
-extern int numswordattack;
-extern int numknifeattack;
-extern int numunarmedattack;
-extern int numescaped;
-extern int numflipped;
-extern int numwallflipped;
-extern int numthrowkill;
-extern int numafterkill;
-extern int numreversals;
-extern int numattacks;
-extern int maxalarmed;
-extern int indialogue;
-
-extern bool gamestarted;
-
-extern OPENAL_STREAM * strm[20];
-extern "C"	void PlaySoundEx(int channel, OPENAL_SAMPLE *sptr, OPENAL_DSPUNIT *dsp, signed char startpaused);
+extern "C" void PlaySoundEx(int chan, OPENAL_SAMPLE *sptr, OPENAL_DSPUNIT *dsp, signed char startpaused);
 extern "C" void PlayStreamEx(int chan, OPENAL_STREAM *sptr, OPENAL_DSPUNIT *dsp, signed char startpaused);
+
 
 void Person::CheckKick(){
 	static XYZ relative;
@@ -421,7 +337,7 @@ void Person::DoBlood(float howmuch,int which){
 	static int bleedxint,bleedyint;
 	static XYZ bloodvel;
 	//if(howmuch&&id==0)blooddimamount=1;
-	if(bloodtoggle&&tutoriallevel!=1){
+	if(blooddetail&&tutoriallevel!=1){
 		if(bleeding<=0&&spurt){
 			spurt=0;
 			for(int i=0;i<3;i++){
@@ -548,7 +464,7 @@ void Person::DoBloodBig(float howmuch,int which){
 			flashdelay=0;
 		}
 
-		if(bloodtoggle&&decals&&tutoriallevel!=1){
+		if(blooddetail&&decals&&tutoriallevel!=1){
 			if(bleeding<=0&&spurt){
 				spurt=0;
 				for(int i=0;i<3;i++){
@@ -721,7 +637,7 @@ bool Person::DoBloodBigWhere(float howmuch,int which, XYZ where){
 	float coordsx,coordsy;
 	float total;
 
-	if(bloodtoggle&&decals&&tutoriallevel!=1){
+	if(blooddetail&&decals&&tutoriallevel!=1){
 		where-=coords;
 		if(!skeleton.free)where=DoRotation(where,0,-rotation,0);
 		//where=scale;
@@ -2309,7 +2225,7 @@ void	Person::DoAnimations(){
 														footpoint=weapons.position[i];
 														if(victim->weaponstuck!=-1){
 															if(victim->weaponids[victim->weaponstuck]==i){
-																if(bloodtoggle)sprites.MakeSprite(cloudimpactsprite, footpoint,footvel, 1,0,0, .8, .3);
+																if(blooddetail)sprites.MakeSprite(cloudimpactsprite, footpoint,footvel, 1,0,0, .8, .3);
 																weapons.bloody[i]=2;
 																weapons.blooddrip[i]=5;
 																victim->weaponstuck=-1;
@@ -2921,7 +2837,7 @@ void	Person::DoAnimations(){
 														bonusvalue=200;
 													}
 												}
-												if(bloodtoggle)weapons.bloody[weaponids[weaponactive]]=2;
+												if(blooddetail) weapons.bloody[weaponids[weaponactive]]=2;
 
 												victim->skeleton.longdead=0;
 												victim->skeleton.free=1;
@@ -3046,7 +2962,7 @@ void	Person::DoAnimations(){
 												relative.y=10;
 												Normalise(&relative);
 												//victim->Puff(abdomen);
-												if(bloodtoggle)sprites.MakeSprite(cloudimpactsprite, footpoint,footvel, 1,0,0, .8, .3);
+												if(blooddetail)sprites.MakeSprite(cloudimpactsprite, footpoint,footvel, 1,0,0, .8, .3);
 
 												if(victim->bloodloss<victim->damagetolerance){
 													victim->bloodloss+=1000;
@@ -3311,7 +3227,7 @@ void	Person::DoAnimations(){
 											victim->highreversaldelay=0;
 											if(aitype!=playercontrolled)weaponmissdelay=.6;
 
-											if(tutoriallevel!=1)if(bloodtoggle&&!weapons.bloody[weaponids[weaponactive]])weapons.bloody[weaponids[weaponactive]]=1;
+											if(tutoriallevel!=1)if(blooddetail&&!weapons.bloody[weaponids[weaponactive]])weapons.bloody[weaponids[weaponactive]]=1;
 											if(tutoriallevel!=1)weapons.blooddrip[weaponids[weaponactive]]+=3;
 
 											XYZ footvel,footpoint;
@@ -3323,7 +3239,7 @@ void	Person::DoAnimations(){
 												footpoint=DoRotation((victim->skeleton.joints[victim->skeleton.jointlabels[abdomen]].position+victim->skeleton.joints[victim->skeleton.jointlabels[neck]].position)/2,0,victim->rotation,0)*victim->scale+victim->coords;
 											}
 											if(tutoriallevel!=1){
-												if(bloodtoggle)sprites.MakeSprite(cloudimpactsprite, footpoint,footvel, 1,0,0, .6, .3);
+												if(blooddetail)sprites.MakeSprite(cloudimpactsprite, footpoint,footvel, 1,0,0, .6, .3);
 												footvel=DoRotation(facing,0,90,0)*.8;
 												//footvel.y-=.3;
 												sprites.MakeSprite(bloodsprite,footpoint,DoRotation(footvel*7,(float)(Random()%20),(float)(Random()%20),0), 1,1,1, .05, .9);
@@ -3376,7 +3292,7 @@ void	Person::DoAnimations(){
 											//}
 
 											if(tutoriallevel!=1){
-												if(bloodtoggle&&!weapons.bloody[weaponids[weaponactive]])weapons.bloody[weaponids[weaponactive]]=1;
+												if(blooddetail&&!weapons.bloody[weaponids[weaponactive]])weapons.bloody[weaponids[weaponactive]]=1;
 												weapons.blooddrip[weaponids[weaponactive]]+=3;
 
 												float bloodlossamount;
@@ -3393,7 +3309,7 @@ void	Person::DoAnimations(){
 												if(!skeleton.free){
 													footpoint=DoRotation((victim->skeleton.joints[victim->skeleton.jointlabels[abdomen]].position+victim->skeleton.joints[victim->skeleton.jointlabels[neck]].position)/2,0,victim->rotation,0)*victim->scale+victim->coords;
 												}
-												if(bloodtoggle)sprites.MakeSprite(cloudimpactsprite, footpoint,footvel, 1,0,0, .9, .3);
+												if(blooddetail)sprites.MakeSprite(cloudimpactsprite, footpoint,footvel, 1,0,0, .9, .3);
 												footvel=DoRotation(facing,0,90,0)*.8;
 												footvel.y-=.3;
 												sprites.MakeSprite(bloodsprite,footpoint,DoRotation(footvel*7,(float)(Random()%20),(float)(Random()%20),0), 1,1,1, .05, .9);
@@ -3986,7 +3902,7 @@ void	Person::DoAnimations(){
 											OPENAL_3D_SetAttributes(channels[knifeslicesound], gLoc, vel);
 											OPENAL_SetVolume(channels[knifeslicesound], 512);
 											OPENAL_SetPaused(channels[knifeslicesound], false);
-											if(bloodtoggle&&!weapons.bloody[weaponids[weaponactive]])weapons.bloody[weaponids[weaponactive]]=1;
+											if(blooddetail&&!weapons.bloody[weaponids[weaponactive]])weapons.bloody[weaponids[weaponactive]]=1;
 											weapons.blooddrip[weaponids[weaponactive]]+=3;
 										}
 										if(weaponactive==-1&&creature==wolftype){
@@ -4044,7 +3960,7 @@ void	Person::DoAnimations(){
 									OPENAL_3D_SetAttributes(channels[knifeslicesound], gLoc, vel);
 									OPENAL_SetVolume(channels[knifeslicesound], 512);
 									OPENAL_SetPaused(channels[knifeslicesound], false);
-									if(bloodtoggle&&!weapons.bloody[weaponids[weaponactive]])weapons.bloody[weaponids[weaponactive]]=1;
+									if(blooddetail&&!weapons.bloody[weaponids[weaponactive]])weapons.bloody[weaponids[weaponactive]]=1;
 									weapons.blooddrip[weaponids[weaponactive]]+=3;
 									}*/
 								}
@@ -4125,7 +4041,7 @@ void	Person::DoAnimations(){
 											OPENAL_3D_SetAttributes(channels[knifeslicesound], gLoc, vel);
 											OPENAL_SetVolume(channels[knifeslicesound], 512);
 											OPENAL_SetPaused(channels[knifeslicesound], false);
-											if(bloodtoggle)weapons.bloody[weaponids[weaponactive]]=2;
+											if(blooddetail)weapons.bloody[weaponids[weaponactive]]=2;
 											weapons.blooddrip[weaponids[weaponactive]]+=5;
 										}
 
@@ -4161,7 +4077,7 @@ void	Person::DoAnimations(){
 											XYZ footvel,footpoint;
 											footvel=0;
 											footpoint=weapons.tippoint[weaponids[0]];
-											if(bloodtoggle)sprites.MakeSprite(cloudimpactsprite, footpoint,footvel, 1,0,0, .9, .3);
+											if(blooddetail)sprites.MakeSprite(cloudimpactsprite, footpoint,footvel, 1,0,0, .9, .3);
 											footvel=(weapons.tippoint[weaponids[0]]-weapons.position[weaponids[0]]);
 											sprites.MakeSprite(bloodsprite,footpoint,DoRotation(footvel*7,(float)(Random()%20),(float)(Random()%20),0), 1,1,1, .05, .9);
 											sprites.MakeSprite(bloodsprite,footpoint,DoRotation(footvel*3,(float)(Random()%20),(float)(Random()%20),0), 1,1,1, .05, .9);
@@ -4185,7 +4101,7 @@ void	Person::DoAnimations(){
 											XYZ footvel,footpoint;
 											footvel=0;
 											footpoint=weapons.tippoint[weaponids[0]];
-											if(bloodtoggle)sprites.MakeSprite(cloudimpactsprite, footpoint,footvel, 1,0,0, .9, .3);
+											if(blooddetail)sprites.MakeSprite(cloudimpactsprite, footpoint,footvel, 1,0,0, .9, .3);
 											footvel=(weapons.tippoint[weaponids[0]]-weapons.position[weaponids[0]])*-1;
 											sprites.MakeSprite(bloodsprite,footpoint,DoRotation(footvel*7,(float)(Random()%20),(float)(Random()%20),0), 1,1,1, .05, .9);
 											sprites.MakeSprite(bloodsprite,footpoint,DoRotation(footvel*3,(float)(Random()%20),(float)(Random()%20),0), 1,1,1, .05, .9);
@@ -4207,7 +4123,7 @@ void	Person::DoAnimations(){
 										OPENAL_3D_SetAttributes(channels[fleshstabsound], gLoc, vel);
 										OPENAL_SetVolume(channels[fleshstabsound], 512);
 										OPENAL_SetPaused(channels[fleshstabsound], false);
-										if(bloodtoggle)weapons.bloody[weaponids[weaponactive]]=2;
+										if(blooddetail)weapons.bloody[weaponids[weaponactive]]=2;
 										weapons.blooddrip[weaponids[weaponactive]]+=5;
 									}
 								}
@@ -4237,13 +4153,13 @@ void	Person::DoAnimations(){
 										OPENAL_3D_SetAttributes(channels[fleshstabremovesound], gLoc, vel);
 										OPENAL_SetVolume(channels[fleshstabremovesound], 512);
 										OPENAL_SetPaused(channels[fleshstabremovesound], false);
-										if(bloodtoggle)weapons.bloody[weaponids[weaponactive]]=2;
+										if(blooddetail)weapons.bloody[weaponids[weaponactive]]=2;
 										weapons.blooddrip[weaponids[weaponactive]]+=5;
 
 										XYZ footvel,footpoint;
 										footvel=0;
 										footpoint=weapons.tippoint[weaponids[0]];
-										if(bloodtoggle)sprites.MakeSprite(cloudimpactsprite, footpoint,footvel, 1,0,0, .9, .3);
+										if(blooddetail)sprites.MakeSprite(cloudimpactsprite, footpoint,footvel, 1,0,0, .9, .3);
 										footvel=(weapons.tippoint[weaponids[0]]-weapons.position[weaponids[0]])*-1;
 										sprites.MakeSprite(bloodsprite,footpoint,DoRotation(footvel*7,(float)(Random()%20),(float)(Random()%20),0), 1,1,1, .05, .9);
 										sprites.MakeSprite(bloodsprite,footpoint,DoRotation(footvel*3,(float)(Random()%20),(float)(Random()%20),0), 1,1,1, .05, .9);
@@ -4265,7 +4181,7 @@ void	Person::DoAnimations(){
 										XYZ footvel,footpoint;
 										footvel=0;
 										footpoint=(weapons.tippoint[weaponids[0]]+weapons.position[weaponids[0]])/2;
-										if(bloodtoggle)sprites.MakeSprite(cloudimpactsprite, footpoint,footvel, 1,0,0, .9, .3);
+										if(blooddetail)sprites.MakeSprite(cloudimpactsprite, footpoint,footvel, 1,0,0, .9, .3);
 										footvel=(weapons.tippoint[weaponids[0]]-weapons.position[weaponids[0]]);
 										sprites.MakeSprite(bloodsprite,footpoint,DoRotation(footvel*7,(float)(Random()%20),(float)(Random()%20),0), 1,1,1, .05, .9);
 										sprites.MakeSprite(bloodsprite,footpoint,DoRotation(footvel*3,(float)(Random()%20),(float)(Random()%20),0), 1,1,1, .05, .9);
@@ -4287,7 +4203,7 @@ void	Person::DoAnimations(){
 										OPENAL_3D_SetAttributes(channels[fleshstabsound], gLoc, vel);
 										OPENAL_SetVolume(channels[fleshstabsound], 512);
 										OPENAL_SetPaused(channels[fleshstabsound], false);
-										if(bloodtoggle)weapons.bloody[weaponids[weaponactive]]=2;
+										if(blooddetail)weapons.bloody[weaponids[weaponactive]]=2;
 										weapons.blooddrip[weaponids[weaponactive]]+=5;
 									}
 								}
@@ -4311,13 +4227,13 @@ void	Person::DoAnimations(){
 										OPENAL_3D_SetAttributes(channels[fleshstabremovesound], gLoc, vel);
 										OPENAL_SetVolume(channels[fleshstabremovesound], 512);
 										OPENAL_SetPaused(channels[fleshstabremovesound], false);
-										if(bloodtoggle)weapons.bloody[weaponids[weaponactive]]=2;
+										if(blooddetail)weapons.bloody[weaponids[weaponactive]]=2;
 										weapons.blooddrip[weaponids[weaponactive]]+=5;
 
 										XYZ footvel,footpoint;
 										footvel=0;
 										footpoint=weapons.tippoint[weaponids[0]];
-										if(bloodtoggle)sprites.MakeSprite(cloudimpactsprite, footpoint,footvel, 1,0,0, .9, .3);
+										if(blooddetail)sprites.MakeSprite(cloudimpactsprite, footpoint,footvel, 1,0,0, .9, .3);
 										footvel=(weapons.tippoint[weaponids[0]]-weapons.position[weaponids[0]])*-1;
 										sprites.MakeSprite(bloodsprite,footpoint,DoRotation(footvel*7,(float)(Random()%20),(float)(Random()%20),0), 1,1,1, .05, .9);
 										sprites.MakeSprite(bloodsprite,footpoint,DoRotation(footvel*3,(float)(Random()%20),(float)(Random()%20),0), 1,1,1, .05, .9);
@@ -4360,7 +4276,7 @@ void	Person::DoAnimations(){
 											OPENAL_3D_SetAttributes(channels[knifeslicesound], gLoc, vel);
 											OPENAL_SetVolume(channels[knifeslicesound], 512);
 											OPENAL_SetPaused(channels[knifeslicesound], false);
-											if(bloodtoggle&&!weapons.bloody[weaponids[weaponactive]])weapons.bloody[weaponids[weaponactive]]=1;
+											if(blooddetail&&!weapons.bloody[weaponids[weaponactive]])weapons.bloody[weaponids[weaponactive]]=1;
 											weapons.blooddrip[weaponids[weaponactive]]+=3;
 										}
 										if(weaponactive==-1&&creature==wolftype){
@@ -5116,7 +5032,7 @@ void	Person::DoStuff(){
 
 	if(bleeding>0){
 		bleeding-=multiplier*.3;
-		if(bloodtoggle==2){
+		if(blooddetail==2){
 			glBindTexture(GL_TEXTURE_2D,skeleton.drawmodel.textureptr);
 			if(bleeding<=0&&(detail!=2||osx))DoMipmaps(5,0,0,skeleton.skinsize,skeleton.skinsize);
 		}
@@ -5150,10 +5066,10 @@ void	Person::DoStuff(){
 	if(deathbleeding>0&&dead!=2){
 		if(deathbleeding<5)bleeddelay-=deathbleeding*multiplier/4;
 		else bleeddelay-=5*multiplier/4;
-		if(bleeddelay<0&&bloodtoggle){
+		if(bleeddelay<0&&blooddetail){
 			bleeddelay=1;
 			XYZ bloodvel;
-			if(bloodtoggle){
+			if(blooddetail){
 				bloodvel=0;
 				if(skeleton.free)bloodvel+=DoRotation(skeleton.joints[skeleton.jointlabels[abdomen]].velocity,((float)(Random()%100))/4,rotation+((float)(Random()%100))/4,0)*scale;
 				if(!skeleton.free)bloodvel+=DoRotation(velocity,((float)(Random()%100))/4,((float)(Random()%100))/4,0)*scale;
@@ -5219,7 +5135,7 @@ void	Person::DoStuff(){
 		}
 	}
 
-	if(texupdatedelay<0&&bleeding>0&&bloodtoggle==2&&findDistancefast(&viewer,&coords)<9){
+	if(texupdatedelay<0&&bleeding>0&&blooddetail==2&&findDistancefast(&viewer,&coords)<9){
 		texupdatedelay=.12;
 
 		bloodsize=5-realtexdetail;
@@ -5539,10 +5455,10 @@ void	Person::DoStuff(){
 	if(howactive>typesleeping){
 		XYZ headpoint;
 		headpoint=coords;
-		if(bloodtoggle&&!bled){
+		if(blooddetail&&!bled){
 			terrain.MakeDecal(blooddecalslow,headpoint,.8,.5,0);
 		}
-		if(bloodtoggle&&!bled)
+		if(blooddetail&&!bled)
 			for(l=0;l<terrain.patchobjectnum[whichpatchx][whichpatchz];l++){
 				j=terrain.patchobjects[whichpatchx][whichpatchz][l];
 				XYZ point=DoRotation(headpoint-objects.position[j],0,-objects.rotation[j],0);
@@ -5789,10 +5705,10 @@ void	Person::DoStuff(){
 					XYZ headpoint;
 					headpoint=(skeleton.joints[skeleton.jointlabels[head]].position+skeleton.joints[skeleton.jointlabels[neck]].position)/2*scale+coords;
 					DoBlood(1,255);
-					if(bloodtoggle&&!bled){
+					if(blooddetail&&!bled){
 						terrain.MakeDecal(blooddecal,headpoint,.2*1.2,.5,0);
 					}
-					if(bloodtoggle&&!bled)
+					if(blooddetail&&!bled)
 						for(l=0;l<terrain.patchobjectnum[whichpatchx][whichpatchz];l++){
 							j=terrain.patchobjects[whichpatchx][whichpatchz][l];
 							XYZ point=DoRotation(headpoint-objects.position[j],0,-objects.rotation[j],0);
@@ -5807,10 +5723,10 @@ void	Person::DoStuff(){
 					XYZ headpoint;
 					headpoint=(skeleton.joints[skeleton.jointlabels[abdomen]].position+skeleton.joints[skeleton.jointlabels[neck]].position)/2*scale+coords;
 					if(bleeding<=0)DoBlood(1,255);
-					if(bloodtoggle&&!bled){
+					if(blooddetail&&!bled){
 						terrain.MakeDecal(blooddecalslow,headpoint,.8,.5,0);
 					}
-					if(bloodtoggle&&!bled)
+					if(blooddetail&&!bled)
 						for(l=0;l<terrain.patchobjectnum[whichpatchx][whichpatchz];l++){
 							j=terrain.patchobjects[whichpatchx][whichpatchz][l];
 							XYZ point=DoRotation(headpoint-objects.position[j],0,-objects.rotation[j],0);

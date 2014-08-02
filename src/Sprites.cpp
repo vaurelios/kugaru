@@ -22,26 +22,8 @@
 #include "Sprites.h"
 #include "Person.h"
 #include "Random.h"
+#include "Globals.h"
 
-
-extern XYZ viewer;
-extern float viewdistance;
-extern float fadestart;
-extern int environment;
-extern float texscale;
-extern Light light;
-extern float multiplier;
-extern float gravity;
-extern Terrain terrain;
-extern Objects objects;
-extern int detail;
-extern XYZ viewerfacing;
-extern float terraindetail;
-extern int bloodtoggle;
-extern XYZ windvector;
-extern int numplayers;
-extern Person player[maxplayers];
-//Functions
 
 void Sprites::Draw()
 {
@@ -400,7 +382,7 @@ void Sprites::DeleteSprite(int which)
 
 void Sprites::MakeSprite(int atype, XYZ where, XYZ avelocity, float red, float green, float blue, float asize, float aopacity){
 	if(numsprites<max_sprites-1){
-		if((atype!=bloodsprite&&atype!=bloodflamesprite)||bloodtoggle){
+		if((atype!=bloodsprite&&atype!=bloodflamesprite)||blooddetail){
 			special[numsprites]=0;
 			type[numsprites]=atype;
 			position[numsprites]=where;

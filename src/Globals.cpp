@@ -20,18 +20,24 @@
 
 #include "Globals.h"
 
-
+SDL_Keysym *keysym = NULL;
+SDL_Scancode oldscancode = SDL_SCANCODE_0;
+SDL_MouseButtonEvent *button = NULL;
+uint8_t oldbutton = 0;
+int modes_count = 0;
+GSList *displaymodes = NULL;
+int displaywidth = 800, displayheight = 600;
+bool IsFocused = true;
+Kugaru::Conf cnf;
 bool visibleloading = 0;
 OPENAL_SAMPLE *samp[100] = {0};
 OPENAL_STREAM *strm[20] = {0};
 int channels[100] = {0};
 
 static int music1;
-bool buttons[3] = {0};
 int volume = 0;
-bool oldbuttons[3] = {0};
 bool ismotionblur = 0;
-float usermousesensitivity = 0;
+int usermousesensitivity = 0;
 bool floatjump = 0;
 bool cellophane = 0;
 bool autoslomo = 0;
@@ -65,7 +71,7 @@ Terrain terrain;
 Sprites sprites;
 float sps = 0;
 
-SDL_Surface *sdlscreen;
+SDL_Window *screen = NULL;
 
 int kTextureSize = 0;
 int detail = 0;
@@ -80,7 +86,7 @@ float slomodelay = 0;
 GLubyte bloodText[512*512*3] = {0};
 GLubyte wolfbloodText[512*512*3] = {0};
 float colors[3] = {0};
-int bloodtoggle = 0;
+int blooddetail = 0;
 bool osx = 0;
 float camerashake = 0;
 float woozy = 0;
@@ -99,7 +105,7 @@ bool freeze = 0;
 bool winfreeze = 0;
 float flashamount = 0,flashr = 0,flashg = 0,flashb = 0;
 int flashdelay = 0;
-bool vblsync = 0;
+bool vsync = 0;
 float motionbluramount = 0;
 bool keyboardfrozen = 0;
 char mapname[256] = {0};
@@ -113,8 +119,8 @@ int test = 0;
 XYZ windvector;
 short vRefNum = 0;
 long dirID = 0;
-int mainmenu = 0;
-int oldmainmenu = 0;
+Kugaru::MainMenu mainmenu = Kugaru::MAIN_MENU_MAIN;
+Kugaru::MainMenu oldmainmenu = Kugaru::MAIN_MENU_MAIN;
 GLubyte texturearray[512*512*3] = {0};
 int loadscreencolor = 0;
 int whichjointstartarray[26] = {0};

@@ -21,47 +21,13 @@
 
 #include "Weapons.h"
 #include "Random.h"
+#include "Globals.h"
 #include "openal_wrapper.h"
 
-extern float multiplier;
-extern Animation animation[animation_count];
-extern OPENAL_SAMPLE	*samp[100];
-extern int channels[100];
-extern Terrain terrain;
-extern float gravity;
-extern int environment;
-extern Sprites sprites;
-extern int detail;
-extern FRUSTUM frustum;
-extern XYZ viewer;
-extern float realmultiplier;
-extern int slomo;
-extern float slomodelay;
-extern bool cellophane;
-extern float texdetail;
-extern GLubyte bloodText[512*512*3];
-extern int bloodtoggle;
-extern Objects objects;
-extern bool osx;
-extern bool autoslomo;
-extern float camerashake;
-extern float woozy;
-extern float terraindetail;
-extern float viewdistance;
-extern float blackout;
-extern int difficulty;
-extern Person player[maxplayers];
-extern int numplayers;
-extern bool freeze;
-extern int bonus;
-extern float bonusvalue;
-extern float bonustotal;
-extern float bonustime;
-extern int tutoriallevel;
-extern int numthrowkill;
 extern "C"	void PlaySoundEx(int channel, OPENAL_SAMPLE *sptr, OPENAL_DSPUNIT *dsp, signed char startpaused);
 
-void	Weapons::DoStuff(){
+void Weapons::DoStuff()
+{
 	static int i,whichpatchx,whichpatchz,j,k,whichhit,m;
 	static XYZ start,end,colpoint,normalrot,footvel,footpoint;
 	static XYZ terrainnormal;
@@ -257,11 +223,11 @@ void	Weapons::DoStuff(){
 									player[j].skeleton.joints[player[j].skeleton.jointlabels[rightshoulder]].velocity+=velocity[i]*2;
 									player[j].skeleton.joints[player[j].skeleton.jointlabels[leftshoulder]].velocity+=velocity[i]*2;
 									//player[j].Puff(abdomen);
-									if(bloodtoggle&&tutoriallevel!=1)sprites.MakeSprite(cloudimpactsprite, footpoint,footvel, 1,0,0, .8, .3);
+									if(blooddetail&&tutoriallevel!=1)sprites.MakeSprite(cloudimpactsprite, footpoint,footvel, 1,0,0, .8, .3);
 									if(tutoriallevel==1)sprites.MakeSprite(cloudimpactsprite, footpoint,footvel, 1,1,1, .8, .3);
 									footvel=tippoint[i]-position[i];
 									Normalise(&footvel);
-									if(bloodtoggle&&tutoriallevel!=1)sprites.MakeSprite(bloodflamesprite, footpoint,footvel*-1, 1,0,0, .6, 1);
+									if(blooddetail&&tutoriallevel!=1)sprites.MakeSprite(bloodflamesprite, footpoint,footvel*-1, 1,0,0, .6, 1);
 
 									if(tutoriallevel!=1){
 										if(player[j].weaponstuckwhere==0)player[j].DoBloodBig(2,205);
@@ -1075,13 +1041,13 @@ void	Weapons::DoStuff(){
 			blooddrip[i]-=multiplier;
 			if(blooddrip[i]<0)blooddrip[i]=0;
 			if(blooddrip[i]>5)blooddrip[i]=5;
-			if(blooddripdelay[i]<0&&bloodtoggle){
+			if(blooddripdelay[i]<0&&blooddetail){
 				blooddripdelay[i]=1;
 				XYZ bloodvel;
 				XYZ bloodloc;
 				bloodloc=position[i]+(tippoint[i]-position[i])*.7;
 				bloodloc.y-=.05;
-				if(bloodtoggle){
+				if(blooddetail){
 					bloodvel=0;
 					sprites.MakeSprite(bloodsprite, bloodloc,bloodvel, 1,1,1, .03, 1);
 				}
@@ -1215,8 +1181,8 @@ int Weapons::Draw()
 						if(type[i]==knife)
 						{
 							glEnable(GL_LIGHTING);
-							if(!bloody[i]||!bloodtoggle)throwingknifemodel.drawdifftex(knifetextureptr);
-							if(bloodtoggle)
+							if(!bloody[i]||!blooddetail)throwingknifemodel.drawdifftex(knifetextureptr);
+							if(blooddetail)
 							{
 								if(bloody[i]==1)throwingknifemodel.drawdifftex(lightbloodknifetextureptr);
 								if(bloody[i]==2)throwingknifemodel.drawdifftex(bloodknifetextureptr);
@@ -1225,8 +1191,8 @@ int Weapons::Draw()
 						if(type[i]==sword)
 						{
 							glEnable(GL_LIGHTING);
-							if(!bloody[i]||!bloodtoggle)swordmodel.drawdifftex(swordtextureptr);
-							if(bloodtoggle)
+							if(!bloody[i]||!blooddetail)swordmodel.drawdifftex(swordtextureptr);
+							if(blooddetail)
 							{
 								if(bloody[i]==1)swordmodel.drawdifftex(lightbloodswordtextureptr);
 								if(bloody[i]==2)swordmodel.drawdifftex(bloodswordtextureptr);

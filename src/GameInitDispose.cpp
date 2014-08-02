@@ -41,63 +41,70 @@ Game::TextureList Game::textures;
 
 void Game::Dispose()
 {
-	int i, j;
+    gchar *config_dir;
 
 	LOGFUNC;
 
-	if(endgame==2){
-		accountcampaignchoicesmade[accountactive]=0;
-		accountcampaignscore[accountactive]=0;
-		accountcampaigntime[accountactive]=0;
-		endgame=0;
+	if (endgame == 2)
+    {
+		accountcampaignchoicesmade[accountactive] = 0;
+		accountcampaignscore[accountactive]       = 0;
+		accountcampaigntime[accountactive]        = 0;
+		endgame                                   = 0;
 	}
 
-
-	sprintf (mapname, "data/Users");
+    config_dir = GetConfigDir ();
+	sprintf (mapname, g_build_filname (config_dir, "users"));
+    g_free (config_dir);
 
 	FILE *tfile;
-	tfile = fopen( ConvertFileName(mapname), "wb" );
+	tfile = fopen (mapname, "wb");
 	if (tfile)
 	{
-		fpackf(tfile, "Bi", numaccounts);
-		fpackf(tfile, "Bi", accountactive);
-		if(numaccounts>0)
+		fpackf (tfile, "Bi", numaccounts);
+		fpackf (tfile, "Bi", accountactive);
+		if (numaccounts > 0)
 		{
-			for(i=0;i<numaccounts;i++)
+			for (int i = 0; i < numaccounts; i++)
 			{
-				fpackf(tfile, "Bf", accountcampaigntime[i]);
-				fpackf(tfile, "Bf", accountcampaignscore[i]);
-				fpackf(tfile, "Bf", accountcampaignfasttime[i]);
-				fpackf(tfile, "Bf", accountcampaignhighscore[i]);
-				fpackf(tfile, "Bi", accountdifficulty[i]);
-				fpackf(tfile, "Bi", accountprogress[i]);
-				fpackf(tfile, "Bi", accountcampaignchoicesmade[i]);
-				for(j=0;j<accountcampaignchoicesmade[i];j++)
+				fpackf (tfile, "Bf", accountcampaigntime[i]);
+				fpackf (tfile, "Bf", accountcampaignscore[i]);
+				fpackf (tfile, "Bf", accountcampaignfasttime[i]);
+				fpackf (tfile, "Bf", accountcampaignhighscore[i]);
+				fpackf (tfile, "Bi", accountdifficulty[i]);
+				fpackf (tfile, "Bi", accountprogress[i]);
+				fpackf (tfile, "Bi", accountcampaignchoicesmade[i]);
+				
+                for (int j = 0; j < accountcampaignchoicesmade[i]; j++)
 				{
-					fpackf(tfile, "Bi", accountcampaignchoices[i][j]);
+					fpackf (tfile, "Bi", accountcampaignchoices[i][j]);
 				}
-				fpackf(tfile, "Bf", accountpoints[i]);
-				for(j=0;j<50;j++)
+
+				fpackf (tfile, "Bf", accountpoints[i]);
+
+				for (int j = 0; j < 50; j++)
 				{
-					fpackf(tfile, "Bf", accounthighscore[i][j]);
-					fpackf(tfile, "Bf", accountfasttime[i][j]);
+					fpackf (tfile, "Bf", accounthighscore[i][j]);
+					fpackf (tfile, "Bf", accountfasttime[i][j]);
 				}
-				for(j=0;j<60;j++)
+
+				for (int j = 0; j < 60; j++)
 				{
-					fpackf(tfile, "Bb",  accountunlocked[i][j]);
+					fpackf (tfile, "Bb",  accountunlocked[i][j]);
 				}
-				fpackf(tfile, "Bi",  strlen(accountname[i]));
-				if(strlen(accountname[i])>0)
+
+				fpackf (tfile, "Bi",  strlen(accountname[i]));
+				if (strlen(accountname[i]) > 0)
 				{
-					for(j=0;j<(int)strlen(accountname[i]);j++)
+					for (int j = 0; j < (int) strlen(accountname[i]); j++)
 					{
-						fpackf(tfile, "Bb",  accountname[i][j]);
+						fpackf (tfile, "Bb",  accountname[i][j]);
 					}
 				}
 			}
 		}
 
-		fclose(tfile);
+		fclose (tfile);
 	}
 
 	TexIter it = textures.begin();
@@ -137,8 +144,6 @@ void Game::Dispose()
 #endif
 }
 
-
-//void Game::LoadSounds();
 void Game::LoadSounds()
 {
 	LOGFUNC;
@@ -787,8 +792,8 @@ void Game::LoadingScreen()
 			glDepthMask(1);
 		}
 
-		swap_gl_buffers();
-		loadscreencolor=0;
+		SDL_GL_SwapWindow(screen);
+        loadscreencolor = 0;
 	}
 }
 
@@ -866,8 +871,8 @@ void Game::FadeLoadingScreen(float howmuch)
 	glColor4f(1.2-loadprogress/100,1.2-loadprogress/100,1.2-loadprogress/100,1);
 	text.glPrint(280,125,string,1,1,640,480);
 	*/
-	swap_gl_buffers();
-	loadscreencolor=0;
+	SDL_GL_SwapWindow(screen);
+    loadscreencolor=0;
 }
 
 
@@ -1217,11 +1222,11 @@ void Game::InitGame()
 
 
 	gameon=0;
-	mainmenu=1;
+	mainmenu = MAIN_MENU_MAIN;
 
 	stillloading=0;
 	firstload=0;
-	oldmainmenu=0;
+	oldmainmenu = MAIN_MENU_MAIN;
 
 	newdetail=detail;
 	newscreenwidth=screenwidth;
@@ -1492,7 +1497,7 @@ void Game::LoadStuff()
 	oldenvironment=-4;
 
 	gameon=1;
-	mainmenu=0;
+	mainmenu = MAIN_MENU_MAIN;
 
 	firstload=0;
 	//if(targetlevel!=7)
@@ -1802,7 +1807,6 @@ Game::Game()
 	explodetogglekeydown = 0;
 	detailtogglekeydown = 0;
 	firstload = 0;
-	oldbutton = 0;
 
 	leveltime = 0;
 	loadtime = 0;
@@ -1913,8 +1917,17 @@ Game::Game()
 	registernow = 0;
 	autocam = 0;
 
-	crouchkey = 0,jumpkey = 0,forwardkey = 0,chatkey = 0,backkey = 0,leftkey = 0,rightkey = 0,drawkey = 0,throwkey = 0,attackkey = 0;
-	oldattackkey = 0;
+	crouchkey    = SDL_SCANCODE_0;
+    jumpkey      = SDL_SCANCODE_0;
+    forwardkey   = SDL_SCANCODE_0;
+    chatkey      = SDL_SCANCODE_0;
+    backkey      = SDL_SCANCODE_0;
+    leftkey      = SDL_SCANCODE_0;
+    rightkey     = SDL_SCANCODE_0;
+    drawkey      = SDL_SCANCODE_0;
+    throwkey     = SDL_SCANCODE_0;
+    attackkey    = SDL_SCANCODE_0;
+	oldattackkey = SDL_SCANCODE_0;
 
 	loading = 0;
 	talkdelay = 0;

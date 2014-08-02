@@ -1,6 +1,7 @@
 /*
  * This file is part of Kugaru.
  *
+ * Copyright (C) 2003, 2010 - Wolfire Games
  * Copyright (C) 2014 Victor A. Santos
  *
  * Kugaru is free software: you can redistribute it and/or modify
@@ -18,19 +19,23 @@
  */
 
 
-#ifndef FILEIO_H
-#define FILEIO_H
+#ifndef KUGARU_INPUT_H
+#define KUGARU_INPUT_H
 
-
-#include <glib.h>
+#include <stdint.h>
+#include <SDL.h>
 
 
 namespace Kugaru
 {
-    const char *ConvertFileName  (const char* name);
-    gchar      *GetConfigDir     (void);
-    gchar      *GetConfigFilePath(void);
-    FILE       *LoadConfigFile   (void);
+    const char   *GetButtonName(uint8_t button);
+    SDL_Scancode  GetMouseOrKbd(const char *which);
+
+    bool IsKeyDown(SDL_Scancode key);
+    bool IsKeyRangeDown(SDL_Scancode keyf, SDL_Scancode keyl);
+    bool IsKeyPress(SDL_Scancode Key);
+    bool IsButtonDown(uint8_t btn);
+    bool IsButtonPress(uint8_t btn);
 }
 
-#endif /* FILEIO_H */
+#endif /* KUGARU_INPUT_H */

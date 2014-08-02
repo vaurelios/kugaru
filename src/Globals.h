@@ -24,10 +24,12 @@
 
 
 #include <SDL.h>
+#include <glib.h>
 
 #include "gamegl.h"
 #include "Quaternions.h"
 #include "Lights.h"
+#include "Conf.h"
 #include "Skeleton.h"
 #include "Terrain.h"
 #include "Sprites.h"
@@ -36,20 +38,28 @@
 #include "Weapons.h"
 #include "Person.h"
 #include "TGALoader.h"
+#include "Types.h"
 #include "openal_wrapper.h"
 
 #include "Constants.h"
 
+extern SDL_Keysym *keysym;
+extern SDL_Scancode oldscancode;
+extern SDL_MouseButtonEvent *button;
+extern uint8_t oldbutton;
+extern int modes_count;
+extern GSList *displaymodes;
+extern int displaywidth, displayheight;
+extern bool IsFocused;
+extern Kugaru::Conf cnf;
 extern bool visibleloading;
 extern OPENAL_SAMPLE *samp[];
 extern OPENAL_STREAM *strm[];
 extern int channels[];
 
-extern bool buttons[];
 extern int volume;
-extern bool oldbuttons[];
 extern bool ismotionblur;
-extern float usermousesensitivity;
+extern int usermousesensitivity;
 extern bool floatjump;
 extern bool cellophane;
 extern bool autoslomo;
@@ -83,7 +93,7 @@ extern Terrain terrain;
 extern Sprites sprites;
 extern float sps;
 
-extern SDL_Surface *sdlscreen;
+extern SDL_Window *screen;
 
 extern int kTextureSize;
 extern int detail;
@@ -98,7 +108,7 @@ extern float slomodelay;
 extern GLubyte bloodText[];
 extern GLubyte wolfbloodText[];
 extern float colors[];
-extern int bloodtoggle;
+extern int blooddetail;
 extern bool osx;
 extern float camerashake;
 extern float woozy;
@@ -116,7 +126,7 @@ extern bool freeze;
 extern bool winfreeze;
 extern float flashamount, flashr, flashg, flashb;
 extern int flashdelay;
-extern bool vblsync;
+extern bool vsync;
 extern float motionbluramount;
 extern bool keyboardfrozen;
 extern char mapname[];
@@ -130,8 +140,8 @@ extern int test;
 extern XYZ windvector;
 extern short vRefNum;
 extern long dirID;
-extern int mainmenu;
-extern int oldmainmenu;
+extern Kugaru::MainMenu mainmenu;
+extern Kugaru::MainMenu oldmainmenu;
 extern GLubyte texturearray[];
 extern int loadscreencolor;
 extern int whichjointstartarray[];
