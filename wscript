@@ -19,7 +19,7 @@ def configure(cnf):
     cnf.check_cfg(package='gl', args='--cflags --libs', mandatory=True)
     cnf.check_cfg(package='glu', args='--cflags --libs', mandatory=True)
     cnf.check_cfg(package='openal', args='--cflags --libs', mandatory=True)
-    cnf.check_cfg(package='sdl', args='--cflags --libs', madatory=True)
+    cnf.check_cfg(package='sdl2', args='--cflags --libs', madatory=True)
     cnf.check_cfg(package='libpng', args='--cflags --libs', mandatory=True)
     cnf.check_cfg(package='zlib', args='--cflags --libs', mandatory=True)
     cnf.check_cfg(package='vorbis', args='--cflags --libs', mandatory=True)

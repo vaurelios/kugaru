@@ -9450,7 +9450,7 @@ void	Game::TickOnceAfter(){
 								mapname[7]='p';
 								mapname[8]='s';
 								mapname[9]='/';
-								strcat(mapname, campaignmapname[levelorder[accountcampaignchoicesmade[accountactive]]]);//[campaignchoicewhich[whichchoice]]);
+								strcat(mapname, campaignmapname[levelorder[accountcampaignchoicesmade[accountactive]]]);
 								Loadlevel(mapname);
 
 								OPENAL_Sample_SetMinMaxDistance(samp[fireendsound], 9999.0f, 99999.0f);
@@ -9460,7 +9460,7 @@ void	Game::TickOnceAfter(){
 								OPENAL_SetPaused(channels[fireendsound], false);
 								OPENAL_Sample_SetMinMaxDistance(samp[fireendsound], 8.0f, 2000.0f);
 
-								loading=3;
+								loading = 3;
 							}
 							if(changedelay<=-999&&whichlevel!=-2&&!loading&&(player[0].dead||(alldead&&maptype==mapkilleveryone)||(winhotspot)||(killhotspot))&&!winfreeze)loading=1;
 							if((player[0].dead||(alldead&&maptype==mapkilleveryone)||(winhotspot)||(windialogue)||(killhotspot))&&changedelay<=0){

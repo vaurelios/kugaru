@@ -42,6 +42,7 @@ Game::TextureList Game::textures;
 void Game::Dispose()
 {
     gchar *config_dir;
+    gchar *users_file;
 
 	LOGFUNC;
 
@@ -54,7 +55,9 @@ void Game::Dispose()
 	}
 
     config_dir = GetConfigDir ();
-	sprintf (mapname, g_build_filname (config_dir, "users"));
+    users_file = g_build_filename (config_dir, "users", NULL);
+	sprintf (mapname, "%s", users_file);
+    g_free (users_file);
     g_free (config_dir);
 
 	FILE *tfile;
@@ -125,12 +128,12 @@ void Game::Dispose()
 #define streamcount 20
 #define samplecount 100
 
-	for (i=0; i < samplecount; ++i)
+	for (int i = 0; i < samplecount; ++i)
 	{
 		OPENAL_Sample_Free(samp[i]);
 	}
 
-	for (i=0; i < streamcount; ++i)
+	for (int i = 0; i < streamcount; ++i)
 	{
 		OPENAL_Stream_Close(strm[i]);
 	}
@@ -902,8 +905,8 @@ void Game::InitGame()
 
 	autocam=0;
 
-	int i,j;
-
+    gchar *config_dir;
+    gchar *users_file;
 	numchallengelevels=14;
 
 	/*char tempstring[256];
@@ -924,164 +927,173 @@ void Game::InitGame()
 
 	accountactive=-1;
 
-	sprintf (mapname, "data/Users");
-	tfile=fopen( ConvertFileName(mapname), "rb" );
-	if(tfile)
+    config_dir = GetConfigDir ();
+    users_file = g_build_filename (config_dir, "users", NULL);
+	sprintf (mapname, "%s", users_file);
+    g_free (config_dir);
+
+	tfile = fopen(users_file, "rb");
+
+    g_free (users_file);
+
+	if (tfile)
 	{
-		funpackf(tfile, "Bi", &numaccounts);
-		funpackf(tfile, "Bi", &accountactive);
-		if(numaccounts>0)
+		funpackf (tfile, "Bi", &numaccounts);
+		funpackf (tfile, "Bi", &accountactive);
+		if (numaccounts > 0)
 		{
-			for(i=0;i<numaccounts;i++)
+			for(int i = 0; i < numaccounts; i++)
 			{
-				funpackf(tfile, "Bf", &accountcampaigntime[i]);
-				funpackf(tfile, "Bf", &accountcampaignscore[i]);
-				funpackf(tfile, "Bf", &accountcampaignfasttime[i]);
-				funpackf(tfile, "Bf", &accountcampaignhighscore[i]);
-				funpackf(tfile, "Bi", &accountdifficulty[i]);
-				funpackf(tfile, "Bi", &accountprogress[i]);
-				funpackf(tfile, "Bi", &accountcampaignchoicesmade[i]);
-				for(j=0;j<accountcampaignchoicesmade[i];j++)
+				funpackf (tfile, "Bf", &accountcampaigntime[i]);
+				funpackf (tfile, "Bf", &accountcampaignscore[i]);
+				funpackf (tfile, "Bf", &accountcampaignfasttime[i]);
+				funpackf (tfile, "Bf", &accountcampaignhighscore[i]);
+				funpackf (tfile, "Bi", &accountdifficulty[i]);
+				funpackf (tfile, "Bi", &accountprogress[i]);
+				funpackf (tfile, "Bi", &accountcampaignchoicesmade[i]);
+				for (int j = 0; j < accountcampaignchoicesmade[i];j++)
 				{
-					funpackf(tfile, "Bi", &accountcampaignchoices[i][j]);
+					funpackf (tfile, "Bi", &accountcampaignchoices[i][j]);
 					if (accountcampaignchoices[i][j] >= 10)
 					{
 						accountcampaignchoices[i][j] = 0;
 					}
 				}
-				funpackf(tfile, "Bf", &accountpoints[i]);
-				for(j=0;j<50;j++)
+				funpackf (tfile, "Bf", &accountpoints[i]);
+				for(int j = 0; j < 50; j++)
 				{
-					funpackf(tfile, "Bf", &accounthighscore[i][j]);
-					funpackf(tfile, "Bf", &accountfasttime[i][j]);
+					funpackf (tfile, "Bf", &accounthighscore[i][j]);
+					funpackf (tfile, "Bf", &accountfasttime[i][j]);
 				}
-				for(j=0;j<60;j++)
+				for(int j = 0; j < 60; j++)
 				{
-					funpackf(tfile, "Bb",  &accountunlocked[i][j]);
+					funpackf (tfile, "Bb",  &accountunlocked[i][j]);
 				}
 				int temp;
-				funpackf(tfile, "Bi",  &temp);
-				if(temp>0)
+				funpackf (tfile, "Bi",  &temp);
+				if (temp > 0)
 				{
-					for(j=0;j<temp;j++)
+					for(int j = 0; j < temp; j++)
 					{
-						funpackf(tfile, "Bb",  &accountname[i][j]);
+						funpackf (tfile, "Bb",  &accountname[i][j]);
 					}
 				}
 			}
 		}
 
-		fclose(tfile);
+		fclose (tfile);
 	}
 
-	tintr=1;
-	tintg=1;
-	tintb=1;
+	tintr = 1;
+	tintg = 1;
+	tintb = 1;
 
-	whichjointstartarray[0]=righthip;
-	whichjointendarray[0]=rightfoot;
+	whichjointstartarray[0] = righthip;
+	whichjointendarray[0]   = rightfoot;
 
-	whichjointstartarray[1]=righthip;
-	whichjointendarray[1]=rightankle;
+	whichjointstartarray[1] = righthip;
+	whichjointendarray[1]   = rightankle;
 
-	whichjointstartarray[2]=righthip;
-	whichjointendarray[2]=rightknee;
+	whichjointstartarray[2] = righthip;
+	whichjointendarray[2]   = rightknee;
 
-	whichjointstartarray[3]=rightknee;
-	whichjointendarray[3]=rightankle;
+	whichjointstartarray[3] = rightknee;
+	whichjointendarray[3]   = rightankle;
 
-	whichjointstartarray[4]=rightankle;
-	whichjointendarray[4]=rightfoot;
+	whichjointstartarray[4] = rightankle;
+	whichjointendarray[4]   = rightfoot;
 
-	whichjointstartarray[5]=lefthip;
-	whichjointendarray[5]=leftfoot;
+	whichjointstartarray[5] = lefthip;
+	whichjointendarray[5]   = leftfoot;
 
-	whichjointstartarray[6]=lefthip;
-	whichjointendarray[6]=leftankle;
+	whichjointstartarray[6] = lefthip;
+	whichjointendarray[6]   = leftankle;
 
-	whichjointstartarray[7]=lefthip;
-	whichjointendarray[7]=leftknee;
+	whichjointstartarray[7] = lefthip;
+	whichjointendarray[7]   = leftknee;
 
-	whichjointstartarray[8]=leftknee;
-	whichjointendarray[8]=leftankle;
+	whichjointstartarray[8] = leftknee;
+	whichjointendarray[8]   = leftankle;
 
-	whichjointstartarray[9]=leftankle;
-	whichjointendarray[9]=leftfoot;
+	whichjointstartarray[9] = leftankle;
+	whichjointendarray[9]   = leftfoot;
 
-	whichjointstartarray[10]=abdomen;
-	whichjointendarray[10]=rightshoulder;
+	whichjointstartarray[10] = abdomen;
+	whichjointendarray[10]   = rightshoulder;
 
-	whichjointstartarray[11]=abdomen;
-	whichjointendarray[11]=rightelbow;
+	whichjointstartarray[11] = abdomen;
+	whichjointendarray[11]   = rightelbow;
 
-	whichjointstartarray[12]=abdomen;
-	whichjointendarray[12]=rightwrist;
+	whichjointstartarray[12] = abdomen;
+	whichjointendarray[12]   = rightwrist;
 
-	whichjointstartarray[13]=abdomen;
-	whichjointendarray[13]=righthand;
+	whichjointstartarray[13] = abdomen;
+	whichjointendarray[13]   = righthand;
 
-	whichjointstartarray[14]=rightshoulder;
-	whichjointendarray[14]=rightelbow;
+	whichjointstartarray[14] = rightshoulder;
+	whichjointendarray[14]   = rightelbow;
 
-	whichjointstartarray[15]=rightelbow;
-	whichjointendarray[15]=rightwrist;
+	whichjointstartarray[15] = rightelbow;
+	whichjointendarray[15]   = rightwrist;
 
-	whichjointstartarray[16]=rightwrist;
-	whichjointendarray[16]=righthand;
+	whichjointstartarray[16] = rightwrist;
+	whichjointendarray[16]   = righthand;
 
-	whichjointstartarray[17]=abdomen;
-	whichjointendarray[17]=leftshoulder;
+	whichjointstartarray[17] = abdomen;
+	whichjointendarray[17]   = leftshoulder;
 
-	whichjointstartarray[18]=abdomen;
-	whichjointendarray[18]=leftelbow;
+	whichjointstartarray[18] = abdomen;
+	whichjointendarray[18]   = leftelbow;
 
-	whichjointstartarray[19]=abdomen;
-	whichjointendarray[19]=leftwrist;
+	whichjointstartarray[19] = abdomen;
+	whichjointendarray[19]   = leftwrist;
 
-	whichjointstartarray[20]=abdomen;
-	whichjointendarray[20]=lefthand;
+	whichjointstartarray[20] = abdomen;
+	whichjointendarray[20]   = lefthand;
 
-	whichjointstartarray[21]=leftshoulder;
-	whichjointendarray[21]=leftelbow;
+	whichjointstartarray[21] = leftshoulder;
+	whichjointendarray[21]   = leftelbow;
 
-	whichjointstartarray[22]=leftelbow;
-	whichjointendarray[22]=leftwrist;
+	whichjointstartarray[22] = leftelbow;
+	whichjointendarray[22]   = leftwrist;
 
-	whichjointstartarray[23]=leftwrist;
-	whichjointendarray[23]=lefthand;
+	whichjointstartarray[23] = leftwrist;
+	whichjointendarray[23]   = lefthand;
 
-	whichjointstartarray[24]=abdomen;
-	whichjointendarray[24]=neck;
+	whichjointstartarray[24] = abdomen;
+	whichjointendarray[24]   = neck;
 
-	whichjointstartarray[25]=neck;
-	whichjointendarray[25]=head;
+	whichjointstartarray[25] = neck;
+	whichjointendarray[25]   = head;
 
 	FadeLoadingScreen(0);
 
-	stillloading=1;
+	stillloading = 1;
 
-	texture.data = ( GLubyte* )malloc( 1024*1024*4 );
+	texture.data = (GLubyte *) malloc (1024 * 1024 * 4);
 
-	int temptexdetail=texdetail;
-	texdetail=1;
+	int temptexdetail = texdetail;
+	texdetail = 1;
 	text.LoadFontTexture("data/textures/font.png");
 	text.BuildFont();
-	texdetail=temptexdetail;
+	texdetail = temptexdetail;
 
 	FadeLoadingScreen(10);
 
-	if(detail==2){
-		texdetail=1;
-		terraindetail=1;
+	if (detail == 2)
+    {
+		texdetail     = 1;
+		terraindetail = 1;
 	}
-	if(detail==1){
-		texdetail=2;
-		terraindetail=1;
+	if (detail == 1)
+    {
+		texdetail     = 2;
+		terraindetail = 1;
 	}
-	if(detail==0){
-		texdetail=4;
-		terraindetail=1;
-		//terraindetail=2;
+	if (detail == 0)
+    {
+		texdetail     = 4;
+		terraindetail = 1;
 	}
 
 	for (int it = 0; it < 100; ++it)
@@ -1098,47 +1110,15 @@ void Game::InitGame()
 
     int output = -1;
 
-    #if PLATFORM_LINUX
-    extern bool cmdline(const char *cmd);
-    unsigned char rc = 0;
-    output = OPENAL_OUTPUT_ALSA;  // Try alsa first...
-    if (cmdline("forceoss"))      //  ...but let user override that.
-        output = OPENAL_OUTPUT_OSS;
-    else if (cmdline("nosound"))
-        output = OPENAL_OUTPUT_NOSOUND;
-
-    OPENAL_SetOutput(output);
-	if ((rc = OPENAL_Init(44100, 32, 0)) == false)
-    {
-        // if we tried ALSA and failed, fall back to OSS.
-        if ( (output == OPENAL_OUTPUT_ALSA) && (!cmdline("forcealsa")) )
-        {
-            OPENAL_Close();
-            output = OPENAL_OUTPUT_OSS;
-            OPENAL_SetOutput(output);
-	        rc = OPENAL_Init(44100, 32, 0);
-        }
-    }
-
-    if (rc == false)
-    {
-        OPENAL_Close();
-        output = OPENAL_OUTPUT_NOSOUND;  // we tried! just do silence.
-        OPENAL_SetOutput(output);
-	    rc = OPENAL_Init(44100, 32, 0);
-    }
-    #else
 	OPENAL_Init(44100, 32, 0);
-    #endif
 
 	OPENAL_SetSFXMasterVolume((float) volume / 100.0f);
 
 	strm[stream_music3] = OPENAL_Stream_Open(ConvertFileName("data/sounds/music3.ogg"), OPENAL_2D, 0, 0); if(visibleloading){LoadingScreen(); loadscreencolor=0;}
-//	OPENAL_Sample_SetMinMaxDistance(strm[stream_music3], 4.0f, 1000.0f);
 	OPENAL_Stream_SetMode(strm[stream_music3], OPENAL_LOOP_NORMAL);
 
-	if(musictoggle){
-//		PlaySoundEx( stream_music3, strm[stream_music3], NULL, true);
+	if (musictoggle)
+    {
 		PlayStreamEx(stream_music3, strm[stream_music3], 0, true);
 		OPENAL_SetPaused(channels[stream_music3], false);
 		OPENAL_SetVolume(channels[stream_music3], 256);
@@ -1146,15 +1126,14 @@ void Game::InitGame()
 
 	FadeLoadingScreen(20);
 
-	if(ambientsound){
+	if (ambientsound)
+    {
 		strm[stream_wind] = OPENAL_Stream_Open(ConvertFileName("data/sounds/wind.ogg"), OPENAL_2D, 0, 0); if(visibleloading){LoadingScreen(); loadscreencolor=5;}
-//		OPENAL_Sample_SetMinMaxDistance(strm[stream_wind], 4.0f, 1000.0f);
 		OPENAL_Stream_SetMode(strm[stream_wind], OPENAL_LOOP_NORMAL);
 
 		FadeLoadingScreen(30);
 
 		strm[stream_desertambient] = OPENAL_Stream_Open(ConvertFileName("data/sounds/desertambient.ogg"), OPENAL_2D, 0, 0); if(visibleloading){LoadingScreen(); loadscreencolor=5;}
-//		OPENAL_Sample_SetMinMaxDistance(strm[stream_desertambient], 4.0f, 1000.0f);
 		OPENAL_Stream_SetMode(strm[stream_desertambient], OPENAL_LOOP_NORMAL);
 	}
 
@@ -1164,7 +1143,6 @@ void Game::InitGame()
 	OPENAL_Sample_SetMinMaxDistance(samp[firestartsound], 8.0f, 2000.0f);
 
 	strm[stream_firesound] = OPENAL_Stream_Open(ConvertFileName("data/sounds/fire.ogg"), OPENAL_2D, 0, 0); if(visibleloading){LoadingScreen(); loadscreencolor=5;}
-//	OPENAL_Sample_SetMinMaxDistance(strm[stream_firesound], 8.0f, 2000.0f);
 	OPENAL_Stream_SetMode(strm[stream_firesound], OPENAL_LOOP_NORMAL);
 
 	FadeLoadingScreen(50);
@@ -1172,84 +1150,57 @@ void Game::InitGame()
 	samp[fireendsound] = OPENAL_Sample_Load(OPENAL_FREE, ConvertFileName("data/sounds/fireend.ogg"), OPENAL_2D, 0, 0); if(visibleloading){LoadingScreen(); loadscreencolor=5;}
 	OPENAL_Sample_SetMinMaxDistance(samp[fireendsound], 8.0f, 2000.0f);
 
-	//if(musictoggle){
 	strm[stream_music1grass] = OPENAL_Stream_Open(ConvertFileName("data/sounds/music1grass.ogg"), OPENAL_2D, 0, 0); if(visibleloading){LoadingScreen(); loadscreencolor=1;}
-//	OPENAL_Sample_SetMinMaxDistance(strm[stream_music1grass], 4.0f, 1000.0f);
 	OPENAL_Stream_SetMode(strm[stream_music1grass], OPENAL_LOOP_NORMAL);
 
 	strm[stream_music1snow] = OPENAL_Stream_Open(ConvertFileName("data/sounds/music1snow.ogg"), OPENAL_2D, 0, 0); if(visibleloading){LoadingScreen(); loadscreencolor=2;}
-//	OPENAL_Sample_SetMinMaxDistance(strm[stream_music1snow], 4.0f, 1000.0f);
 	OPENAL_Stream_SetMode(strm[stream_music1snow], OPENAL_LOOP_NORMAL);
 
 	FadeLoadingScreen(60);
 
 	strm[stream_music1desert] = OPENAL_Stream_Open(ConvertFileName("data/sounds/music1desert.ogg"), OPENAL_2D, 0, 0); if(visibleloading){LoadingScreen(); loadscreencolor=3;}
-//	OPENAL_Sample_SetMinMaxDistance(strm[stream_music1desert], 4.0f, 1000.0f);
 	OPENAL_Stream_SetMode(strm[stream_music1desert], OPENAL_LOOP_NORMAL);
 
 	FadeLoadingScreen(80);
 	strm[stream_music2] = OPENAL_Stream_Open(ConvertFileName("data/sounds/music2.ogg"), OPENAL_2D, 0, 0); if(visibleloading){LoadingScreen(); loadscreencolor=4;}
-//	OPENAL_Sample_SetMinMaxDistance(strm[stream_music2], 4.0f, 1000.0f);
 	OPENAL_Stream_SetMode(strm[stream_music2], OPENAL_LOOP_NORMAL);
 
-	//}
+	
+    FadeLoadingScreen(90);
 
 
-	FadeLoadingScreen(90);
+	LoadTexture ("data/textures/cursor.png",    &cursortexture,    0, 1);
 
+	LoadTexture ("data/textures/mapcircle.png", &Mapcircletexture, 0, 1);
+	LoadTexture ("data/textures/mapbox.png",    &Mapboxtexture,    0, 1);
+	LoadTexture ("data/textures/maparrow.png",  &Maparrowtexture,  0, 1);
 
-	LoadTexture("data/textures/cursor.png",&cursortexture,0,1);
+	temptexdetail = texdetail;
+	if (texdetail > 2) texdetail = 2;
+	LoadTexture ("data/textures/lugaru.png",  &Mainmenuitems[0], 0, 0);
+	LoadTexture ("data/textures/newgame.png", &Mainmenuitems[1], 0, 0);
+	LoadTexture ("data/textures/options.png", &Mainmenuitems[2], 0, 0);
+	LoadTexture ("data/textures/quit.png",    &Mainmenuitems[3], 0, 0);
+	LoadTexture ("data/textures/world.png",   &Mainmenuitems[7], 0, 0);
+	LoadTexture ("data/textures/eyelid.png",  &Mainmenuitems[4], 0, 1);
+	texdetail = temptexdetail;
 
-	LoadTexture("data/textures/mapcircle.png",&Mapcircletexture,0,1);
-	LoadTexture("data/textures/mapbox.png",&Mapboxtexture,0,1);
-	LoadTexture("data/textures/maparrow.png",&Maparrowtexture,0,1);
-
-	temptexdetail=texdetail;
-	if(texdetail>2)texdetail=2;
-	LoadTexture("data/textures/lugaru.png",&Mainmenuitems[0],0,0);
-	LoadTexture("data/textures/newgame.png",&Mainmenuitems[1],0,0);
-	LoadTexture("data/textures/options.png",&Mainmenuitems[2],0,0);
-	LoadTexture("data/textures/quit.png",&Mainmenuitems[3],0,0);
-	LoadTexture("data/textures/world.png",&Mainmenuitems[7],0,0);
-	LoadTexture("data/textures/eyelid.png",&Mainmenuitems[4],0,1);
-	//LoadTexture("data/textures/eye.jpg",&Mainmenuitems[5],0,1);
-	texdetail=temptexdetail;
-
-	loaddistrib=0;
-	anim=0;
+	loaddistrib = 0;
+	anim = 0;
 
 	FadeLoadingScreen(95);
 
 
-	gameon=0;
+	gameon = 0;
 	mainmenu = MAIN_MENU_MAIN;
 
-	stillloading=0;
-	firstload=0;
+	stillloading = 0;
+	firstload = 0;
 	oldmainmenu = MAIN_MENU_MAIN;
 
-	newdetail=detail;
-	newscreenwidth=screenwidth;
-	newscreenheight=screenheight;
-
-
-
-	/*
-	float gLoc[3]={0,0,0};
-	float vel[3]={0,0,0};
-	OPENAL_Sample_SetMinMaxDistance(samp[firestartsound], 9999.0f, 99999.0f);
-	PlaySoundEx( firestartsound, samp[firestartsound], NULL, true);
-	OPENAL_3D_SetAttributes(channels[firestartsound], gLoc, vel);
-	OPENAL_SetVolume(channels[firestartsound], 256);
-	OPENAL_SetPaused(channels[firestartsound], false);
-	OPENAL_Sample_SetMinMaxDistance(samp[firestartsound], 8.0f, 2000.0f);
-
-	flashr=1;
-	flashg=0;
-	flashb=0;
-	flashamount=1;
-	flashdelay=1;
-	*/
+	newdetail = detail;
+	newscreenwidth = screenwidth;
+	newscreenheight = screenheight;
 }
 
 
