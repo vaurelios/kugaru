@@ -93,24 +93,6 @@ Point           delta;
 const RGBColor  RGB_BLACK = { 0x0000, 0x0000, 0x0000 };
 
 
-static bool lookup_glsym(const char *funcname, void **func)
-{
-    *func = SDL_GL_GetProcAddress(funcname);
-
-    if (*func == NULL)
-    {
-        fprintf(stderr, "Failed to find OpenGL symbol \"%s\"\n", funcname);
-        return false;
-    }
-
-    return true;
-}
-
-static void GLAPIENTRY glDeleteTextures_doNothing(GLsizei n, const GLuint *textures)
-{
-    // no-op.
-}
-
 #ifdef MessageBox
 #undef MessageBox
 #endif
@@ -202,6 +184,14 @@ static void sdlEventProc(const SDL_Event &e, Game &game)
                 IsFocused = true;
             if (e.window.event == SDL_WINDOWEVENT_FOCUS_LOST)
                 IsFocused = false;
+            break;
+        case SDL_TEXTEDITING:
+            printf("Text editing: %s\n", e.edit.text);
+            textediting = true;
+            editevent = (SDL_TextEditingEvent *) &e.edit;
+            break;
+        case SDL_TEXTINPUT:
+            printf("Text Input: %s\n", e.text.text);
             break;
     }
 }
@@ -687,7 +677,8 @@ int main(int argc, char **argv)
         if (!SetUp(game))
             return 42;
 
-        while (!gDone&&!game.quit&&(!game.tryquit))
+        SDL_StartTextInput();
+        while (!gDone && !game.quit && !game.tryquit)
         {
             if (IsFocused)
             {
@@ -699,10 +690,10 @@ int main(int argc, char **argv)
                 {
                     if( e.type == SDL_QUIT )
                     {
-                        gDone=true;
+                        gDone = true;
                         break;
-                }
-                sdlEventProc(e, game);
+                    }
+                    sdlEventProc(e, game);
                 }
 
                 // game
@@ -717,6 +708,7 @@ int main(int argc, char **argv)
                 STUBBED("give up CPU but sniff the event queue");
             }
         }
+        SDL_StopTextInput();
 
         pgame = 0;
 

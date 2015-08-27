@@ -24,6 +24,8 @@ SDL_Keysym *keysym = NULL;
 SDL_Scancode oldscancode = SDL_SCANCODE_0;
 SDL_MouseButtonEvent *button = NULL;
 uint8_t oldbutton = 0;
+bool textediting;
+SDL_TextEditingEvent *editevent = NULL;
 int modes_count = 0;
 GSList *displaymodes = NULL;
 int displaywidth = 800, displayheight = 600;

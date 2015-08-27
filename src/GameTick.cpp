@@ -2703,7 +2703,7 @@ void Game::Tick()
 		// menu buttons
 		if (mainmenu == MAIN_MENU_MAIN || mainmenu == MAIN_MENU_RESUME)
         {
-			if (IsButtonDown(SDL_BUTTON_LEFT) && selected == 1)
+			if (IsButtonPress(SDL_BUTTON_LEFT) && selected == 1)
             {
 				if (!gameon)
                 {
@@ -2748,7 +2748,7 @@ void Game::Tick()
 				}
 			}
 
-			if (IsButtonDown(SDL_BUTTON_LEFT) && selected == 2)
+			if (IsButtonPress(SDL_BUTTON_LEFT) && selected == 2)
             {
 				float gLoc[3]={0,0,0};
 				float vel[3]={0,0,0};
@@ -2777,7 +2777,7 @@ void Game::Tick()
 				if (newscreenheight < 0) newscreenheight = screenheight;
 			}
 
-			if (IsButtonDown(SDL_BUTTON_LEFT) && selected == 3)
+			if (IsButtonPress(SDL_BUTTON_LEFT) && selected == 3)
             {
 				float gLoc[3]={0,0,0};
 				float vel[3]={0,0,0};
@@ -2811,7 +2811,7 @@ void Game::Tick()
 
 		if (mainmenu == MAIN_MENU_OPTIONS)
         {
-			if(IsButtonDown(SDL_BUTTON_LEFT) && selected != -1)
+			if(IsButtonPress(SDL_BUTTON_LEFT) && selected != -1)
             {
 				float gLoc[3] = {0, 0, 0};
 				float vel[3]  = {0, 0, 0};
@@ -3077,7 +3077,7 @@ void Game::Tick()
 				endgame=0;
 			}
 
-			if (IsButtonDown(SDL_BUTTON_LEFT) && selected == 1)
+			if (IsButtonPress(SDL_BUTTON_LEFT) && selected == 1)
             {
 				float gLoc[3]={0,0,0};
 				float vel[3]={0,0,0};
@@ -3109,7 +3109,7 @@ void Game::Tick()
 				gameon = 1;
 				OPENAL_SetPaused(channels[stream_music3], true);
 			}
-			if (IsButtonDown(SDL_BUTTON_LEFT) && selected - 7 >= accountcampaignchoicesmade[accountactive])
+			if (IsButtonPress(SDL_BUTTON_LEFT) && selected - 7 >= accountcampaignchoicesmade[accountactive])
             {
 				float gLoc[3]={0,0,0};
 				float vel[3]={0,0,0};
@@ -3159,7 +3159,7 @@ void Game::Tick()
 				gameon=1;
 				OPENAL_SetPaused(channels[stream_music3], true);
 			}
-			if (IsButtonDown(SDL_BUTTON_LEFT) && selected == 4)
+			if (IsButtonPress(SDL_BUTTON_LEFT) && selected == 4)
             {
 				float gLoc[3]={0,0,0};
 				float vel[3]={0,0,0};
@@ -3179,7 +3179,7 @@ void Game::Tick()
 				if (mainmenu == MAIN_MENU_CAMPAIGNS && gameon) mainmenu = MAIN_MENU_RESUME;
 				if (mainmenu == MAIN_MENU_CAMPAIGNS && !gameon) mainmenu = MAIN_MENU_MAIN;
 			}
-			if (IsButtonDown(SDL_BUTTON_LEFT) && selected == 5)
+			if (IsButtonPress(SDL_BUTTON_LEFT) && selected == 5)
             {
 				float gLoc[3]={0,0,0};
 				float vel[3]={0,0,0};
@@ -3198,7 +3198,7 @@ void Game::Tick()
 
 				mainmenu = MAIN_MENU_USER_LISTING;
 			}
-			if (IsButtonDown(SDL_BUTTON_LEFT) && selected == 3)
+			if (IsButtonPress(SDL_BUTTON_LEFT) && selected == 3)
             {
 				float gLoc[3]={0,0,0};
 				float vel[3]={0,0,0};
@@ -3217,7 +3217,7 @@ void Game::Tick()
 
 				mainmenu = MAIN_MENU_DELETE_USER;
 			}
-			if (IsButtonDown(SDL_BUTTON_LEFT) && selected == 2)
+			if (IsButtonPress(SDL_BUTTON_LEFT) && selected == 2)
             {
 				float gLoc[3]={0,0,0};
 				float vel[3]={0,0,0};
@@ -3453,20 +3453,20 @@ void Game::Tick()
 		}
 		if (mainmenu == MAIN_MENU_USER_LISTING)
         {
-			if (IsButtonPress(SDL_BUTTON_LEFT) && selected != -1)
-            {
-				float gLoc[3]={0,0,0};
-				float vel[3]={0,0,0};
-				OPENAL_Sample_SetMinMaxDistance(samp[firestartsound], 9999.0f, 99999.0f);
-				PlaySoundEx( firestartsound, samp[firestartsound], NULL, true);
-				OPENAL_3D_SetAttributes(channels[firestartsound], gLoc, vel);
-				OPENAL_SetVolume(channels[firestartsound], 256);
-				OPENAL_SetPaused(channels[firestartsound], false);
-				OPENAL_Sample_SetMinMaxDistance(samp[firestartsound], 8.0f, 2000.0f);
-			}
+			//if (IsButtonPress(SDL_BUTTON_LEFT) && selected != -1)
+            //{
+			//	float gLoc[3] = { 0, 0, 0 };
+			//	float vel[3]  = { 0, 0, 0 };
+			//	OPENAL_Sample_SetMinMaxDistance(samp[firestartsound], 9999.0f, 99999.0f);
+			//	PlaySoundEx( firestartsound, samp[firestartsound], NULL, true);
+			//	OPENAL_3D_SetAttributes(channels[firestartsound], gLoc, vel);
+			//	OPENAL_SetVolume(channels[firestartsound], 256);
+			//	OPENAL_SetPaused(channels[firestartsound], false);
+			//	OPENAL_Sample_SetMinMaxDistance(samp[firestartsound], 8.0f, 2000.0f);
+			//}
 			if (IsButtonPress(SDL_BUTTON_LEFT) && selected == 0 && numaccounts < 8)
             {
-				entername=1;
+				entername = 1;
 			}
 			if (IsButtonPress(SDL_BUTTON_LEFT) && selected > 0 && selected < numaccounts + 1)
             {
@@ -3500,9 +3500,9 @@ void Game::Tick()
 				for(j=0;j<255;j++){
 					displaytext[0][j]=' ';
 				}
-				displaychars[0]=0;
-				displayselected=0;
-				entername=0;
+				displaychars[0] = 0;
+				displayselected = 0;
+				entername       = 0;
 			}
 		}
 		if (mainmenu == MAIN_MENU_DIFFICULTY)
@@ -3561,7 +3561,16 @@ void Game::Tick()
 		}
 		OPENAL_SetFrequency(channels[stream_music3], 22050);
 
-		if(entername){
+		if(entername)
+        {
+            if (textediting)
+            {
+                strcpy(displaytext[0], editevent->text);
+                displayselected = editevent->start;
+
+                textediting = false;
+                editevent = NULL;
+            }
 			/*for(i=0;i<140;i++){
 				if(IsKeyDown(i)){
 					togglekeydelay[i]+=multiplier;
@@ -3685,10 +3694,11 @@ void Game::Tick()
 				}
 			}*/
 
-			displayblinkdelay-=multiplier;
-			if(displayblinkdelay<=0){
-				displayblinkdelay=.3;
-				displayblink=1-displayblink;
+			displayblinkdelay -= multiplier;
+			if (displayblinkdelay <= 0)
+            {
+				displayblinkdelay = 0.3;
+				displayblink      = 1 - displayblink;
 			}
 		}
 	}

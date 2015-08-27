@@ -105,14 +105,10 @@ namespace Kugaru {
     {
         if (button == NULL) return false;
         if (oldbutton == btn) return false;
+        if (button->button != btn) return false;
 
-        if (button->button == btn)
-        {
-            oldbutton = button->button;
+        oldbutton = button->button;
 
-            return true;
-        }
-
-        return false;
+        return true;
     }
 }

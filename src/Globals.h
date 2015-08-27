@@ -47,6 +47,8 @@ extern SDL_Keysym *keysym;
 extern SDL_Scancode oldscancode;
 extern SDL_MouseButtonEvent *button;
 extern uint8_t oldbutton;
+extern bool textediting;
+extern SDL_TextEditingEvent *editevent;
 extern int modes_count;
 extern GSList *displaymodes;
 extern int displaywidth, displayheight;
