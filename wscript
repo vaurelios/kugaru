@@ -10,6 +10,8 @@ out = 'build'
 def options(opt):
     opt.load('compiler_c compiler_cxx')
 
+    opt.add_option('--debug', action='store_true', default=False, help='pass debug options to compiler')
+
 def configure(cnf):
     cnf.load('compiler_c compiler_cxx')
 
