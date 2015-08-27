@@ -52,7 +52,7 @@ namespace Kugaru
             path = g_string_new(datap);
         }
         g_free(datap);
- 
+
         if ( g_file_test(rpath, G_FILE_TEST_IS_REGULAR) )
         {
             if (path != NULL)
@@ -90,7 +90,7 @@ namespace Kugaru
 
     gchar *GetConfigDir()
     {
-        gchar *config_dir = g_build_filename(g_get_user_config_dir(), "kugaru");
+        gchar *config_dir = g_build_path(G_DIR_SEPARATOR_S, g_get_user_config_dir(), "kugaru", NULL);
 
         return config_dir;
     }
@@ -121,7 +121,7 @@ namespace Kugaru
         FILE *fp;
 
         fp = fopen(file, "w+");
-        
+
         g_free(file);
 
         return fp;
