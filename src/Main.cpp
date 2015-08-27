@@ -66,12 +66,12 @@ void        CleanUp           ();
 
 
 // Menu defs
-enum 
+enum
 {
     MENU_FILE_QUIT = 1
 };
 
-enum 
+enum
 {
     FG_SLEEP_TIME = 10,
     BG_SLEEP_TIME = 10000
@@ -134,7 +134,7 @@ static void sdlEventProc(const SDL_Event &e, Game &game)
 
         case SDL_MOUSEBUTTONUP:
             button = NULL;
-            oldbutton = 0;
+            oldbutton = e.button.button;
             break;
 
         case SDL_KEYDOWN:
@@ -145,7 +145,7 @@ static void sdlEventProc(const SDL_Event &e, Game &game)
                     if (e.key.keysym.mod & KMOD_CTRL)
                     {
                         skipkey = true;
-                        SDL_SetRelativeMouseMode(SDL_FALSE);                    
+                        SDL_SetRelativeMouseMode(SDL_FALSE);
                     }
                     break;
                 case SDLK_RETURN:
@@ -235,7 +235,7 @@ bool SetUp(Game &game)
     showpoints           = cnf.getGameBool("show-points");
     alwaysblur           = cnf.getDisplayBool("always-blur");
     immediate            = cnf.getGameBool("immediate-mode");
-    velocityblur         = cnf.getDisplayInt("velocity-blur"); 
+    velocityblur         = cnf.getDisplayInt("velocity-blur");
     volume               = cnf.getSoundInt("volume");
     game.forwardkey      = GetMouseOrKbd(cnf.getKeysStr("key-forward"));
     game.backkey         = GetMouseOrKbd(cnf.getKeysStr("key-back")   );
@@ -292,12 +292,12 @@ bool SetUp(Game &game)
                 }
             }
 
-            displaymodes = g_slist_append(displaymodes, mode); 
+            displaymodes = g_slist_append(displaymodes, mode);
         }
         // We set modes_count so it reflect the new value
         modes_count = g_slist_index(displaymodes, g_slist_last(displaymodes)->data) + 1;
     }
-    else 
+    else
     {
         fprintf(stderr, "GetNumDisplayModes() failed: %s\n", SDL_GetError());
     }
@@ -315,7 +315,7 @@ bool SetUp(Game &game)
         GSList *scan;
 
         printf("Resolutions we think are okay:\n");
-        
+
         for (scan = displaymodes; scan != NULL; scan = scan->next)
             printf("  %d x %d\n", ((SDL_DisplayMode *) scan->data)->w, ((SDL_DisplayMode *) scan->data)->h);
     }
@@ -334,7 +334,7 @@ bool SetUp(Game &game)
     if (kContextWidth == displaywidth && kContextHeight == displayheight && fullscreen)
         win_flags |= SDL_WINDOW_FULLSCREEN_DESKTOP;
     else if (fullscreen)
-        win_flags |= SDL_WINDOW_FULLSCREEN; 
+        win_flags |= SDL_WINDOW_FULLSCREEN;
 
     screen = SDL_CreateWindow("Kugaru",
                               SDL_WINDOWPOS_UNDEFINED,
@@ -442,7 +442,7 @@ static void DoMouse(Game &game)
 }
 
 void DoFrameRate (int update)
-{    
+{
     static long frames = 0;
 
     static AbsoluteTime time = {0,0};
@@ -521,7 +521,7 @@ void DoUpdate(Game &game)
     static AbsoluteTime start = {0,0};
     AbsoluteTime currTime = UpTime ();
     static int num_channels = 0;
-    
+
     num_channels += OPENAL_GetChannelsPlaying();
     double deltaTime = (float) AbsoluteDeltaToDuration (currTime, start);
 
@@ -537,7 +537,7 @@ void DoUpdate(Game &game)
         start = currTime;
         float avg_channels = (float)num_channels / (float)frames;
 
-        ofstream opstream("log.txt",ios::app); 
+        ofstream opstream("log.txt",ios::app);
         opstream << "Average frame count: ";
         opstream << frames;
         opstream << " frames - ";

@@ -96,9 +96,9 @@ namespace Kugaru {
     bool IsButtonDown(uint8_t btn)
     {
         if (button == NULL) return false;
-        if (button->button == btn) return true;
+        if (button->button != btn) return false;
 
-        return false;
+        return true;
     }
 
     bool IsButtonPress(uint8_t btn)
