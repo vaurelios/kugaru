@@ -65,7 +65,7 @@ long long Game::MD5_string (char *string){
 }
 
 int Game::DrawGLScene(void)
-{	
+{
 	static float texcoordwidth,texcoordheight;
 	static float texviewwidth, texviewheight;
 	static int i,j,k,l;
@@ -189,7 +189,7 @@ int Game::DrawGLScene(void)
 		static float distance;
 		//if(drawmode==normalmode)ReSizeGLScene(90,.1);
 		if(drawmode==normalmode)ReSizeGLScene(90,.1f);
-		if(drawmode!=normalmode)glViewport(0,0,texviewwidth,texviewheight);	
+		if(drawmode!=normalmode)glViewport(0,0,texviewwidth,texviewheight);
 		glDepthFunc(GL_LEQUAL);
 		glDepthMask(1);
 		glAlphaFunc(GL_GREATER, 0.0001f);
@@ -223,7 +223,7 @@ int Game::DrawGLScene(void)
 		if(environment==desertenvironment){
 			glRotatef((float)(abs(Random()%100))/1000,1,0,0);
 			glRotatef((float)(abs(Random()%100))/1000,0,1,0);
-		}	
+		}
 		skybox.draw();
 		glTexEnvf( GL_TEXTURE_FILTER_CONTROL_EXT, GL_TEXTURE_LOD_BIAS_EXT, 0);
 		glPopMatrix();
@@ -315,7 +315,7 @@ int Game::DrawGLScene(void)
 		glEnable(GL_CULL_FACE);
 		glDisable(GL_BLEND);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT); 
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 		glBindTexture( GL_TEXTURE_2D, terraintexture);
 		terrain.draw(0);
 		glBindTexture( GL_TEXTURE_2D, terraintexture2);
@@ -386,7 +386,7 @@ int Game::DrawGLScene(void)
 		glPopMatrix();
 
 		glPushMatrix();
-		if(frustum.SphereInFrustum(realhawkcoords.x+hawk.boundingspherecenter.x,realhawkcoords.y+hawk.boundingspherecenter.y,realhawkcoords.z+hawk.boundingspherecenter.z,2)){   
+		if(frustum.SphereInFrustum(realhawkcoords.x+hawk.boundingspherecenter.x,realhawkcoords.y+hawk.boundingspherecenter.y,realhawkcoords.z+hawk.boundingspherecenter.z,2)){
 			glAlphaFunc(GL_GREATER, 0.0001f);
 			glDepthMask(1);
 			glDisable(GL_CULL_FACE);
@@ -496,7 +496,7 @@ int Game::DrawGLScene(void)
 						for(i=0;i<numpathpointconnect[k];i++){
 							glBegin(GL_LINE_LOOP);
 							glVertex3f(pathpoint[k].x,pathpoint[k].y+.5,pathpoint[k].z);
-							glVertex3f(pathpoint[pathpointconnect[k][i]].x,pathpoint[pathpointconnect[k][i]].y+.5,pathpoint[pathpointconnect[k][i]].z);					
+							glVertex3f(pathpoint[pathpointconnect[k][i]].x,pathpoint[pathpointconnect[k][i]].y+.5,pathpoint[pathpointconnect[k][i]].z);
 							glEnd();
 						}
 					}
@@ -857,7 +857,7 @@ int Game::DrawGLScene(void)
 					text.glPrint(screenwidth/2-7.6*strlen(string2)*screenwidth/1024*.8,0+screenheight*1/10-20*.8*screenwidth/1024,string2,1,1.5*screenwidth/1024*.8,screenwidth,screenheight);
 					text.glPrint(screenwidth/2-7.6*strlen(string3)*screenwidth/1024*.8,0+screenheight*1/10-40*.8*screenwidth/1024,string3,1,1.5*screenwidth/1024*.8,screenwidth,screenheight);
 				}
-				//Hot spots	
+				//Hot spots
 
 				if(numhotspots&&(bonustime>=1||bonus<=0||bonustime<0)&&!tutoriallevel){
 					int closest=-1;
@@ -1070,7 +1070,7 @@ int Game::DrawGLScene(void)
 						if(i>=255)done=1;
 						i++;
 					}
-				}	
+				}
 
 				if(!tutoriallevel&&!winfreeze&&indialogue==-1&&!mainmenu){
 					if(campaign){
@@ -1257,7 +1257,7 @@ int Game::DrawGLScene(void)
 			glEnable(GL_CULL_FACE);
 			glDisable(GL_BLEND);
 			glDepthMask(1);
-		}	
+		}
 
 		if(!console){
 			displaytime[0]=0;
@@ -1326,12 +1326,12 @@ int Game::DrawGLScene(void)
 
 			for(i=0;i<objects.numobjects;i++){
 				if(objects.type[i]==treetrunktype||objects.type[i]==boxtype){
-					center+=objects.position[i];	
+					center+=objects.position[i];
 					numadd++;
 				}
 			}
 			for(i=0;i<numplayers;i++){
-				if(!player[i].dead)center+=player[i].coords;	
+				if(!player[i].dead)center+=player[i].coords;
 			}
 			center/=numadd+numliveplayers;
 
@@ -1587,7 +1587,7 @@ int Game::DrawGLScene(void)
 
 			//Minimap
 
-			if(loading!=4){				
+			if(loading!=4){
 				glEnable(GL_TEXTURE_2D);
 				glColor4f(1,1,1,1);
 				sprintf (string, "Loading...");
@@ -1689,7 +1689,7 @@ int Game::DrawGLScene(void)
 			bool alldead;
 			alldead=1;
 			if(numplayers>1)
-				for(i=1;i<numplayers;i++){		
+				for(i=1;i<numplayers;i++){
 					if(player[i].dead!=2)alldead=0;
 				}
 				if(alldead){
@@ -1698,7 +1698,7 @@ int Game::DrawGLScene(void)
 				}
 				alldead=1;
 				if(numplayers>1)
-					for(i=1;i<numplayers;i++){		
+					for(i=1;i<numplayers;i++){
 						if(player[i].dead!=1)alldead=0;
 					}
 					if(alldead){
@@ -1739,7 +1739,7 @@ int Game::DrawGLScene(void)
 					}
 					alldead=1;
 					if(numplayers>1)
-						for(i=1;i<numplayers;i++){		
+						for(i=1;i<numplayers;i++){
 							if(player[i].dead!=2)alldead=0;
 						}
 						if(numafterkill>0&&alldead){
@@ -1829,13 +1829,13 @@ int Game::DrawGLScene(void)
 					glTexEnvf(GL_TEXTURE_ENV, GL_RGB_SCALE_EXT, 2.0f);
 
 					glBindTexture( GL_TEXTURE_2D, screentexture);
-					glCopyTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, 0, 0, texviewwidth, texviewheight);		
+					glCopyTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, 0, 0, texviewwidth, texviewheight);
 				}
 			}
 			if((drawtoggle||change==1)&&drawmode==realmotionblurmode){
 				if(screentexture2){
 					glBindTexture( GL_TEXTURE_2D, screentexture2);
-					glCopyTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, 0, 0, texviewwidth, texviewheight);		
+					glCopyTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, 0, 0, texviewwidth, texviewheight);
 				}
 				if(!screentexture2){
 					glPixelStorei( GL_UNPACK_ALIGNMENT, 1 );
@@ -1848,7 +1848,7 @@ int Game::DrawGLScene(void)
 					glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
 					glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR );
 
-					glCopyTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, 0, 0, kTextureSize, kTextureSize, 0);		
+					glCopyTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, 0, 0, kTextureSize, kTextureSize, 0);
 				}
 			}
 			//glFlush();
@@ -1856,7 +1856,7 @@ int Game::DrawGLScene(void)
 
 		glClear(GL_DEPTH_BUFFER_BIT);
 		ReSizeGLScene(90,.1f);
-		glViewport(0,0,screenwidth,screenheight);	
+		glViewport(0,0,screenwidth,screenheight);
 
 		if(drawmode!=normalmode){
 			glDisable(GL_DEPTH_TEST);
@@ -2195,7 +2195,7 @@ int Game::DrawGLScene(void)
 						campaignchoicenum=campaignnumnext[levelorder[whichlevelstart]];
 						if(campaignchoicenum==0){
 							if(accountcampaignscore[accountactive]>accountcampaignhighscore[accountactive])accountcampaignhighscore[accountactive]=accountcampaignscore[accountactive];
-							if(accountcampaignfasttime[accountactive]==0||accountcampaigntime[accountactive]<accountcampaignfasttime[accountactive])accountcampaignfasttime[accountactive]=accountcampaigntime[accountactive];		
+							if(accountcampaignfasttime[accountactive]==0||accountcampaigntime[accountactive]<accountcampaignfasttime[accountactive])accountcampaignfasttime[accountactive]=accountcampaigntime[accountactive];
 						}
 						if(campaignchoicenum)
 							for(i=0;i<campaignchoicenum;i++){
@@ -2284,7 +2284,7 @@ int Game::DrawGLScene(void)
 			glMatrixMode(GL_MODELVIEW);							// Select The Modelview Matrix
 
 			if (mainmenu == MAIN_MENU_OPTIONS)
-            {			
+            {
 				nummenuitems = 12;
 				if ((float) newscreenwidth > (float) newscreenheight * 1.61 || (float) newscreenwidth < (float) newscreenheight * 1.59)
                     sprintf(menustring[0], "Resolution: %dx%d", newscreenwidth, newscreenheight);
@@ -2370,7 +2370,7 @@ int Game::DrawGLScene(void)
 				endy[10]   = starty[10] + 20;
 				movex[10]  = 0;
 				movey[10]  = 0;
-				
+
 				sprintf(menustring[11], "Volume: %d%%", volume);
 				startx[11] = 10 + 60;
 				starty[11] = 155;
@@ -2400,7 +2400,7 @@ int Game::DrawGLScene(void)
 			}
 
 			if (mainmenu == MAIN_MENU_KEYS)
-            {			
+            {
 				nummenuitems = 10;
 				if (keyselect != 0) sprintf(menustring[0], "Forwards: %s", SDL_GetKeyName(forwardkey));
 				else sprintf(menustring[0], "Forwards: _");
@@ -2492,7 +2492,7 @@ int Game::DrawGLScene(void)
 				movey[9]  = 0;
 			}
 			if (mainmenu == MAIN_MENU_CAMPAIGNS)
-            {			
+            {
 				nummenuitems = 7 + accountcampaignchoicesmade[accountactive] + campaignchoicenum;
 
 				sprintf(menustring[0], "%s", accountname[accountactive]);
@@ -2619,7 +2619,7 @@ int Game::DrawGLScene(void)
 			}
 
 			if (mainmenu == MAIN_MENU_DELETE_USER)
-            {			
+            {
 				nummenuitems = 3;
 
 				sprintf(menustring[0], "Are you sure you want to delete this user?");
@@ -2672,7 +2672,7 @@ int Game::DrawGLScene(void)
 			}
 
 			if (mainmenu == MAIN_MENU_USER_LISTING)
-            {			
+            {
 				nummenuitems = numaccounts + 2;
 
 				int num;
@@ -2714,7 +2714,7 @@ int Game::DrawGLScene(void)
 					movey[num]  = 0;
 			}
 			if (mainmenu == MAIN_MENU_DIFFICULTY)
-            {			
+            {
 				nummenuitems = 3;
 
 				sprintf(menustring[0], "Easier");
@@ -2741,7 +2741,7 @@ int Game::DrawGLScene(void)
 				movex[2]  = 0;
 				movey[2]  = 0;
 			}
-			if (mainmenu == MAIN_MENU_LEVEL_LISTING){			
+			if (mainmenu == MAIN_MENU_LEVEL_LISTING){
 				int tempncl;
 				//tempncl=numchallengelevels;
 				//numchallengelevels=9;
@@ -2796,7 +2796,7 @@ int Game::DrawGLScene(void)
 
 			}
 			if (mainmenu == MAIN_MENU_CONGRATS_SCORES)
-            {			
+            {
 				nummenuitems = 2 + numchallengelevels;
 				char temp[255];
 
@@ -2843,7 +2843,7 @@ int Game::DrawGLScene(void)
 
 			}
 			if (mainmenu == MAIN_MENU_CONGRATS)
-            {			
+            {
 				nummenuitems = 6;
 				char temp[255];
 
@@ -2939,7 +2939,7 @@ int Game::DrawGLScene(void)
 		}
 
 		if (mainmenu == MAIN_MENU_CONGRATS_ENTER_NAME)
-        {	
+        {
 			nummenuitems = 2;
 			char temp[255];
 
@@ -3128,24 +3128,28 @@ int Game::DrawGLScene(void)
 
 		selected = -1;
 
-		if (mainmenu == MAIN_MENU_MAIN || mainmenu == MAIN_MENU_RESUME)
-			for (i = 1; i < 4; i++)
+        if (mainmenu == MAIN_MENU_MAIN || mainmenu == MAIN_MENU_RESUME)
+            for (int i = 1; i < 4; i++)
             {
-				if ((mousecoordh / screenwidth * 640) > startx[i] && (mousecoordh / screenwidth * 640) < endx[i] && 480 - (mousecoordv / screenheight * 480) > starty[i] && 480 - (mousecoordv / screenheight * 480) < endy[i])
-					selected=i;
-			}
+                if (isHoverRect(startx[i], endx[i], starty[i], endy[i]))
+                    selected = i;
+            }
 
-			if (mainmenu >= MAIN_MENU_OPTIONS || mainmenu == MAIN_MENU_17)
-				for (i = 0; i < nummenuitems; i++)
+            if (mainmenu >= MAIN_MENU_OPTIONS || mainmenu == MAIN_MENU_17)
+                for (i = 0; i < nummenuitems; i++)
                 {
-					if ((mousecoordh / screenwidth * 640) > startx[i] && (mousecoordh / screenwidth * 640) < endx[i] && 480 - (mousecoordv / screenheight * 480) > starty[i] && 480 - (mousecoordv / screenheight * 480) < endy[i])
+                    if (isHoverRect(startx[i], endx[i], starty[i], endy[i]))
                     {
-						if(mainmenu != MAIN_MENU_CAMPAIGNS) selected = i;
-						if(mainmenu == MAIN_MENU_CAMPAIGNS && (i != 0 && i != 6 )) selected=i;
-						if(mainmenu == MAIN_MENU_LEVEL_LISTING && (i != numchallengelevels + 1)) selected=i;
-						if(mainmenu == MAIN_MENU_CONGRATS_SCORES && (i != numchallengelevels + 1)) selected=i;
-					}
-				}
+                        if (mainmenu != MAIN_MENU_CAMPAIGNS)
+                            selected = i;
+                        if(mainmenu == MAIN_MENU_CAMPAIGNS && (i != 0 && i != 6 ))
+                            selected = i;
+                        if(mainmenu == MAIN_MENU_LEVEL_LISTING && (i != numchallengelevels + 1))
+                            selected = i;
+                        if(mainmenu == MAIN_MENU_CONGRATS_SCORES && (i != numchallengelevels + 1))
+                            selected = i;
+                    }
+                }
 
 				if (nummenuitems > 0)
 					for(i = 0; i < nummenuitems; i++)
@@ -3153,9 +3157,9 @@ int Game::DrawGLScene(void)
 						if (selected == i) selectedlong[i] += multiplier * 5;
 						if (selectedlong[i] > 1) selectedlong[i] = 1;
 						if (selected != i) selectedlong[i] -= multiplier * 5;
-						if (selectedlong[i] < 0) selectedlong[i] = 0;	
+						if (selectedlong[i] < 0) selectedlong[i] = 0;
 						//if(i>=4)selectedlong[i]=.3;
-						if (i >= 4 && (mainmenu == MAIN_MENU_MAIN || mainmenu == MAIN_MENU_RESUME)) selectedlong[i] = 0;	
+						if (i >= 4 && (mainmenu == MAIN_MENU_MAIN || mainmenu == MAIN_MENU_RESUME)) selectedlong[i] = 0;
 					}
 
 					if (nummenuitems > 0)
@@ -3450,7 +3454,7 @@ int Game::DrawGLScene(void)
 															Normalise(&fac);
 															offset=DoRotation(offset,0,0,90);
 															Normalise(&offset);
-															glDisable(GL_TEXTURE_2D);							
+															glDisable(GL_TEXTURE_2D);
 
 															if(j<6+accountcampaignchoicesmade[accountactive]){
 																glColor4f(0.5,0,0,1);
@@ -3680,7 +3684,7 @@ int Game::DrawGLScene(void)
 									glEnable(GL_CULL_FACE);
 									glDisable(GL_BLEND);
 									glDepthMask(1);
-								}	
+								}
 	}
 
 	if(freeze||winfreeze||(mainmenu&&gameon)||(!gameon&&gamestarted)||(!gameon&&gamestarted)){

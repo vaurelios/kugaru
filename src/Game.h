@@ -38,8 +38,9 @@
 #include "Objects.h"
 #include "Weapons.h"
 #include "binio.h"
-#include <fstream>
 #include "gamegl.h"
+#include "Globals.h"
+#include <fstream>
 
 
 class Game
@@ -283,7 +284,10 @@ public:
 
 		Dispose();
 	}
+    void mouseUp(Uint8 button);
 
+protected:
+    bool isHoverRect(int sx, int sy, int ex, int ey);
 };
 
 extern "C" { void UndefinedSymbolToExposeStubbedCode(void); }

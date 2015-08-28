@@ -135,6 +135,7 @@ static void sdlEventProc(const SDL_Event &e, Game &game)
         case SDL_MOUSEBUTTONUP:
             button = NULL;
             oldbutton = e.button.button;
+            game.mouseUp(e.button.button);
             break;
 
         case SDL_KEYDOWN:
