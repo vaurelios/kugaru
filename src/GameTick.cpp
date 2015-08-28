@@ -2998,60 +2998,376 @@ void Game::mouseUp(Uint8 button) {
                 mainmenu = MAIN_MENU_LEVEL_LISTING;
             }
         }
+        if (mainmenu == MAIN_MENU_LEVEL_LISTING)
+        {
+            if (button == SDL_BUTTON_LEFT && selected < numchallengelevels && selected >= 0 && selected <= accountprogress[accountactive])
+            {
+                float gLoc[3]={0,0,0};
+                float vel[3]={0,0,0};
+
+                OPENAL_Sample_SetMinMaxDistance(samp[firestartsound], 9999.0f, 99999.0f);
+                PlaySoundEx( firestartsound, samp[firestartsound], NULL, true);
+                OPENAL_3D_SetAttributes(channels[firestartsound], gLoc, vel);
+                OPENAL_SetVolume(channels[firestartsound], 256);
+                OPENAL_SetPaused(channels[firestartsound], false);
+                OPENAL_Sample_SetMinMaxDistance(samp[firestartsound], 8.0f, 2000.0f);
+
+                flashr      = 1;
+                flashg      = 0;
+                flashb      = 0;
+                flashamount = 1;
+                flashdelay  = 1;
+
+                startbonustotal = 0;
+
+                loading     = 2;
+                loadtime    = 0;
+                targetlevel = selected;
+
+                if (firstload)
+                {
+                    TickOnceAfter();
+                    Loadlevel(selected);
+                } else
+                    LoadStuff();
+
+                campaign = 0;
+
+                mainmenu = MAIN_MENU_IN_GAME;
+                gameon = 1;
+                OPENAL_SetPaused(channels[stream_music3], true);
+            }
+            if (button == SDL_BUTTON_LEFT && selected == numchallengelevels)
+            {
+                float gLoc[3]={0,0,0};
+                float vel[3]={0,0,0};
+
+                OPENAL_Sample_SetMinMaxDistance(samp[fireendsound], 9999.0f, 99999.0f);
+                PlaySoundEx( fireendsound, samp[fireendsound], NULL, true);
+                OPENAL_3D_SetAttributes(channels[fireendsound], gLoc, vel);
+                OPENAL_SetVolume(channels[fireendsound], 256);
+                OPENAL_SetPaused(channels[fireendsound], false);
+                OPENAL_Sample_SetMinMaxDistance(samp[fireendsound], 8.0f, 2000.0f);
+
+                flashr      = 1;
+                flashg      = 0;
+                flashb      = 0;
+                flashamount = 1;
+                flashdelay  = 1;
+
+                mainmenu = MAIN_MENU_CAMPAIGNS;
+            }
+        }
+        if (mainmenu == MAIN_MENU_CONGRATS_SCORES)
+        {
+            if (button == SDL_BUTTON_LEFT && selected < numchallengelevels && selected >=0 && selected <= accountprogress[accountactive])
+            {
+                float gLoc[3]={0,0,0};
+                float vel[3]={0,0,0};
+
+                OPENAL_Sample_SetMinMaxDistance(samp[firestartsound], 9999.0f, 99999.0f);
+                PlaySoundEx( firestartsound, samp[firestartsound], NULL, true);
+                OPENAL_3D_SetAttributes(channels[firestartsound], gLoc, vel);
+                OPENAL_SetVolume(channels[firestartsound], 256);
+                OPENAL_SetPaused(channels[firestartsound], false);
+                OPENAL_Sample_SetMinMaxDistance(samp[firestartsound], 8.0f, 2000.0f);
+
+                flashr      = 1;
+                flashg      = 0;
+                flashb      = 0;
+                flashamount = 1;
+                flashdelay  = 1;
+
+                startbonustotal=0;
+
+                loading     = 2;
+                loadtime    = 0;
+                targetlevel = selected;
+
+                if (firstload) {
+                    TickOnceAfter();
+                    Loadlevel(selected);
+                } else
+                    LoadStuff();
+
+                campaign = 0;
+
+                mainmenu = MAIN_MENU_IN_GAME;
+                gameon   = 1;
+                OPENAL_SetPaused(channels[stream_music3], true);
+            }
+            if (button == SDL_BUTTON_LEFT && selected == numchallengelevels)
+            {
+                float gLoc[3]={0,0,0};
+                float vel[3]={0,0,0};
+
+                OPENAL_Sample_SetMinMaxDistance(samp[fireendsound], 9999.0f, 99999.0f);
+                PlaySoundEx( fireendsound, samp[fireendsound], NULL, true);
+                OPENAL_3D_SetAttributes(channels[fireendsound], gLoc, vel);
+                OPENAL_SetVolume(channels[fireendsound], 256);
+                OPENAL_SetPaused(channels[fireendsound], false);
+                OPENAL_Sample_SetMinMaxDistance(samp[fireendsound], 8.0f, 2000.0f);
+
+                flashr      = 1;
+                flashg      = 0;
+                flashb      = 0;
+                flashamount = 1;
+                flashdelay  = 1;
+
+                mainmenu = MAIN_MENU_CAMPAIGNS;
+            }
+        }
+        if (mainmenu == MAIN_MENU_CONGRATS)
+        {
+            endgame = 2;
+
+            if(button == SDL_BUTTON_LEFT && selected == 3)
+            {
+                float gLoc[3]={0,0,0};
+                float vel[3]={0,0,0};
+
+                OPENAL_Sample_SetMinMaxDistance(samp[fireendsound], 9999.0f, 99999.0f);
+                PlaySoundEx( fireendsound, samp[fireendsound], NULL, true);
+                OPENAL_3D_SetAttributes(channels[fireendsound], gLoc, vel);
+                OPENAL_SetVolume(channels[fireendsound], 256);
+                OPENAL_SetPaused(channels[fireendsound], false);
+                OPENAL_Sample_SetMinMaxDistance(samp[fireendsound], 8.0f, 2000.0f);
+
+                flashr=1;
+                flashg=0;
+                flashb=0;
+                flashamount=1;
+                flashdelay=1;
+
+                mainmenu = MAIN_MENU_CAMPAIGNS;
+            }
+        }
+        if (mainmenu == MAIN_MENU_DELETE_USER)
+        {
+            if (button == SDL_BUTTON_LEFT && selected != -1)
+            {
+                float gLoc[3] = { 0, 0, 0 };
+                float vel[3]  = { 0, 0, 0 };
+
+                OPENAL_Sample_SetMinMaxDistance(samp[firestartsound], 9999.0f, 99999.0f);
+                PlaySoundEx( firestartsound, samp[firestartsound], NULL, true);
+                OPENAL_3D_SetAttributes(channels[firestartsound], gLoc, vel);
+                OPENAL_SetVolume(channels[firestartsound], 256);
+                OPENAL_SetPaused(channels[firestartsound], false);
+                OPENAL_Sample_SetMinMaxDistance(samp[firestartsound], 8.0f, 2000.0f);
+            }
+            if (button == SDL_BUTTON_LEFT && selected == 1)
+            {
+                float gLoc[3]={0,0,0};
+                float vel[3]={0,0,0};
+
+                OPENAL_Sample_SetMinMaxDistance(samp[fireendsound], 9999.0f, 99999.0f);
+                PlaySoundEx( fireendsound, samp[fireendsound], NULL, true);
+                OPENAL_3D_SetAttributes(channels[fireendsound], gLoc, vel);
+                OPENAL_SetVolume(channels[fireendsound], 256);
+                OPENAL_SetPaused(channels[fireendsound], false);
+                OPENAL_Sample_SetMinMaxDistance(samp[fireendsound], 8.0f, 2000.0f);
+
+                flashr      = 1;
+                flashg      = 0;
+                flashb      = 0;
+                flashamount = 1;
+                flashdelay  = 1;
+
+                for (int i = accountactive; i < numaccounts - 1; i++)
+                {
+                    accountdifficulty[i]          = accountdifficulty[i+1];
+                    accountcampaignchoicesmade[i] = accountcampaignchoicesmade[i+1];
+
+                    for (int j = 0; j < accountcampaignchoicesmade[i+1]; j++)
+                    {
+                        accountcampaignchoices[i][j] = accountcampaignchoices[i+1][j];
+                    }
+                    accountpoints[i] = accountpoints[i+1];
+                    for(int j = 0; j < 50; j++)
+                    {
+                        accounthighscore[i][j]=accounthighscore[i+1][j];
+                        accountfasttime[i][j]=accountfasttime[i+1][j];
+                    }
+                    for(int j = 0; j < 60; j++)
+                    {
+                        accountunlocked[i][j] = accountunlocked[i+1][j];
+                    }
+                    for(int j = 0; j < 256; j++)
+                    {
+                        accountname[i][j] = accountname[i+1][j];
+                    }
+                    accountcampaignhighscore[i] = accountcampaignhighscore[i+1];
+                    accountprogress[i] = accountprogress[i+1];
+                    accountcampaignfasttime[i] = accountcampaignfasttime[i+1];
+                    accountcampaignscore[i] = accountcampaignscore[i+1];
+                    accountcampaigntime[i] = accountcampaigntime[i+1];
+                }
+
+                numaccounts--;
+                accountactive = -1;
+
+
+                mainmenu = MAIN_MENU_USER_LISTING;
+            }
+            if (button == SDL_BUTTON_LEFT && selected == 2)
+            {
+                float gLoc[3]={0,0,0};
+                float vel[3]={0,0,0};
+
+                OPENAL_Sample_SetMinMaxDistance(samp[fireendsound], 9999.0f, 99999.0f);
+                PlaySoundEx( fireendsound, samp[fireendsound], NULL, true);
+                OPENAL_3D_SetAttributes(channels[fireendsound], gLoc, vel);
+                OPENAL_SetVolume(channels[fireendsound], 256);
+                OPENAL_SetPaused(channels[fireendsound], false);
+                OPENAL_Sample_SetMinMaxDistance(samp[fireendsound], 8.0f, 2000.0f);
+
+                flashr      = 1;
+                flashg      = 0;
+                flashb      = 0;
+                flashamount = 1;
+                flashdelay  = 1;
+
+                mainmenu = MAIN_MENU_CAMPAIGNS;
+            }
+        }
+        if (mainmenu == MAIN_MENU_USER_LISTING)
+        {
+            //if (IsButtonPress(SDL_BUTTON_LEFT) && selected != -1)
+            //{
+            // float gLoc[3] = { 0, 0, 0 };
+            // float vel[3]  = { 0, 0, 0 };
+            // OPENAL_Sample_SetMinMaxDistance(samp[firestartsound], 9999.0f, 99999.0f);
+            // PlaySoundEx( firestartsound, samp[firestartsound], NULL, true);
+            // OPENAL_3D_SetAttributes(channels[firestartsound], gLoc, vel);
+            // OPENAL_SetVolume(channels[firestartsound], 256);
+            // OPENAL_SetPaused(channels[firestartsound], false);
+            // OPENAL_Sample_SetMinMaxDistance(samp[firestartsound], 8.0f, 2000.0f);
+            //}
+            if (button == SDL_BUTTON_LEFT && selected == 0 && numaccounts < 8)
+            {
+                entername = 1;
+            }
+            if (button == SDL_BUTTON_LEFT && selected > 0 && selected < numaccounts + 1)
+            {
+                accountactive = selected - 1;
+                mainmenu    = MAIN_MENU_CAMPAIGNS;
+                flashr      = 1;
+                flashg      = 0;
+                flashb      = 0;
+                flashamount = 1;
+                flashdelay  = 1;
+            }
+            if (button == SDL_BUTTON_LEFT && selected == numaccounts + 1)
+            {
+                float gLoc[3] = { 0, 0, 0 };
+                float vel[3]  = { 0, 0, 0 };
+
+                OPENAL_Sample_SetMinMaxDistance(samp[fireendsound], 9999.0f, 99999.0f);
+                PlaySoundEx( fireendsound, samp[fireendsound], NULL, true);
+                OPENAL_3D_SetAttributes(channels[fireendsound], gLoc, vel);
+                OPENAL_SetVolume(channels[fireendsound], 256);
+                OPENAL_SetPaused(channels[fireendsound], false);
+                OPENAL_Sample_SetMinMaxDistance(samp[fireendsound], 8.0f, 2000.0f);
+
+                flashr      = 1;
+                flashg      = 0;
+                flashb      = 0;
+                flashamount = 1;
+                flashdelay  = 1;
+
+                mainmenu = MAIN_MENU_MAIN;
+
+                for (int j = 0; j < 255; j++)
+                {
+                    displaytext[0][j] = ' ';
+                }
+                displaychars[0] = 0;
+                displayselected = 0;
+                entername       = 0;
+            }
+        }
+        if (mainmenu == MAIN_MENU_DIFFICULTY)
+        {
+            if(IsButtonPress(SDL_BUTTON_LEFT) && selected != -1)
+            {
+                float gLoc[3] = { 0, 0, 0 };
+                float vel[3]  = { 0, 0, 0 };
+
+                OPENAL_Sample_SetMinMaxDistance(samp[firestartsound], 9999.0f, 99999.0f);
+                PlaySoundEx( firestartsound, samp[firestartsound], NULL, true);
+                OPENAL_3D_SetAttributes(channels[firestartsound], gLoc, vel);
+                OPENAL_SetVolume(channels[firestartsound], 256);
+                OPENAL_SetPaused(channels[firestartsound], false);
+                OPENAL_Sample_SetMinMaxDistance(samp[firestartsound], 8.0f, 2000.0f);
+
+                if(selected == 0) accountdifficulty[accountactive] = 0;
+                if(selected == 1) accountdifficulty[accountactive] = 1;
+                if(selected == 2) accountdifficulty[accountactive] = 2;
+
+                mainmenu = MAIN_MENU_CAMPAIGNS;
+
+                flashr      = 1;
+                flashg      = 0;
+                flashb      = 0;
+                flashamount = 1;
+                flashdelay  = 1;
+            }
+        }
     }
 }
 
 void Game::Tick()
 {
-	static int i,k,j,l,m;
-	static XYZ facing,flatfacing,absflatfacing;
-	static XYZ rotatetarget;
-	static bool oldkey;
-	static float oldtargetrotation;
-	static int target, numgood;
-	static XYZ tempcoords1,tempcoords2;
-	static XYZ test;
-	static XYZ test2;
-	static XYZ lowpoint,lowpointtarget,lowpoint2,lowpointtarget2,lowpoint3,lowpointtarget3,lowpoint4,lowpointtarget4,lowpoint5,lowpointtarget5,lowpoint6,lowpointtarget6,lowpoint7,lowpointtarget7,colpoint,colpoint2;
-	static int whichhit;
-	static bool oldjumpkeydown;
+    static int i,k,j,l,m;
+    static XYZ facing,flatfacing,absflatfacing;
+    static XYZ rotatetarget;
+    static bool oldkey;
+    static float oldtargetrotation;
+    static int target, numgood;
+    static XYZ tempcoords1,tempcoords2;
+    static XYZ test;
+    static XYZ test2;
+    static XYZ lowpoint,lowpointtarget,lowpoint2,lowpointtarget2,lowpoint3,lowpointtarget3,lowpoint4,lowpointtarget4,lowpoint5,lowpointtarget5,lowpoint6,lowpointtarget6,lowpoint7,lowpointtarget7,colpoint,colpoint2;
+    static int whichhit;
+    static bool oldjumpkeydown;
 
-	int templength;
+    int templength;
 
-	float headprop,bodyprop,armprop,legprop;
+    float headprop,bodyprop,armprop,legprop;
 
-	for(i = 0; i < 15; i++)
+    for(int i = 0; i < 15; i++)
     {
-		displaytime[i] += multiplier;
-	}
+        displaytime[i] += multiplier;
+    }
 
-	keyboardfrozen = 0;
+    keyboardfrozen = 0;
 
-	static bool mainmenutogglekeydown;
+    static bool mainmenutogglekeydown;
 
-	if(!console)
+    if(!console)
     {
-		if (mainmenu && endgame == 1)
+        if (mainmenu && endgame == 1)
             mainmenu = MAIN_MENU_CONGRATS;
 
-		if(IsKeyPress(SDL_SCANCODE_ESCAPE) && !mainmenutogglekeydown && (mainmenu == MAIN_MENU_USER_LISTING && entername))
+        if(IsKeyPress(SDL_SCANCODE_ESCAPE) && !mainmenutogglekeydown && (mainmenu == MAIN_MENU_USER_LISTING && entername))
         {
-			for (j = 0; j < 255; j++)
-				displaytext[0][j]=' ';
+            for (int j = 0; j < 255; j++)
+                displaytext[0][j]=' ';
 
-			displaychars[0]       = 0;
-			displayselected       = 0;
-			entername             = 0;
-			mainmenutogglekeydown = 1;
-		}
-		if (IsKeyDown(SDL_SCANCODE_ESCAPE))
+            displaychars[0]       = 0;
+            displayselected       = 0;
+            entername             = 0;
+            mainmenutogglekeydown = 1;
+        }
+        if (IsKeyDown(SDL_SCANCODE_ESCAPE))
         {
-			selected = -1;
-			if (mainmenu == MAIN_MENU_RESUME || mainmenu == MAIN_MENU_IN_GAME)
+            selected = -1;
+            if (mainmenu == MAIN_MENU_RESUME || mainmenu == MAIN_MENU_IN_GAME)
             {
-				if (mainmenu == MAIN_MENU_IN_GAME && !winfreeze) mainmenu = MAIN_MENU_RESUME;
-				else if (mainmenu == MAIN_MENU_IN_GAME && winfreeze && (campaignchoosenext[campaignchoicewhich[whichchoice]]) == 1) mainmenu = MAIN_MENU_LAST;
-				else if (mainmenu == MAIN_MENU_IN_GAME && winfreeze)
+                if (mainmenu == MAIN_MENU_IN_GAME && !winfreeze) mainmenu = MAIN_MENU_RESUME;
+                else if (mainmenu == MAIN_MENU_IN_GAME && winfreeze && (campaignchoosenext[campaignchoicewhich[whichchoice]]) == 1) mainmenu = MAIN_MENU_LAST;
+                else if (mainmenu == MAIN_MENU_IN_GAME && winfreeze)
                 {
 					/*	if(campaignchoosenext[campaignchoicewhich[whichchoice]]==2)
 					stealthloading=1;
@@ -3141,956 +3457,118 @@ void Game::Tick()
 					OPENAL_SetPaused(channels[music3], true);
 
 					stealthloading=0;*/
-				}
-				else if (mainmenu == MAIN_MENU_RESUME) mainmenu = MAIN_MENU_IN_GAME;
-				if (mainmenu && musictoggle)
+                }
+                else if (mainmenu == MAIN_MENU_RESUME) mainmenu = MAIN_MENU_IN_GAME;
+                if (mainmenu && musictoggle)
                 {
-					if (mainmenu == MAIN_MENU_RESUME || mainmenu == MAIN_MENU_LAST)
+                    if (mainmenu == MAIN_MENU_RESUME || mainmenu == MAIN_MENU_LAST)
                     {
-						OPENAL_SetFrequency(OPENAL_ALL, 0);
-						PlayStreamEx( stream_music3, strm[stream_music3], NULL, true);
-						OPENAL_SetPaused(channels[stream_music3], false);
-						OPENAL_SetVolume(channels[stream_music3], 256);
-						OPENAL_SetPaused(channels[music1], true);
-					}
-				}
-				if (!mainmenu)
+                        OPENAL_SetFrequency(OPENAL_ALL, 0);
+                        PlayStreamEx( stream_music3, strm[stream_music3], NULL, true);
+                        OPENAL_SetPaused(channels[stream_music3], false);
+                        OPENAL_SetVolume(channels[stream_music3], 256);
+                        OPENAL_SetPaused(channels[music1], true);
+                    }
+                }
+                if (!mainmenu)
                 {
-					OPENAL_SetPaused(channels[stream_music3], true);
-					OPENAL_SetPaused(channels[music1], false);
-				}
-			}
-			if (mainmenu == MAIN_MENU_OPTIONS)
+                    OPENAL_SetPaused(channels[stream_music3], true);
+                    OPENAL_SetPaused(channels[music1], false);
+                }
+            }
+            if (mainmenu == MAIN_MENU_OPTIONS)
             {
-				float gLoc[3]={0,0,0};
-				float vel[3]={0,0,0};
-				OPENAL_Sample_SetMinMaxDistance(samp[fireendsound], 9999.0f, 99999.0f);
-				PlaySoundEx( fireendsound, samp[fireendsound], NULL, true);
-				OPENAL_3D_SetAttributes(channels[fireendsound], gLoc, vel);
-				OPENAL_SetVolume(channels[fireendsound], 256);
-				OPENAL_SetPaused(channels[fireendsound], false);
-				OPENAL_Sample_SetMinMaxDistance(samp[fireendsound], 8.0f, 2000.0f);
+                float gLoc[3] = { 0, 0, 0 };
+                float vel[3]  = { 0, 0, 0 };
 
-				flashr=1;
-				flashg=0;
-				flashb=0;
-				flashamount=1;
-				flashdelay=1;
+                OPENAL_Sample_SetMinMaxDistance(samp[fireendsound], 9999.0f, 99999.0f);
+                PlaySoundEx( fireendsound, samp[fireendsound], NULL, true);
+                OPENAL_3D_SetAttributes(channels[fireendsound], gLoc, vel);
+                OPENAL_SetVolume(channels[fireendsound], 256);
+                OPENAL_SetPaused(channels[fireendsound], false);
+                OPENAL_Sample_SetMinMaxDistance(samp[fireendsound], 8.0f, 2000.0f);
 
-				if(newdetail>2)newdetail=detail;
-				if(newdetail<0)newdetail=detail;
-				if(newscreenwidth<0)newscreenwidth=screenwidth;
-				if(newscreenheight<0)newscreenheight=screenheight;
-                if(oldgamespeed==0)oldgamespeed=1;
+                flashr      = 1;
+                flashg      = 0;
+                flashb      = 0;
+                flashamount = 1;
+                flashdelay  = 1;
+
+                if (newdetail > 2) newdetail = detail;
+                if (newdetail < 0) newdetail = detail;
+                if (newscreenwidth < 0) newscreenwidth = screenwidth;
+                if (newscreenheight < 0) newscreenheight = screenheight;
+                if (oldgamespeed == 0) oldgamespeed = 1;
 
                 cnf.dump();
                 cnf.save();
-			}
-			if ((mainmenu >= MAIN_MENU_KEYS && mainmenu <= MAIN_MENU_CONGRATS_SCORES) || mainmenu == MAIN_MENU_CONGRATS_ENTER_NAME || mainmenu == MAIN_MENU_LAST)
-            {
-				float gLoc[3]={0,0,0};
-				float vel[3]={0,0,0};
-				OPENAL_Sample_SetMinMaxDistance(samp[fireendsound], 9999.0f, 99999.0f);
-				PlaySoundEx( fireendsound, samp[fireendsound], NULL, true);
-				OPENAL_3D_SetAttributes(channels[fireendsound], gLoc, vel);
-				OPENAL_SetVolume(channels[fireendsound], 256);
-				OPENAL_SetPaused(channels[fireendsound], false);
-				OPENAL_Sample_SetMinMaxDistance(samp[fireendsound], 8.0f, 2000.0f);
-
-				flashr=1;
-				flashg=0;
-				flashb=0;
-				flashamount=1;
-				flashdelay=1;
-			}
-			if (mainmenu == MAIN_MENU_OPTIONS && gameon) mainmenu = MAIN_MENU_RESUME;
-			if (mainmenu == MAIN_MENU_OPTIONS && !gameon) mainmenu = MAIN_MENU_MAIN;
-			if (mainmenu == MAIN_MENU_CAMPAIGNS && gameon) mainmenu = MAIN_MENU_RESUME;
-			if (mainmenu == MAIN_MENU_CAMPAIGNS && !gameon) mainmenu = MAIN_MENU_MAIN;
-			if (mainmenu == MAIN_MENU_KEYS) mainmenu = MAIN_MENU_OPTIONS;
-			if (mainmenu == MAIN_MENU_DELETE_USER) mainmenu = MAIN_MENU_CAMPAIGNS;
-			if (mainmenu == MAIN_MENU_USER_LISTING) mainmenu = MAIN_MENU_MAIN;
-			if (mainmenu == MAIN_MENU_LEVEL_LISTING) mainmenu = MAIN_MENU_CAMPAIGNS;
-			if (mainmenu == MAIN_MENU_CONGRATS_SCORES) mainmenu = MAIN_MENU_CAMPAIGNS;
-			if (mainmenu == MAIN_MENU_CONGRATS_ENTER_NAME) mainmenu = MAIN_MENU_12;
-			if (mainmenu == MAIN_MENU_CONGRATS) mainmenu = MAIN_MENU_CAMPAIGNS;
-			if (mainmenu == MAIN_MENU_LAST)
-            {
-				mainmenu = MAIN_MENU_CAMPAIGNS;
-				gameon=0;
-				winfreeze=0;
-			}
-			mainmenutogglekeydown=1;
-		}
-		if(IsKeyDown(SDL_SCANCODE_ESCAPE))
-        {
-			mainmenutogglekeydown = 0;
-		}
-	}
-
-	/*static bool minimaptogglekeydown;
-	if(IsKeyDown(SDL_SCANCODE_TAB)&&!minimaptogglekeydown){
-	minimap=1-minimap;
-	minimaptogglekeydown=1;
-	}
-	if(!IsKeyDown(SDL_SCANCODE_TAB)){
-	minimaptogglekeydown=0;
-	}
-	*/
-
-	static bool minimaptogglekeydown;
-	if (IsKeyDown(SDL_SCANCODE_TAB) && !minimaptogglekeydown && tutoriallevel)
-    {
-		if(tutorialstage != 51)
-			tutorialstagetime = tutorialmaxtime;
-		PlaySoundEx( consolefailsound, samp[consolefailsound], NULL, true);
-		OPENAL_SetVolume(channels[consolefailsound], 128);
-		OPENAL_SetPaused(channels[consolefailsound], false);
-		minimaptogglekeydown=1;
-	}
-	if (IsKeyDown(SDL_SCANCODE_TAB))
-    {
-		minimaptogglekeydown = 0;
-	}
-
-	if (mainmenu) {
-		// menu buttons
-		if (mainmenu == MAIN_MENU_MAIN || mainmenu == MAIN_MENU_RESUME)
-        {
-			if (IsButtonPress(SDL_BUTTON_LEFT) && selected == 1)
-            {
-				if (!gameon)
-                {
-					float gLoc[3] = {0, 0, 0};
-					float vel[3]  = {0, 0, 0};
-					OPENAL_Sample_SetMinMaxDistance(samp[firestartsound], 9999.0f, 99999.0f);
-					PlaySoundEx( firestartsound, samp[firestartsound], NULL, true);
-					OPENAL_3D_SetAttributes(channels[firestartsound], gLoc, vel);
-					OPENAL_SetVolume(channels[firestartsound], 256);
-					OPENAL_SetPaused(channels[firestartsound], false);
-					OPENAL_Sample_SetMinMaxDistance(samp[firestartsound], 8.0f, 2000.0f);
-
-					flashr      = 1;
-					flashg      = 0;
-					flashb      = 0;
-					flashamount = 1;
-					flashdelay  = 1;
-
-					// new game
-					if (accountactive != -1) mainmenu = MAIN_MENU_CAMPAIGNS;
-					else mainmenu = MAIN_MENU_USER_LISTING;
-					/*
-					startbonustotal=0;
-
-					loading=2;
-					loadtime=0;
-					if(firstload)TickOnceAfter();
-					if(!firstload)LoadStuff();
-					else {
-					Loadlevel(0);
-					}
-					mainmenu=0;
-					gameon=1;
-					OPENAL_SetPaused(channels[music3], true);	*/
-				}
-				else
-				{
-					// resume
-					mainmenu = MAIN_MENU_IN_GAME;
-					OPENAL_SetPaused(channels[stream_music3], true);
-					OPENAL_SetPaused(channels[music1], false);
-				}
-			}
-
-			if (IsButtonPress(SDL_BUTTON_LEFT) && selected == 2)
-            {
-				float gLoc[3]={0,0,0};
-				float vel[3]={0,0,0};
-				OPENAL_Sample_SetMinMaxDistance(samp[firestartsound], 9999.0f, 99999.0f);
-				PlaySoundEx( firestartsound, samp[firestartsound], NULL, true);
-				OPENAL_3D_SetAttributes(channels[firestartsound], gLoc, vel);
-				OPENAL_SetVolume(channels[firestartsound], 256);
-				OPENAL_SetPaused(channels[firestartsound], false);
-				OPENAL_Sample_SetMinMaxDistance(samp[firestartsound], 8.0f, 2000.0f);
-
-				flashr=1;
-				flashg=0;
-				flashb=0;
-				flashamount=1;
-				flashdelay=1;
-
-				//options
-
-				mainmenu = MAIN_MENU_OPTIONS;
-
-				if (newdetail > 2) newdetail = detail;
-				if (newdetail < 0) newdetail = detail;
-				if (newscreenwidth > 3000) newscreenwidth = screenwidth;
-				if (newscreenwidth < 0) newscreenwidth = screenwidth;
-				if (newscreenheight > 3000) newscreenheight = screenheight;
-				if (newscreenheight < 0) newscreenheight = screenheight;
-			}
-
-			if (IsButtonPress(SDL_BUTTON_LEFT) && selected == 3)
-            {
-				float gLoc[3]={0,0,0};
-				float vel[3]={0,0,0};
-				OPENAL_Sample_SetMinMaxDistance(samp[fireendsound], 9999.0f, 99999.0f);
-				PlaySoundEx( fireendsound, samp[fireendsound], NULL, true);
-				OPENAL_3D_SetAttributes(channels[fireendsound], gLoc, vel);
-				OPENAL_SetVolume(channels[fireendsound], 256);
-				OPENAL_SetPaused(channels[fireendsound], false);
-				OPENAL_Sample_SetMinMaxDistance(samp[fireendsound], 8.0f, 2000.0f);
-
-				flashr=1;
-				flashg=0;
-				flashb=0;
-				flashamount=1;
-				flashdelay=1;
-
-				if (!gameon)
-                {
-					//quit
-					tryquit = 1;
-					OPENAL_SetPaused(channels[stream_music3], true);
-				}
-				else
-                {
-					//end game
-					gameon = 0;
-					mainmenu = MAIN_MENU_MAIN;
-				}
-			}
-		}
-
-		if (mainmenu == MAIN_MENU_OPTIONS)
-        {
-			if(IsButtonPress(SDL_BUTTON_LEFT) && selected != -1)
-            {
-				float gLoc[3] = {0, 0, 0};
-				float vel[3]  = {0, 0, 0};
-				OPENAL_Sample_SetMinMaxDistance( samp[firestartsound], 9999.0f, 99999.0f );
-				PlaySoundEx( firestartsound, samp[firestartsound], NULL, true );
-				OPENAL_3D_SetAttributes( channels[firestartsound], gLoc, vel );
-				OPENAL_SetVolume( channels[firestartsound], 100 );
-				OPENAL_SetPaused( channels[firestartsound], false );
-				OPENAL_Sample_SetMinMaxDistance(samp[firestartsound], 8.0f, 2000.0f);
-			}
-
-            if (IsButtonPress(SDL_BUTTON_LEFT) || IsKeyPress(SDL_SCANCODE_RIGHT) || IsKeyPress(SDL_SCANCODE_RETURN))
-            {
-                switch (selected)
-                    case 0: // Resolution
-                    {
-                        static int current_options_res = 0;
-                        SDL_DisplayMode *mode;
-
-                        current_options_res++;
-                        if (current_options_res > (modes_count - 1)) current_options_res = 0;
-
-                        mode = (SDL_DisplayMode *) g_slist_nth(displaymodes, current_options_res)->data;
-                        newscreenwidth = mode->w;
-                        newscreenheight = mode->h;
-                    break;
-                    case 1: // Detail
-                        newdetail++;
-                        if (newdetail > 2) newdetail = 0;
-                    break;
-                    case 2: // Blood
-                        blooddetail++;
-				        if (blooddetail > 2) blooddetail = 0;
-                    break;
-                    case 3: // Difficulty
-                        difficulty++;
-				        if (difficulty > 2) difficulty = 0;
-                    break;
-                    case 4: // Motion blur
-                        ismotionblur = 1 - ismotionblur;
-                    break;
-                    case 5: // Decals
-                        decals = 1 - decals;
-                    break;
-                    case 6: // Music
-                        musictoggle = 1 - musictoggle;
-
-				        if(!musictoggle)
-                        {
-					        OPENAL_SetPaused( channels[music1], true );
-					        OPENAL_SetPaused( channels[stream_music2], true );
-					        OPENAL_SetPaused( channels[stream_music3], true );
-
-					        for (i = 0; i < 4; i++)
-                            {
-						        oldmusicvolume[i] = 0;
-						        musicvolume[i]    = 0;
-					        }
-				        }
-                        else
-                        {
-					        PlayStreamEx( stream_music3, strm[stream_music3], NULL, true );
-					        OPENAL_SetPaused( channels[stream_music3], false );
-					        OPENAL_SetVolume( channels[stream_music3], 256 );
-				        }
-                    break;
-                    case 7: // Switch to Keys main menu
-                        flashr      = 1;
-				        flashg      = 0;
-				        flashb      = 0;
-				        flashamount = 1;
-				        flashdelay  = 1;
-
-				        mainmenu = MAIN_MENU_KEYS;
-				        keyselect = -1;
-                    break;
-                    case 8: // Back to main menu or resume menu
-                        flashr      = 1;
-				        flashg      = 0;
-				        flashb      = 0;
-				        flashamount = 1;
-				        flashdelay  = 1;
-
-				        if (newdetail > 2) newdetail = detail;
-				        if (newdetail < 0) newdetail = detail;
-				        if (newscreenwidth < 0) newscreenwidth = screenwidth;
-				        if (newscreenheight < 0) newscreenheight = screenheight;
-
-                        cnf.dump();
-                        cnf.save();
-
-                        if (mainmenu == MAIN_MENU_OPTIONS && gameon) mainmenu = MAIN_MENU_RESUME;
-				        if (mainmenu == MAIN_MENU_OPTIONS && !gameon) mainmenu = MAIN_MENU_MAIN;
-                    break;
-                    case 9: // Invert Mouse
-                        invertmouse = 1 - invertmouse;
-                    break;
-                    case 10: // Mouse sensitivity
-                        usermousesensitivity++;
-
-				        if (usermousesensitivity > 25) usermousesensitivity = 1;
-                    break;
-                    case 11: // Volume
-                        volume++;
-
-				        if (volume > 100) volume = 0;
-				        OPENAL_SetSFXMasterVolume((float) volume / 100.0f);
-                    break;
-                }
             }
-            if (IsKeyPress(SDL_SCANCODE_LEFT))
+            if ((mainmenu >= MAIN_MENU_KEYS && mainmenu <= MAIN_MENU_CONGRATS_SCORES) || mainmenu == MAIN_MENU_CONGRATS_ENTER_NAME || mainmenu == MAIN_MENU_LAST)
             {
-                switch (selected)
-                {
-                    case 0: // Resolution
-                        static int current_options_res = 0;
-                        SDL_DisplayMode *mode;
+                float gLoc[3] = { 0, 0, 0 };
+                float vel[3]  = { 0, 0, 0 };
 
-                        current_options_res--;
-                        if (current_options_res < 0) current_options_res = modes_count - 1;
+                OPENAL_Sample_SetMinMaxDistance(samp[fireendsound], 9999.0f, 99999.0f);
+                PlaySoundEx( fireendsound, samp[fireendsound], NULL, true);
+                OPENAL_3D_SetAttributes(channels[fireendsound], gLoc, vel);
+                OPENAL_SetVolume(channels[fireendsound], 256);
+                OPENAL_SetPaused(channels[fireendsound], false);
+                OPENAL_Sample_SetMinMaxDistance(samp[fireendsound], 8.0f, 2000.0f);
 
-                        mode = (SDL_DisplayMode *) g_slist_nth(displaymodes, current_options_res)->data;
-                        newscreenwidth = mode->w;
-                        newscreenheight = mode->h;
-                        break;
-                    case 1: // Detail
-                        newdetail--;
-                        if (newdetail < 0) newdetail = 2;
-                    case 2: // Blood
-                        blooddetail--;
-                        if (blooddetail < 0) blooddetail = 2;
-                    case 3: // Difficulty
-                        difficulty--;
-				        if (difficulty < 0) difficulty = 2;
-                        break;
-                    case 4: // Motion blur
-                        ismotionblur = 1 - ismotionblur;
-                        break;
-                    case 5: // Decals
-                        decals = 1 - decals;
-                        break;
-                    case 6: // Music
-                        musictoggle = 1 - musictoggle;
-
-				        if(!musictoggle)
-                        {
-					        OPENAL_SetPaused( channels[music1], true );
-					        OPENAL_SetPaused( channels[stream_music2], true );
-					        OPENAL_SetPaused( channels[stream_music3], true );
-
-					        for (i = 0; i < 4; i++)
-                            {
-						        oldmusicvolume[i] = 0;
-						        musicvolume[i]    = 0;
-					        }
-				        }
-                        else
-                        {
-					        PlayStreamEx( stream_music3, strm[stream_music3], NULL, true );
-					        OPENAL_SetPaused( channels[stream_music3], false );
-					        OPENAL_SetVolume( channels[stream_music3], 256 );
-				        }
-                        break;
-                    case 7: // Switch to Keys main menu
-                        flashr      = 1;
-				        flashg      = 0;
-				        flashb      = 0;
-				        flashamount = 1;
-				        flashdelay  = 1;
-
-				        mainmenu = MAIN_MENU_KEYS;
-				        keyselect = -1;
-                        break;
-                    case 8: // Back to main menu or resume menu
-                        flashr      = 1;
-				        flashg      = 0;
-				        flashb      = 0;
-				        flashamount = 1;
-				        flashdelay  = 1;
-
-				        if (newdetail > 2) newdetail = detail;
-				        if (newdetail < 0) newdetail = detail;
-				        if (newscreenwidth < 0) newscreenwidth = screenwidth;
-				        if (newscreenheight < 0) newscreenheight = screenheight;
-
-                        cnf.dump();
-                        cnf.save();
-
-                        if (mainmenu == MAIN_MENU_OPTIONS && gameon) mainmenu = MAIN_MENU_RESUME;
-				        if (mainmenu == MAIN_MENU_OPTIONS && !gameon) mainmenu = MAIN_MENU_MAIN;
-                        break;
-                    case 9: // Invert Mouse
-                        invertmouse = 1 - invertmouse;
-                        break;
-                    case 10: // Mouse sensitivity
-                        usermousesensitivity--;
-
-				        if (usermousesensitivity < 0) usermousesensitivity = 25;
-                        break;
-                    case 11: // Volume
-                    {
-                        volume--;
-
-				        if (volume < 0) volume = 100;
-				        OPENAL_SetSFXMasterVolume((float) volume / 100.0f);
-                    }
-                    break;
-                }
+                flashr      = 1;
+                flashg      = 0;
+                flashb      = 0;
+                flashamount = 1;
+                flashdelay  = 1;
             }
-		}
-		if (mainmenu == MAIN_MENU_KEYS)
+            if (mainmenu == MAIN_MENU_OPTIONS && gameon) mainmenu = MAIN_MENU_RESUME;
+            if (mainmenu == MAIN_MENU_OPTIONS && !gameon) mainmenu = MAIN_MENU_MAIN;
+            if (mainmenu == MAIN_MENU_CAMPAIGNS && gameon) mainmenu = MAIN_MENU_RESUME;
+            if (mainmenu == MAIN_MENU_CAMPAIGNS && !gameon) mainmenu = MAIN_MENU_MAIN;
+            if (mainmenu == MAIN_MENU_KEYS) mainmenu = MAIN_MENU_OPTIONS;
+            if (mainmenu == MAIN_MENU_DELETE_USER) mainmenu = MAIN_MENU_CAMPAIGNS;
+            if (mainmenu == MAIN_MENU_USER_LISTING) mainmenu = MAIN_MENU_MAIN;
+            if (mainmenu == MAIN_MENU_LEVEL_LISTING) mainmenu = MAIN_MENU_CAMPAIGNS;
+            if (mainmenu == MAIN_MENU_CONGRATS_SCORES) mainmenu = MAIN_MENU_CAMPAIGNS;
+            if (mainmenu == MAIN_MENU_CONGRATS_ENTER_NAME) mainmenu = MAIN_MENU_12;
+            if (mainmenu == MAIN_MENU_CONGRATS) mainmenu = MAIN_MENU_CAMPAIGNS;
+            if (mainmenu == MAIN_MENU_LAST)
+            {
+                mainmenu = MAIN_MENU_CAMPAIGNS;
+                gameon    = 0;
+                winfreeze = 0;
+            }
+            mainmenutogglekeydown = 1;
+        }
+        if(IsKeyDown(SDL_SCANCODE_ESCAPE))
         {
-		    if (IsButtonPress(SDL_BUTTON_LEFT) && selected != -1 && keyselect == -1)
-            {
-				float gLoc[3]={0,0,0};
-				float vel[3]={0,0,0};
-				OPENAL_Sample_SetMinMaxDistance(samp[firestartsound], 9999.0f, 99999.0f);
-				PlaySoundEx( firestartsound, samp[firestartsound], NULL, true);
-				OPENAL_3D_SetAttributes(channels[firestartsound], gLoc, vel);
-				OPENAL_SetVolume(channels[firestartsound], 256);
-				OPENAL_SetPaused(channels[firestartsound], false);
-				OPENAL_Sample_SetMinMaxDistance(samp[firestartsound], 8.0f, 2000.0f);
-			}
-			if (IsButtonPress(SDL_BUTTON_LEFT) && selected < 9 && keyselect == -1)
-            {
-				keyselect = selected;
-			}
-			if (IsButtonPress(SDL_BUTTON_LEFT) && selected == 9)
-            {
-				float gLoc[3]={0,0,0};
-				float vel[3]={0,0,0};
-				OPENAL_Sample_SetMinMaxDistance(samp[fireendsound], 9999.0f, 99999.0f);
-				PlaySoundEx( fireendsound, samp[fireendsound], NULL, true);
-				OPENAL_3D_SetAttributes(channels[fireendsound], gLoc, vel);
-				OPENAL_SetVolume(channels[fireendsound], 256);
-				OPENAL_SetPaused(channels[fireendsound], false);
-				OPENAL_Sample_SetMinMaxDistance(samp[fireendsound], 8.0f, 2000.0f);
+            mainmenutogglekeydown = 0;
+        }
+    }
 
-				flashr=1;
-				flashg=0;
-				flashb=0;
-				flashamount=1;
-				flashdelay=1;
+    static bool minimaptogglekeydown;
+    if (IsKeyDown(SDL_SCANCODE_TAB) && !minimaptogglekeydown && tutoriallevel)
+    {
+        if(tutorialstage != 51)
+            tutorialstagetime = tutorialmaxtime;
 
-				mainmenu = MAIN_MENU_OPTIONS;
+        PlaySoundEx( consolefailsound, samp[consolefailsound], NULL, true);
+        OPENAL_SetVolume(channels[consolefailsound], 128);
+        OPENAL_SetPaused(channels[consolefailsound], false);
 
-				if(newdetail>2)newdetail=detail;
-				if(newdetail<0)newdetail=detail;
-				if(newscreenwidth>3000)newscreenwidth=screenwidth;
-				if(newscreenwidth<0)newscreenwidth=screenwidth;
-				if(newscreenheight>3000)newscreenheight=screenheight;
-				if(newscreenheight<0)newscreenheight=screenheight;
-			}
-		}
+        minimaptogglekeydown = 1;
+    }
+    if (IsKeyDown(SDL_SCANCODE_TAB))
+    {
+        minimaptogglekeydown = 0;
+    }
 
-		if (mainmenu == MAIN_MENU_CAMPAIGNS)
-        {
-
-			if(endgame==2){
-				accountcampaignchoicesmade[accountactive]=0;
-				accountcampaignscore[accountactive]=0;
-				accountcampaigntime[accountactive]=0;
-				endgame=0;
-			}
-
-			if (IsButtonPress(SDL_BUTTON_LEFT) && selected == 1)
-            {
-				float gLoc[3]={0,0,0};
-				float vel[3]={0,0,0};
-				OPENAL_Sample_SetMinMaxDistance(samp[firestartsound], 9999.0f, 99999.0f);
-				PlaySoundEx( firestartsound, samp[firestartsound], NULL, true);
-				OPENAL_3D_SetAttributes(channels[firestartsound], gLoc, vel);
-				OPENAL_SetVolume(channels[firestartsound], 256);
-				OPENAL_SetPaused(channels[firestartsound], false);
-				OPENAL_Sample_SetMinMaxDistance(samp[firestartsound], 8.0f, 2000.0f);
-
-				flashr=1;
-				flashg=0;
-				flashb=0;
-				flashamount=1;
-				flashdelay=1;
-
-				startbonustotal=0;
-
-				loading=2;
-				loadtime=0;
-				targetlevel=-1;
-				if(firstload)TickOnceAfter();
-				if(!firstload)LoadStuff();
-				else {
-					Loadlevel(-1);
-				}
-
-				mainmenu = MAIN_MENU_IN_GAME;
-				gameon = 1;
-				OPENAL_SetPaused(channels[stream_music3], true);
-			}
-			if (IsButtonPress(SDL_BUTTON_LEFT) && selected - 7 >= accountcampaignchoicesmade[accountactive])
-            {
-				float gLoc[3]={0,0,0};
-				float vel[3]={0,0,0};
-				OPENAL_Sample_SetMinMaxDistance(samp[firestartsound], 9999.0f, 99999.0f);
-				PlaySoundEx( firestartsound, samp[firestartsound], NULL, true);
-				OPENAL_3D_SetAttributes(channels[firestartsound], gLoc, vel);
-				OPENAL_SetVolume(channels[firestartsound], 256);
-				OPENAL_SetPaused(channels[firestartsound], false);
-				OPENAL_Sample_SetMinMaxDistance(samp[firestartsound], 8.0f, 2000.0f);
-
-				flashr=1;
-				flashg=0;
-				flashb=0;
-				flashamount=1;
-				flashdelay=1;
-
-				startbonustotal=0;
-
-				loading=2;
-				loadtime=0;
-				targetlevel=7;
-				if(firstload)TickOnceAfter();
-				if(!firstload)LoadStuff();
-				//else {
-				for(i=0;i<255;i++){
-					mapname[i]='\0';
-				}
-				mapname[0]='d';
-				mapname[1]='a';
-				mapname[2]='t';
-				mapname[3]='a';
-				mapname[4]='/';
-				mapname[5]='m';
-				mapname[6]='a';
-				mapname[7]='p';
-				mapname[8]='s';
-				mapname[9]='/';
-				strcat(mapname,campaignmapname[campaignchoicewhich[selected-7-accountcampaignchoicesmade[accountactive]]]);
-				whichchoice=selected-7-accountcampaignchoicesmade[accountactive];
-				visibleloading=1;
-				stillloading=1;
-				Loadlevel(mapname);
-				//Loadlevel(campaignmapname[levelorder[selected-7]]);
-				//}
-				campaign=1;
-				mainmenu = MAIN_MENU_IN_GAME;
-				gameon=1;
-				OPENAL_SetPaused(channels[stream_music3], true);
-			}
-			if (IsButtonPress(SDL_BUTTON_LEFT) && selected == 4)
-            {
-				float gLoc[3]={0,0,0};
-				float vel[3]={0,0,0};
-				OPENAL_Sample_SetMinMaxDistance(samp[fireendsound], 9999.0f, 99999.0f);
-				PlaySoundEx( fireendsound, samp[fireendsound], NULL, true);
-				OPENAL_3D_SetAttributes(channels[fireendsound], gLoc, vel);
-				OPENAL_SetVolume(channels[fireendsound], 256);
-				OPENAL_SetPaused(channels[fireendsound], false);
-				OPENAL_Sample_SetMinMaxDistance(samp[fireendsound], 8.0f, 2000.0f);
-
-				flashr=1;
-				flashg=0;
-				flashb=0;
-				flashamount=1;
-				flashdelay=1;
-
-				if (mainmenu == MAIN_MENU_CAMPAIGNS && gameon) mainmenu = MAIN_MENU_RESUME;
-				if (mainmenu == MAIN_MENU_CAMPAIGNS && !gameon) mainmenu = MAIN_MENU_MAIN;
-			}
-			if (IsButtonPress(SDL_BUTTON_LEFT) && selected == 5)
-            {
-				float gLoc[3]={0,0,0};
-				float vel[3]={0,0,0};
-				OPENAL_Sample_SetMinMaxDistance(samp[fireendsound], 9999.0f, 99999.0f);
-				PlaySoundEx( fireendsound, samp[fireendsound], NULL, true);
-				OPENAL_3D_SetAttributes(channels[fireendsound], gLoc, vel);
-				OPENAL_SetVolume(channels[fireendsound], 256);
-				OPENAL_SetPaused(channels[fireendsound], false);
-				OPENAL_Sample_SetMinMaxDistance(samp[fireendsound], 8.0f, 2000.0f);
-
-				flashr=1;
-				flashg=0;
-				flashb=0;
-				flashamount=1;
-				flashdelay=1;
-
-				mainmenu = MAIN_MENU_USER_LISTING;
-			}
-			if (IsButtonPress(SDL_BUTTON_LEFT) && selected == 3)
-            {
-				float gLoc[3]={0,0,0};
-				float vel[3]={0,0,0};
-				OPENAL_Sample_SetMinMaxDistance(samp[firestartsound], 9999.0f, 99999.0f);
-				PlaySoundEx( firestartsound, samp[firestartsound], NULL, true);
-				OPENAL_3D_SetAttributes(channels[firestartsound], gLoc, vel);
-				OPENAL_SetVolume(channels[firestartsound], 256);
-				OPENAL_SetPaused(channels[firestartsound], false);
-				OPENAL_Sample_SetMinMaxDistance(samp[firestartsound], 8.0f, 2000.0f);
-
-				flashr=1;
-				flashg=0;
-				flashb=0;
-				flashamount=1;
-				flashdelay=1;
-
-				mainmenu = MAIN_MENU_DELETE_USER;
-			}
-			if (IsButtonPress(SDL_BUTTON_LEFT) && selected == 2)
-            {
-				float gLoc[3]={0,0,0};
-				float vel[3]={0,0,0};
-				OPENAL_Sample_SetMinMaxDistance(samp[firestartsound], 9999.0f, 99999.0f);
-				PlaySoundEx( firestartsound, samp[firestartsound], NULL, true);
-				OPENAL_3D_SetAttributes(channels[firestartsound], gLoc, vel);
-				OPENAL_SetVolume(channels[firestartsound], 256);
-				OPENAL_SetPaused(channels[firestartsound], false);
-				OPENAL_Sample_SetMinMaxDistance(samp[firestartsound], 8.0f, 2000.0f);
-
-				flashr=1;
-				flashg=0;
-				flashb=0;
-				flashamount=1;
-				flashdelay=1;
-
-				mainmenu = MAIN_MENU_LEVEL_LISTING;
-			}
-		}
-		if (mainmenu == MAIN_MENU_LEVEL_LISTING)
-        {
-			if (IsButtonPress(SDL_BUTTON_LEFT) && selected < numchallengelevels && selected >= 0 && selected <= accountprogress[accountactive])
-            {
-				float gLoc[3]={0,0,0};
-				float vel[3]={0,0,0};
-				OPENAL_Sample_SetMinMaxDistance(samp[firestartsound], 9999.0f, 99999.0f);
-				PlaySoundEx( firestartsound, samp[firestartsound], NULL, true);
-				OPENAL_3D_SetAttributes(channels[firestartsound], gLoc, vel);
-				OPENAL_SetVolume(channels[firestartsound], 256);
-				OPENAL_SetPaused(channels[firestartsound], false);
-				OPENAL_Sample_SetMinMaxDistance(samp[firestartsound], 8.0f, 2000.0f);
-
-				flashr=1;
-				flashg=0;
-				flashb=0;
-				flashamount=1;
-				flashdelay=1;
-
-				startbonustotal=0;
-
-				loading=2;
-				loadtime=0;
-				targetlevel=selected;
-				if(firstload)TickOnceAfter();
-				if(!firstload)LoadStuff();
-				else {
-					Loadlevel(selected);
-				}
-				campaign=0;
-
-				mainmenu = MAIN_MENU_IN_GAME;
-				gameon = 1;
-				OPENAL_SetPaused(channels[stream_music3], true);
-			}
-			if (IsButtonPress(SDL_BUTTON_LEFT) && selected == numchallengelevels)
-            {
-				float gLoc[3]={0,0,0};
-				float vel[3]={0,0,0};
-				OPENAL_Sample_SetMinMaxDistance(samp[fireendsound], 9999.0f, 99999.0f);
-				PlaySoundEx( fireendsound, samp[fireendsound], NULL, true);
-				OPENAL_3D_SetAttributes(channels[fireendsound], gLoc, vel);
-				OPENAL_SetVolume(channels[fireendsound], 256);
-				OPENAL_SetPaused(channels[fireendsound], false);
-				OPENAL_Sample_SetMinMaxDistance(samp[fireendsound], 8.0f, 2000.0f);
-
-				flashr=1;
-				flashg=0;
-				flashb=0;
-				flashamount=1;
-				flashdelay=1;
-
-				mainmenu = MAIN_MENU_CAMPAIGNS;
-			}
-		}
-		if (mainmenu == MAIN_MENU_CONGRATS_SCORES)
-        {
-			if (IsButtonPress(SDL_BUTTON_LEFT) && selected < numchallengelevels && selected >=0 && selected <= accountprogress[accountactive])
-            {
-				float gLoc[3]={0,0,0};
-				float vel[3]={0,0,0};
-				OPENAL_Sample_SetMinMaxDistance(samp[firestartsound], 9999.0f, 99999.0f);
-				PlaySoundEx( firestartsound, samp[firestartsound], NULL, true);
-				OPENAL_3D_SetAttributes(channels[firestartsound], gLoc, vel);
-				OPENAL_SetVolume(channels[firestartsound], 256);
-				OPENAL_SetPaused(channels[firestartsound], false);
-				OPENAL_Sample_SetMinMaxDistance(samp[firestartsound], 8.0f, 2000.0f);
-
-				flashr=1;
-				flashg=0;
-				flashb=0;
-				flashamount=1;
-				flashdelay=1;
-
-				startbonustotal=0;
-
-				loading=2;
-				loadtime=0;
-				targetlevel=selected;
-				if(firstload)TickOnceAfter();
-				if(!firstload)LoadStuff();
-				else {
-					Loadlevel(selected);
-				}
-				campaign=0;
-
-				mainmenu = MAIN_MENU_IN_GAME;
-				gameon = 1;
-				OPENAL_SetPaused(channels[stream_music3], true);
-			}
-			if (IsButtonPress(SDL_BUTTON_LEFT) && selected == numchallengelevels)
-            {
-				float gLoc[3]={0,0,0};
-				float vel[3]={0,0,0};
-				OPENAL_Sample_SetMinMaxDistance(samp[fireendsound], 9999.0f, 99999.0f);
-				PlaySoundEx( fireendsound, samp[fireendsound], NULL, true);
-				OPENAL_3D_SetAttributes(channels[fireendsound], gLoc, vel);
-				OPENAL_SetVolume(channels[fireendsound], 256);
-				OPENAL_SetPaused(channels[fireendsound], false);
-				OPENAL_Sample_SetMinMaxDistance(samp[fireendsound], 8.0f, 2000.0f);
-
-				flashr=1;
-				flashg=0;
-				flashb=0;
-				flashamount=1;
-				flashdelay=1;
-
-				mainmenu = MAIN_MENU_CAMPAIGNS;
-			}
-		}
-		if (mainmenu == MAIN_MENU_CONGRATS)
-        {
-			endgame=2;
-			if(IsButtonPress(SDL_BUTTON_LEFT) && selected == 3)
-            {
-				float gLoc[3]={0,0,0};
-				float vel[3]={0,0,0};
-				OPENAL_Sample_SetMinMaxDistance(samp[fireendsound], 9999.0f, 99999.0f);
-				PlaySoundEx( fireendsound, samp[fireendsound], NULL, true);
-				OPENAL_3D_SetAttributes(channels[fireendsound], gLoc, vel);
-				OPENAL_SetVolume(channels[fireendsound], 256);
-				OPENAL_SetPaused(channels[fireendsound], false);
-				OPENAL_Sample_SetMinMaxDistance(samp[fireendsound], 8.0f, 2000.0f);
-
-				flashr=1;
-				flashg=0;
-				flashb=0;
-				flashamount=1;
-				flashdelay=1;
-
-				mainmenu = MAIN_MENU_CAMPAIGNS;
-			}
-		}
-
-		if (mainmenu == MAIN_MENU_DELETE_USER)
-        {
-			if (IsButtonPress(SDL_BUTTON_LEFT) && selected != -1)
-            {
-				float gLoc[3]={0,0,0};
-				float vel[3]={0,0,0};
-				OPENAL_Sample_SetMinMaxDistance(samp[firestartsound], 9999.0f, 99999.0f);
-				PlaySoundEx( firestartsound, samp[firestartsound], NULL, true);
-				OPENAL_3D_SetAttributes(channels[firestartsound], gLoc, vel);
-				OPENAL_SetVolume(channels[firestartsound], 256);
-				OPENAL_SetPaused(channels[firestartsound], false);
-				OPENAL_Sample_SetMinMaxDistance(samp[firestartsound], 8.0f, 2000.0f);
-			}
-			if (IsButtonPress(SDL_BUTTON_LEFT) && selected == 1)
-            {
-				float gLoc[3]={0,0,0};
-				float vel[3]={0,0,0};
-				OPENAL_Sample_SetMinMaxDistance(samp[fireendsound], 9999.0f, 99999.0f);
-				PlaySoundEx( fireendsound, samp[fireendsound], NULL, true);
-				OPENAL_3D_SetAttributes(channels[fireendsound], gLoc, vel);
-				OPENAL_SetVolume(channels[fireendsound], 256);
-				OPENAL_SetPaused(channels[fireendsound], false);
-				OPENAL_Sample_SetMinMaxDistance(samp[fireendsound], 8.0f, 2000.0f);
-
-				flashr=1;
-				flashg=0;
-				flashb=0;
-				flashamount=1;
-				flashdelay=1;
-
-				for(i=accountactive;i<numaccounts-1;i++){
-					accountdifficulty[i]=accountdifficulty[i+1];
-					accountcampaignchoicesmade[i]=accountcampaignchoicesmade[i+1];
-					for(j=0;j<accountcampaignchoicesmade[i+1];j++){
-						accountcampaignchoices[i][j]=accountcampaignchoices[i+1][j];
-					}
-					accountpoints[i]=accountpoints[i+1];
-					for(j=0;j<50;j++){
-						accounthighscore[i][j]=accounthighscore[i+1][j];
-						accountfasttime[i][j]=accountfasttime[i+1][j];
-					}
-					for(j=0;j<60;j++){
-						accountunlocked[i][j]=accountunlocked[i+1][j];
-					}
-					for(j=0;j<256;j++){
-						accountname[i][j]=accountname[i+1][j];
-					}
-					accountcampaignhighscore[i]=accountcampaignhighscore[i+1];
-					accountprogress[i]=accountprogress[i+1];
-					accountcampaignfasttime[i]=accountcampaignfasttime[i+1];
-					accountcampaignscore[i]=accountcampaignscore[i+1];
-					accountcampaigntime[i]=accountcampaigntime[i+1];
-				}
-
-				numaccounts--;
-				accountactive=-1;
-
-
-				mainmenu = MAIN_MENU_USER_LISTING;
-			}
-			if (IsButtonPress(SDL_BUTTON_LEFT) && selected == 2)
-            {
-				float gLoc[3]={0,0,0};
-				float vel[3]={0,0,0};
-				OPENAL_Sample_SetMinMaxDistance(samp[fireendsound], 9999.0f, 99999.0f);
-				PlaySoundEx( fireendsound, samp[fireendsound], NULL, true);
-				OPENAL_3D_SetAttributes(channels[fireendsound], gLoc, vel);
-				OPENAL_SetVolume(channels[fireendsound], 256);
-				OPENAL_SetPaused(channels[fireendsound], false);
-				OPENAL_Sample_SetMinMaxDistance(samp[fireendsound], 8.0f, 2000.0f);
-
-				flashr=1;
-				flashg=0;
-				flashb=0;
-				flashamount=1;
-				flashdelay=1;
-
-				mainmenu = MAIN_MENU_CAMPAIGNS;
-			}
-		}
-		if (mainmenu == MAIN_MENU_USER_LISTING)
-        {
-			//if (IsButtonPress(SDL_BUTTON_LEFT) && selected != -1)
-            //{
-			//	float gLoc[3] = { 0, 0, 0 };
-			//	float vel[3]  = { 0, 0, 0 };
-			//	OPENAL_Sample_SetMinMaxDistance(samp[firestartsound], 9999.0f, 99999.0f);
-			//	PlaySoundEx( firestartsound, samp[firestartsound], NULL, true);
-			//	OPENAL_3D_SetAttributes(channels[firestartsound], gLoc, vel);
-			//	OPENAL_SetVolume(channels[firestartsound], 256);
-			//	OPENAL_SetPaused(channels[firestartsound], false);
-			//	OPENAL_Sample_SetMinMaxDistance(samp[firestartsound], 8.0f, 2000.0f);
-			//}
-			if (IsButtonPress(SDL_BUTTON_LEFT) && selected == 0 && numaccounts < 8)
-            {
-				entername = 1;
-			}
-			if (IsButtonPress(SDL_BUTTON_LEFT) && selected > 0 && selected < numaccounts + 1)
-            {
-				accountactive=selected-1;
-				mainmenu = MAIN_MENU_CAMPAIGNS;
-				flashr=1;
-				flashg=0;
-				flashb=0;
-				flashamount=1;
-				flashdelay=1;
-			}
-			if (IsButtonPress(SDL_BUTTON_LEFT) && selected == numaccounts + 1)
-            {
-				float gLoc[3]={0,0,0};
-				float vel[3]={0,0,0};
-				OPENAL_Sample_SetMinMaxDistance(samp[fireendsound], 9999.0f, 99999.0f);
-				PlaySoundEx( fireendsound, samp[fireendsound], NULL, true);
-				OPENAL_3D_SetAttributes(channels[fireendsound], gLoc, vel);
-				OPENAL_SetVolume(channels[fireendsound], 256);
-				OPENAL_SetPaused(channels[fireendsound], false);
-				OPENAL_Sample_SetMinMaxDistance(samp[fireendsound], 8.0f, 2000.0f);
-
-				flashr=1;
-				flashg=0;
-				flashb=0;
-				flashamount=1;
-				flashdelay=1;
-
-				mainmenu = MAIN_MENU_MAIN;
-
-				for(j=0;j<255;j++){
-					displaytext[0][j]=' ';
-				}
-				displaychars[0] = 0;
-				displayselected = 0;
-				entername       = 0;
-			}
-		}
-		if (mainmenu == MAIN_MENU_DIFFICULTY)
-        {
-			if(IsButtonPress(SDL_BUTTON_LEFT) && selected != -1)
-            {
-				float gLoc[3]={0,0,0};
-				float vel[3]={0,0,0};
-				OPENAL_Sample_SetMinMaxDistance(samp[firestartsound], 9999.0f, 99999.0f);
-				PlaySoundEx( firestartsound, samp[firestartsound], NULL, true);
-				OPENAL_3D_SetAttributes(channels[firestartsound], gLoc, vel);
-				OPENAL_SetVolume(channels[firestartsound], 256);
-				OPENAL_SetPaused(channels[firestartsound], false);
-				OPENAL_Sample_SetMinMaxDistance(samp[firestartsound], 8.0f, 2000.0f);
-
-				if(selected==0)accountdifficulty[accountactive]=0;
-				if(selected==1)accountdifficulty[accountactive]=1;
-				if(selected==2)accountdifficulty[accountactive]=2;
-
-				mainmenu = MAIN_MENU_CAMPAIGNS;
-
-				flashr=1;
-				flashg=0;
-				flashb=0;
-				flashamount=1;
-				flashdelay=1;
-
-			}
-		}
-
-
-		if(IsKeyDown(SDL_SCANCODE_Q) && keysym->mod & KMOD_GUI)
+    if (mainmenu)
+    {
+        if(IsKeyDown(SDL_SCANCODE_Q) && keysym->mod & KMOD_GUI)
         {
             tryquit = 1;
+
             if(mainmenu == MAIN_MENU_OPTIONS)
             {
                 if (newdetail > 2) newdetail = detail;
@@ -4103,19 +3581,21 @@ void Game::Tick()
             }
         }
 
-		if (mainmenu == MAIN_MENU_MAIN || mainmenu == MAIN_MENU_RESUME)
+        if (mainmenu == MAIN_MENU_MAIN || mainmenu == MAIN_MENU_RESUME)
         {
-			if(loaddistrib>4)transition+=multiplier/8;
-			if(transition>1){
-				transition=0;
-				anim++;
-				if(anim>4)anim=0;
-				loaddistrib=0;
-			}
-		}
-		OPENAL_SetFrequency(channels[stream_music3], 22050);
+            if (loaddistrib > 4) transition += multiplier / 8;
+            if (transition > 1) {
+                transition = 0;
+                anim++;
 
-		if(entername)
+                if (anim > 4) anim = 0;
+
+                loaddistrib = 0;
+            }
+        }
+        OPENAL_SetFrequency(channels[stream_music3], 22050);
+
+        if(entername)
         {
             if (textediting)
             {
@@ -4248,42 +3728,44 @@ void Game::Tick()
 				}
 			}*/
 
-			displayblinkdelay -= multiplier;
-			if (displayblinkdelay <= 0)
+            displayblinkdelay -= multiplier;
+            if (displayblinkdelay <= 0)
             {
-				displayblinkdelay = 0.3;
-				displayblink      = 1 - displayblink;
-			}
-		}
-	}
+                displayblinkdelay = 0.3;
+                displayblink      = 1 - displayblink;
+            }
+        }
+    }
 
-	if (!mainmenu)
+    if (!mainmenu)
     {
-		if (hostile == 1) hostiletime += multiplier;
-		else hostiletime = 0;
-		if (!winfreeze) leveltime += multiplier;
-		if (IsKeyPress(SDL_SCANCODE_ESCAPE))
-        {
-			chatting        = 0;
-			console         = 0;
-			freeze          = 0;
-			displaychars[0] = 0;
-		}
+        if (hostile == 1) hostiletime += multiplier;
+        else hostiletime = 0;
 
-		if (IsKeyDown(chatkey) && !chattogglekeydown && !console && !chatting && debugmode)
-        {
-			chatting                = 1;
-			chattogglekeydown       = 1;
-			togglekey[chatkey]      = 1;
-			togglekeydelay[chatkey] = -20;
-		}
+        if (!winfreeze) leveltime += multiplier;
 
-		if (!IsKeyDown(chatkey))
+        if (IsKeyPress(SDL_SCANCODE_ESCAPE))
         {
-			chattogglekeydown=0;
-		}
+            chatting        = 0;
+            console         = 0;
+            freeze          = 0;
+            displaychars[0] = 0;
+        }
 
-		if(chatting){
+        if (IsKeyDown(chatkey) && !chattogglekeydown && !console && !chatting && debugmode)
+        {
+            chatting                = 1;
+            chattogglekeydown       = 1;
+            togglekey[chatkey]      = 1;
+            togglekeydelay[chatkey] = -20;
+        }
+
+        if (!IsKeyDown(chatkey))
+        {
+            chattogglekeydown=0;
+        }
+
+        if(chatting){
 			/*for(i=0;i<140;i++){
 				if(IsKeyDown(i)){
 					togglekeydelay[i]+=multiplier;
@@ -4340,47 +3822,55 @@ void Game::Tick()
 				}
 			}*/
 
-			displayblinkdelay-=multiplier;
-			if(displayblinkdelay<=0){
-				displayblinkdelay=.3;
-				displayblink=1-displayblink;
-			}
-		}
+            displayblinkdelay -= multiplier;
 
-		if(chatting)keyboardfrozen=1;
+            if (displayblinkdelay <= 0)
+            {
+                displayblinkdelay=.3;
+                displayblink=1-displayblink;
+            }
+        }
 
-		if (IsKeyDown(SDL_SCANCODE_V) && !freezetogglekeydown && debugmode)
+        if (chatting)
+            keyboardfrozen = 1;
+
+        if (IsKeyDown(SDL_SCANCODE_V) && !freezetogglekeydown && debugmode)
         {
-			freeze=1-freeze;
-			if(freeze){
-				OPENAL_SetFrequency(OPENAL_ALL, 0);
-			}
-			freezetogglekeydown=1;
-		}
+            freeze = 1 - freeze;
 
-		if (IsKeyDown(SDL_SCANCODE_V) && IsKeyDown(SDL_SCANCODE_F1))
+            if (freeze)
+            {
+                OPENAL_SetFrequency(OPENAL_ALL, 0);
+            }
+
+            freezetogglekeydown = 1;
+        }
+
+        if (IsKeyDown(SDL_SCANCODE_V) && IsKeyDown(SDL_SCANCODE_F1))
         {
-			freezetogglekeydown=0;
-		}
+            freezetogglekeydown=0;
+        }
 
-		if (IsKeyDown(SDL_SCANCODE_GRAVE) && !consoletogglekeydown && debugmode)
+        if (IsKeyDown(SDL_SCANCODE_GRAVE) && !consoletogglekeydown && debugmode)
         {
-			console=1-console;
-			if(!console)freeze=0;
-			if(console){
-				OPENAL_SetFrequency(OPENAL_ALL, 0);
-			}
-			consoletogglekeydown=1;
-		}
+            console = 1 - console;
 
-		if(IsKeyDown(SDL_SCANCODE_GRAVE))
+            if (!console)
+                freeze = 0;
+            else
+                OPENAL_SetFrequency(OPENAL_ALL, 0);
+
+            consoletogglekeydown = 1;
+        }
+
+        if (IsKeyDown(SDL_SCANCODE_GRAVE))
         {
-			consoletogglekeydown=0;
-		}
+            consoletogglekeydown = 0;
+        }
 
-		if(console)freeze=1;
+        if (console) freeze = 1;
 
-		if(console && keysym->mod & KMOD_GUI)
+        if(console && keysym->mod & KMOD_GUI)
         {
 			/*for(i=0;i<140;i++){
 				if(IsKeyDown(i)){
@@ -4464,35 +3954,39 @@ void Game::Tick()
 				}
 			}*/
 
-			consoleblinkdelay-=multiplier;
-			if(consoleblinkdelay<=0){
-				consoleblinkdelay=.3;
-				consoleblink=1-consoleblink;
-			}
-		}
+            consoleblinkdelay -= multiplier;
 
-		if (IsKeyDown(SDL_SCANCODE_Q) && keysym->mod & KMOD_GUI)
-        {
-			tryquit=1;
-			if (mainmenu == MAIN_MENU_OPTIONS)
+            if (consoleblinkdelay <= 0)
             {
-				if(newdetail>2)newdetail=detail;
-				if(newdetail<0)newdetail=detail;
-				if(newscreenwidth<0)newscreenwidth=screenwidth;
-				if(newscreenheight<0)newscreenheight=screenheight;
+                consoleblinkdelay = .3;
+                consoleblink = 1 - consoleblink;
+            }
+        }
+
+        if (IsKeyDown(SDL_SCANCODE_Q) && keysym->mod & KMOD_GUI)
+        {
+            tryquit = 1;
+            if (mainmenu == MAIN_MENU_OPTIONS)
+            {
+                if(newdetail > 2) newdetail = detail;
+                if(newdetail < 0) newdetail = detail;
+                if(newscreenwidth < 0) newscreenwidth = screenwidth;
+                if(newscreenheight < 0) newscreenheight = screenheight;
 
                 cnf.dump();
                 cnf.save();
-			}
-		}
+            }
+        }
 
-		static int oldwinfreeze;
-		if(winfreeze&&!oldwinfreeze){
-			OPENAL_SetFrequency(OPENAL_ALL, 0);
-			PlaySoundEx( consolesuccesssound, samp[consolesuccesssound], NULL, true);
-			OPENAL_SetVolume(channels[consolesuccesssound], 256);
-			OPENAL_SetPaused(channels[consolesuccesssound], false);
-		}
+        static int oldwinfreeze;
+        if (winfreeze && !oldwinfreeze)
+        {
+            OPENAL_SetFrequency(OPENAL_ALL, 0);
+            PlaySoundEx( consolesuccesssound, samp[consolesuccesssound], NULL, true);
+            OPENAL_SetVolume(channels[consolesuccesssound], 256);
+            OPENAL_SetPaused(channels[consolesuccesssound], false);
+        }
+
 		if(winfreeze==0)oldwinfreeze=winfreeze;
 		else oldwinfreeze++;
 
