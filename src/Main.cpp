@@ -179,6 +179,7 @@ static void sdlEventProc(const SDL_Event &e, Game &game)
         case SDL_KEYUP:
             keysym = NULL;
             oldscancode = SDL_SCANCODE_0;
+            game.keyPress(e.key.keysym);
             return;
         case SDL_WINDOWEVENT:
             if (e.window.event == SDL_WINDOWEVENT_FOCUS_GAINED)

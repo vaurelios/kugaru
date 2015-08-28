@@ -3060,7 +3060,7 @@ void Game::mouseUp(Uint8 button) {
         }
         if (mainmenu == MAIN_MENU_CONGRATS_SCORES)
         {
-            if (button == SDL_BUTTON_LEFT && selected < numchallengelevels && selected >=0 && selected <= accountprogress[accountactive])
+            if (button == SDL_BUTTON_LEFT && selected < numchallengelevels && selected >= 0 && selected <= accountprogress[accountactive])
             {
                 float gLoc[3]={0,0,0};
                 float vel[3]={0,0,0};
@@ -3312,6 +3312,213 @@ void Game::mouseUp(Uint8 button) {
                 flashb      = 0;
                 flashamount = 1;
                 flashdelay  = 1;
+            }
+        }
+    }
+}
+
+void Game::keyPress(const SDL_Keysym &sym) {
+    if (mainmenu)
+    {
+        if (mainmenu == MAIN_MENU_OPTIONS)
+        {
+            if (sym.scancode == SDL_SCANCODE_RIGHT || sym.scancode == SDL_SCANCODE_RETURN)
+            {
+                switch (selected)
+                    case 0: // Resolution
+                    {
+                        static int current_options_res = 0;
+                        SDL_DisplayMode *mode;
+
+                        current_options_res++;
+                        if (current_options_res > (modes_count - 1)) current_options_res = 0;
+
+                        mode = (SDL_DisplayMode *) g_slist_nth(displaymodes, current_options_res)->data;
+                        newscreenwidth = mode->w;
+                        newscreenheight = mode->h;
+                    break;
+                    case 1: // Detail
+                        newdetail++;
+                        if (newdetail > 2) newdetail = 0;
+                    break;
+                    case 2: // Blood
+                        blooddetail++;
+                        if (blooddetail > 2) blooddetail = 0;
+                    break;
+                    case 3: // Difficulty
+                        difficulty++;
+                        if (difficulty > 2) difficulty = 0;
+                    break;
+                    case 4: // Motion blur
+                        ismotionblur = 1 - ismotionblur;
+                    break;
+                    case 5: // Decals
+                        decals = 1 - decals;
+                    break;
+                    case 6: // Music
+                        musictoggle = 1 - musictoggle;
+
+                        if(!musictoggle)
+                        {
+                            OPENAL_SetPaused( channels[music1], true );
+                            OPENAL_SetPaused( channels[stream_music2], true );
+                            OPENAL_SetPaused( channels[stream_music3], true );
+
+                            for (int i = 0; i < 4; i++)
+                            {
+                                oldmusicvolume[i] = 0;
+                                musicvolume[i]    = 0;
+                            }
+                        }
+                        else
+                        {
+                            PlayStreamEx( stream_music3, strm[stream_music3], NULL, true );
+                            OPENAL_SetPaused( channels[stream_music3], false );
+                            OPENAL_SetVolume( channels[stream_music3], 256 );
+                        }
+                    break;
+                    case 7: // Switch to Keys main menu
+                        flashr      = 1;
+                        flashg      = 0;
+                        flashb      = 0;
+                        flashamount = 1;
+                        flashdelay  = 1;
+
+                        mainmenu = MAIN_MENU_KEYS;
+                        keyselect = -1;
+                    break;
+                    case 8: // Back to main menu or resume menu
+                        flashr      = 1;
+                        flashg      = 0;
+                        flashb      = 0;
+                        flashamount = 1;
+                        flashdelay  = 1;
+
+                        if (newdetail > 2) newdetail = detail;
+                        if (newdetail < 0) newdetail = detail;
+                        if (newscreenwidth < 0) newscreenwidth = screenwidth;
+                        if (newscreenheight < 0) newscreenheight = screenheight;
+
+                        cnf.dump();
+                        cnf.save();
+
+                        if (mainmenu == MAIN_MENU_OPTIONS && gameon) mainmenu = MAIN_MENU_RESUME;
+                        if (mainmenu == MAIN_MENU_OPTIONS && !gameon) mainmenu = MAIN_MENU_MAIN;
+                    break;
+                    case 9: // Invert Mouse
+                        invertmouse = 1 - invertmouse;
+                    break;
+                    case 10: // Mouse sensitivity
+                        usermousesensitivity++;
+
+                        if (usermousesensitivity > 25) usermousesensitivity = 1;
+                    break;
+                    case 11: // Volume
+                        volume++;
+
+                        if (volume > 100) volume = 0;
+                        OPENAL_SetSFXMasterVolume((float) volume / 100.0f);
+                    break;
+                }
+            }
+            if (sym.scancode == SDL_SCANCODE_LEFT)
+            {
+                switch (selected)
+                {
+                    case 0: // Resolution
+                        static int current_options_res = 0;
+                        SDL_DisplayMode *mode;
+
+                        current_options_res--;
+                        if (current_options_res < 0) current_options_res = modes_count - 1;
+
+                        mode = (SDL_DisplayMode *) g_slist_nth(displaymodes, current_options_res)->data;
+                        newscreenwidth = mode->w;
+                        newscreenheight = mode->h;
+                        break;
+                    case 1: // Detail
+                        newdetail--;
+                        if (newdetail < 0) newdetail = 2;
+                    case 2: // Blood
+                        blooddetail--;
+                        if (blooddetail < 0) blooddetail = 2;
+                    case 3: // Difficulty
+                        difficulty--;
+                        if (difficulty < 0) difficulty = 2;
+                        break;
+                    case 4: // Motion blur
+                        ismotionblur = 1 - ismotionblur;
+                        break;
+                    case 5: // Decals
+                        decals = 1 - decals;
+                        break;
+                    case 6: // Music
+                        musictoggle = 1 - musictoggle;
+
+                        if(!musictoggle)
+                        {
+                            OPENAL_SetPaused( channels[music1], true );
+                            OPENAL_SetPaused( channels[stream_music2], true );
+                            OPENAL_SetPaused( channels[stream_music3], true );
+
+                            for (int i = 0; i < 4; i++)
+                            {
+                                oldmusicvolume[i] = 0;
+                                musicvolume[i]    = 0;
+                            }
+                        }
+                        else
+                        {
+                            PlayStreamEx( stream_music3, strm[stream_music3], NULL, true );
+                            OPENAL_SetPaused( channels[stream_music3], false );
+                            OPENAL_SetVolume( channels[stream_music3], 256 );
+                        }
+                        break;
+                    case 7: // Switch to Keys main menu
+                        flashr      = 1;
+                        flashg      = 0;
+                        flashb      = 0;
+                        flashamount = 1;
+                        flashdelay  = 1;
+
+                        mainmenu = MAIN_MENU_KEYS;
+                        keyselect = -1;
+                        break;
+                    case 8: // Back to main menu or resume menu
+                        flashr      = 1;
+                        flashg      = 0;
+                        flashb      = 0;
+                        flashamount = 1;
+                        flashdelay  = 1;
+
+                        if (newdetail > 2) newdetail = detail;
+                        if (newdetail < 0) newdetail = detail;
+                        if (newscreenwidth < 0) newscreenwidth = screenwidth;
+                        if (newscreenheight < 0) newscreenheight = screenheight;
+
+                        cnf.dump();
+                        cnf.save();
+
+                        if (mainmenu == MAIN_MENU_OPTIONS && gameon) mainmenu = MAIN_MENU_RESUME;
+                        if (mainmenu == MAIN_MENU_OPTIONS && !gameon) mainmenu = MAIN_MENU_MAIN;
+                        break;
+                    case 9: // Invert Mouse
+                        invertmouse = 1 - invertmouse;
+                        break;
+                    case 10: // Mouse sensitivity
+                        usermousesensitivity--;
+
+                        if (usermousesensitivity < 0) usermousesensitivity = 25;
+                        break;
+                    case 11: // Volume
+                    {
+                        volume--;
+
+                        if (volume < 0) volume = 100;
+                        OPENAL_SetSFXMasterVolume((float) volume / 100.0f);
+                    }
+                    break;
+                }
             }
         }
     }

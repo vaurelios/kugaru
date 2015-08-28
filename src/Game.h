@@ -285,6 +285,7 @@ public:
 		Dispose();
 	}
     void mouseUp(Uint8 button);
+    void keyPress(const SDL_Keysym &sym);
 
 protected:
     bool isHoverRect(int sx, int sy, int ex, int ey);
